@@ -1,0 +1,32 @@
+@model TripsProject.Models.User
+
+<h2 class="text-center mt-4">הרשמה</h2>
+
+<div class="container" style="max-width:500px;">
+    <form method="post">
+
+        <div class="mb-3">
+            <label>שם מלא</label>
+            <input asp-for="FullName" class="form-control" />
+            <span asp-validation-for="FullName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label>אימייל</label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label>סיסמה</label>
+            <input asp-for="Password" class="form-control" type="password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <button class="btn btn-primary w-100" type="submit">צור משתמש</button>
+    </form>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
