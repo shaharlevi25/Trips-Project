@@ -4,11 +4,11 @@ using TripsProject.Models;
 
 namespace TripsProject.Controllers;
 
-public class HomeController : Controller
+public class HomePageController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly ILogger<HomePageController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomePageController(ILogger<HomePageController> logger)
     {
         _logger = logger;
     }
