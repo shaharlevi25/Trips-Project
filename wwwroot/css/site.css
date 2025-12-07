@@ -1,31 +1,122 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
+/* GENERAL */
 body {
-  margin-bottom: 60px;
+  background-color: #f7f8fa;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+/* Head Line*/
+.text-center{
+  color: #000;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+/* SECTION TITLES */
+.section-title {
+  color: #000;
+  font-weight: bold;
+  margin-bottom: 25px;
+  text-align: center;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+/* HERO */
+.LOGO {
+  height: 380px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+}
+/* NAVBAR FIX */
+.main-navbar {
+  height: 70px; /* גובה חדש ומצומצם */
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.main-navbar .navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #000 ;
+}
+
+.main-navbar .nav-link {
+  color: #000;
+  font-weight: 500;
+}
+
+.main-navbar .nav-link:hover {
+  color: #007bff ;
+}
+
+/* LOGO SIZE */
+.logo-img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+
+/* SEARCH BOX */
+.search-box {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  margin-top: -40px;
+  position: relative;
+  z-index: 10;
+}
+
+/* TOP DESTINATIONS */
+.dest-card {
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: 0.2s;
+}
+
+.dest-card:hover {
+  transform: scale(1.03);
+}
+
+.dest-card img {
+  height: 200px;
+  object-fit: cover;
+  width: 100%;
+}
+
+/* SPECIAL OFFERS */
+.offer-card {
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.offer-card img {
+  height: 220px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.offer-price-old {
+  text-decoration: line-through;
+  color: #888;
+}
+
+.offer-price-new {
+  color: #e00000;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* FOOTER */
+footer {
+  margin-top: 60px;
+  padding: 25px;
+  background: #f1f1f1;
+  text-align: center;
+  color: #555;
 }

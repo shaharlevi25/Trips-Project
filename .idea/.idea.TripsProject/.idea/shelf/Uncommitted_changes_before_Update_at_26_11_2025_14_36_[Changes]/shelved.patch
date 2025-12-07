@@ -1,0 +1,20 @@
+Index: .gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>bin/\r\nobj/\r\n/packages/\r\nriderModule.iml\r\n/_ReSharper.Caches/
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.gitignore b/.gitignore
+--- a/.gitignore	(revision 8844c2a92a0ea14b714d83f2c0bb7a29a22871bd)
++++ b/.gitignore	(date 1764160477050)
+@@ -2,4 +2,6 @@
+ obj/
+ /packages/
+ riderModule.iml
+-/_ReSharper.Caches/
+\ No newline at end of file
++/_ReSharper.Caches/
++.idea/
++.idea.TripsProject/
+\ No newline at end of file
