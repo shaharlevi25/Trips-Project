@@ -1,0 +1,27 @@
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h2 class="text-center mt-4">התחברות</h2>
+
+<div class="container" style="max-width:450px;">
+    
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger text-center">@ViewBag.Error</div>
+    }
+
+    <form method="post">
+        <div class="mb-3">
+            <label>אימייל</label>
+            <input name="Email" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label>סיסמה</label>
+            <input name="Password" type="password" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mt-3">התחברות</button>
+    </form>
+</div>
