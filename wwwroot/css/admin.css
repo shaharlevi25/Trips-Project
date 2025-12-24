@@ -1,0 +1,70 @@
+﻿/* ===== General Page ===== */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    background-color: #f4f6f9;
+    color: #333;
+}
+
+/* ===== Dashboard Wrapper ===== */
+.dashboard {
+    padding: 40px;
+}
+
+/* ===== Page Title ===== */
+.dashboard h1 {
+    margin-bottom: 30px;
+    font-size: 32px;
+    color: #2c3e50;
+}
+
+/* ===== Cards Grid ===== */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+}
+
+/* ===== Card ===== */
+.card {
+    display: block;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* ===== Card Hover ===== */
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+}
+
+/* ===== Card Title ===== */
+.card h2 {
+    margin: 0 0 12px;
+    font-size: 20px;
+    color: #34495e;
+}
+
+/* ===== Card Description ===== */
+.card p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 600px) {
+    .dashboard {
+        padding: 20px;
+    }
+
+    .dashboard h1 {
+        font-size: 26px;
+    }
+}

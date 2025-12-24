@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<link rel="stylesheet" href="~/css/admin.css" />
+
+<div class="dashboard">
+    <h1>Admin Dashboard</h1>
+
+    <div class="cards">
+        <a asp-controller="Packages" asp-action="Index" class="card">
+            <h2>📦 Travel Packages</h2>
+            <p>Add, edit or remove travel packages</p>
+        </a>
+
+        <a asp-controller="Packages" asp-action="Index" class="card">
+            <h2>💰 Pricing & Discounts</h2>
+            <p>Manage prices and temporary discounts</p>
+        </a>
+
+        <a asp-controller="Admin" asp-action="WaitingList" class="card">
+            <h2>⏳ Waiting List</h2>
+            <p>Manage users waiting for available rooms</p>
+        </a>
+
+        <a asp-controller="Admin" asp-action="Bookings" class="card">
+            <h2>📑 Bookings</h2>
+            <p>View and manage all bookings</p>
+        </a>
+
+        <a asp-controller="Admin" asp-action="Users" class="card">
+            <h2>👥 Users</h2>
+            <p>Manage registered users</p>
+        </a>
+
+        <a asp-controller="Admin" asp-action="Rules" class="card">
+            <h2>⚙️ Booking Rules</h2>
+            <p>Control booking time frames</p>
+        </a>
+    </div>
+</div>

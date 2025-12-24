@@ -1,0 +1,39 @@
+﻿@model IEnumerable<TripsProject.Models.Package>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Destination</th>
+        <th>Country</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Price</th>
+        <th>Rooms</th>
+        <th>Type</th>
+        <th>Available</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach(var pkg in Model)
+    {
+        <tr>
+            <td>@pkg.PackageId</td>
+            <td>@pkg.Destination</td>
+            <td>@pkg.Country</td>
+            <td>@pkg.StartDate.ToShortDateString()</td>
+            <td>@pkg.EndDate.ToShortDateString()</td>
+            <td>@pkg.Price</td>
+            <td>@pkg.NumOfRooms</td>
+            <td>@pkg.PackageType</td>
+            <td>
+                @(pkg.IsAvailable ? "✔" : "✖")
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@pkg.PackageId" class="btn btn-primary btn-sm">Edit</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
