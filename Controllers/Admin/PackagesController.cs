@@ -44,6 +44,22 @@ namespace TripsProject.Controllers.Admin
         [HttpPost]
         public IActionResult Create(Package package)
         {
+            if (package.StartDate < new DateTime(1753, 1, 1))
+            {
+                ModelState.AddModelError("StartDate", "Start date is not valid");
+            }
+
+            if (package.EndDate < new DateTime(1753, 1, 1))
+            {
+                ModelState.AddModelError("EndDate", "End date is not valid");
+            }
+
+            
+            if (!ModelState.IsValid)
+            {
+                return View(package);
+            }
+            
             _repo.AddPackage(package);
             return RedirectToAction("Index");
         }
@@ -51,9 +67,9 @@ namespace TripsProject.Controllers.Admin
         {
             return View(); // מחזיר את ה-View Create.cshtml
         }
-        public IActionResult Edit(int packageId)
+        public IActionResult Edit(int id)
         {
-            var package = _repo.GetPackageById(packageId);
+            var package = _repo.GetPackageById(id);
             if (package == null)
                 return NotFound();
 
@@ -63,11 +79,22 @@ namespace TripsProject.Controllers.Admin
         [HttpPost]
         public IActionResult Edit(Package package)
         {
+            if (package.StartDate < new DateTime(1753, 1, 1))
+            {
+                ModelState.AddModelError("StartDate", "Start date is not valid");
+            }
+
+            if (package.EndDate < new DateTime(1753, 1, 1))
+            {
+                ModelState.AddModelError("EndDate", "End date is not valid");
+            }
+
             if (!ModelState.IsValid)
                 return View(package);
 
             _repo.UpdatePackage(package);
             return RedirectToAction("Index");
         }
+        
     }
 }

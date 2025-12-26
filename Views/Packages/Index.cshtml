@@ -4,7 +4,7 @@
 
 <h1>Travel Packages</h1>
 
-<!-- סרגל חיפוש -->
+
 <div class="mb-3">
     <input type="text" id="destination" placeholder="Destination" class="form-control mb-2" />
     <input type="date" id="startDate" class="form-control mb-2" />
@@ -16,7 +16,7 @@
     </select>
 </div>
 
-<!-- כאן תטען טבלת החבילות -->
+
 <div id="packagesTable">
     @await Html.PartialAsync("_PackagesTable", Model)
 </div>
@@ -37,7 +37,6 @@
         });
     }
 
-    // קריאה ל־filter בזמן הקלדה או שינוי
     $('#destination').on('keyup', filterPackages);
     $('#startDate, #endDate, #isAvailable').on('change', filterPackages);
 </script>
