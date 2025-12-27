@@ -1,0 +1,23 @@
+﻿<link rel="stylesheet" href="~/css/packages.css" />
+
+<h1>Select a Package for Discount</h1>
+
+<input id="search" class="search" placeholder="Search by destination or PackageID..." />
+
+<div id="pickerTable"></div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function loadPackages() {
+            $.get('@Url.Action("PackagesPicker", "Discounts")', {
+                search: $('#search').val()
+            }, function (html) {
+                $('#pickerTable').html(html);
+            });
+        }
+
+        $(document).ready(loadPackages);
+        $('#search').on('keyup', loadPackages);
+    </script>
+}

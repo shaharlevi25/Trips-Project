@@ -1,0 +1,29 @@
+﻿@model List<TripsProject.Models.ViewModel.DiscountVM>
+<link rel="stylesheet" href="~/css/packages.css" />
+<table class="table">
+    <thead>
+    <tr>
+        <th>PackageID</th>
+        <th>Destination</th>
+        <th>Country</th>
+        <th>Package Dates</th>
+        <th>Price</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var p in Model)
+    {
+        <tr>
+            <td>@p.PackageID</td>
+            <td>@p.Destination</td>
+            <td>@p.Country</td>
+            <td>@p.PackageStart.ToShortDateString() - @p.PackageEnd.ToShortDateString()</td>
+            <td>@p.OriginalPrice</td>
+            <td>
+                <a asp-action="Create" asp-route-packageId="@p.PackageID" class="btn btn-success">Choose</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

@@ -1,0 +1,47 @@
+﻿@model TripsProject.Models.ViewModel.DiscountVM
+
+<link rel="stylesheet" href="~/css/packages.css" />
+
+<h1>Edit Discount</h1>
+
+<div class="info-box">
+    <p><b>DiscountID:</b> @Model.DiscountID</p>
+    <p><b>Package:</b> @Model.PackageID</p>
+    <p><b>Destination:</b> @Model.Destination</p>
+    <p><b>Package Dates:</b> @Model.PackageStart.ToShortDateString() - @Model.PackageEnd.ToShortDateString()</p>
+    <p><b>Original Price:</b> @Model.OriginalPrice</p>
+    <p><b>Current Final Price:</b> @Model.FinalPrice</p>
+</div>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="DiscountID" />
+
+    <div class="form-row">
+        <label>Discount Percent</label>
+        <input asp-for="DiscountPercent" />
+        <span asp-validation-for="DiscountPercent" class="text-danger"></span>
+    </div>
+
+    <div class="form-row">
+        <label>Start Date</label>
+        <input asp-for="StartDate" type="date" />
+        <span asp-validation-for="StartDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-row">
+        <label>End Date</label>
+        <input asp-for="EndDate" type="date" />
+        <span asp-validation-for="EndDate" class="text-danger"></span>
+    </div>
+
+    <div class="text-danger">
+        @Html.ValidationSummary()
+    </div>
+
+    <button type="submit" class="btn btn-success">Save Changes</button>
+    <a asp-action="Index" class="btn btn-primary">Back</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
