@@ -1,0 +1,49 @@
+﻿@model TripsProject.Models.User
+
+<link rel="stylesheet" href="~/css/admin.css" />
+
+<h1>Edit User</h1>
+
+<form asp-action="Edit" method="post">
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" readonly />
+        @Html.ValidationMessageFor(x => x.Email, "", new { @style = "color:red" })
+    </div>
+
+    <div class="form-group">
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" class="form-control" />
+        @Html.ValidationMessageFor(x => x.FirstName, "", new { @style = "color:red" })
+    </div>
+
+    <div class="form-group">
+        <label asp-for="LastName"></label>
+        <input asp-for="LastName" class="form-control" />
+        @Html.ValidationMessageFor(x => x.LastName, "", new { @style = "color:red" })
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PhoneNumber"></label>
+        <input asp-for="PhoneNumber" class="form-control" />
+        @Html.ValidationMessageFor(x => x.PhoneNumber, "", new { @style = "color:red" })
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Role"></label>
+        <input asp-for="Role" class="form-control" />
+        @Html.ValidationMessageFor(x => x.Role, "", new { @style = "color:red" })
+    </div>
+
+    <div class="form-group">
+        <label>Active</label>
+        <input asp-for="IsActive" type="checkbox" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

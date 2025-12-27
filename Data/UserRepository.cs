@@ -22,7 +22,7 @@ namespace TripsProject.Data
             using (var conn = new SqlConnection(_connectionString))
             {
                 conn.Open();
-                var cmd = new SqlCommand("SELECT * FROM [User]", conn);
+                var cmd = new SqlCommand("SELECT * FROM [Users]", conn);
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
@@ -47,7 +47,7 @@ namespace TripsProject.Data
             using (var conn = new SqlConnection(_connectionString))
             {
                 conn.Open();
-                var cmd = new SqlCommand("SELECT * FROM [User] WHERE Email = @Email", conn);
+                var cmd = new SqlCommand("SELECT * FROM [Users] WHERE Email = @Email", conn);
                 cmd.Parameters.AddWithValue("@Email", email);
 
                 var reader = cmd.ExecuteReader();
@@ -75,7 +75,7 @@ namespace TripsProject.Data
             {
                 conn.Open();
                 var cmd = new SqlCommand(@"
-                    INSERT INTO [User] 
+                    INSERT INTO [Users] 
                     (Email, FirstName, LastName, PhoneNumber, Password, Role, IsActive)
                     VALUES (@Email, @FirstName, @LastName, @PhoneNumber, @Password, @Role, @IsActive)
                 ", conn);
@@ -127,10 +127,11 @@ namespace TripsProject.Data
             using (var conn = new SqlConnection(_connectionString))
             {
                 conn.Open();
-                var cmd = new SqlCommand("DELETE FROM [User] WHERE Email = @Email", conn);
+                var cmd = new SqlCommand("DELETE FROM [Users] WHERE Email = @Email", conn);
                 cmd.Parameters.AddWithValue("@Email", email);
                 cmd.ExecuteNonQuery();
             }
         }
+        
     }
 }

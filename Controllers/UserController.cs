@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using TripsProject.Data;
 using TripsProject.Models;
 
 namespace TripsProject.Controllers
@@ -7,11 +8,13 @@ namespace TripsProject.Controllers
     public class UserController : Controller
     {
         private string connectionString;
+        
 
         public UserController(IConfiguration config)
         {
             connectionString = config.GetConnectionString("TravelDb");
         }
+        
 
         /* הרשמה*/
         [HttpGet]
@@ -82,6 +85,8 @@ namespace TripsProject.Controllers
                 }
             }
         }
+        
+        
         
     }
 }

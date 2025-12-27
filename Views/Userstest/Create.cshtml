@@ -1,0 +1,44 @@
+﻿@model TripsProject.Models.User
+
+<h2>Add User</h2>
+
+<form asp-action="Create" method="post">
+    <div>
+        <label>Email</label>
+        <input asp-for="Email" class="form-control" />
+        @Html.ValidationMessageFor(x => x.Email, "", new { @style = "color:red" })
+    </div>
+
+    <div>
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" class="form-control" />
+        @Html.ValidationMessageFor(x => x.FirstName, "", new { @style = "color:red" })
+    </div>
+
+    <div class="form-group">
+        <label asp-for="LastName"></label>
+        <input asp-for="LastName" class="form-control" />
+        @Html.ValidationMessageFor(x => x.LastName, "", new { @style = "color:red" })
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="PhoneNumber"></label>
+        <input asp-for="PhoneNumber" class="form-control" />
+        @Html.ValidationMessageFor(x => x.PhoneNumber, "", new { @style = "color:red" })
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="Role"></label>
+        <input asp-for="Role" class="form-control" />
+        @Html.ValidationMessageFor(x => x.Role, "", new { @style = "color:red" })
+    </div>
+    
+    <div class="form-group">
+        <label>Active</label>
+        <input asp-for="IsActive" type="checkbox" />
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-success">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
