@@ -1,0 +1,31 @@
+﻿@model List<TripsProject.Models.ViewModel.DiscountRowVM>
+
+<link rel="stylesheet" href="~/css/packages.css" />
+
+<h1>Discounts</h1>
+
+<div class="toolbar">
+    <input id="search" class="search"
+           placeholder="Search by destination or PackageID..." />
+    
+    <a asp-action="Add" class="btn btn-success">➕ Add Discount</a>
+</div>
+
+<div id="discountsTable">
+    @Html.Partial("_DiscountsTable", Model)
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function filterDiscounts() {
+            $.get('@Url.Action("Filter", "Discounts")', {
+                search: $('#search').val()
+            }, function (html) {
+                $('#discountsTable').html(html);
+            });
+        }
+
+        $('#search').on('keyup', filterDiscounts);
+    </script>
+}

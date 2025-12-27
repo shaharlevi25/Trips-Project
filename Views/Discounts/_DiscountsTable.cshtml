@@ -1,0 +1,35 @@
+﻿@model List<TripsProject.Models.ViewModel.DiscountRowVM>
+<link rel="stylesheet" href="~/css/packages.css" />
+<table class="table">
+    <thead>
+    <tr>
+        <th>PackageID</th>
+        <th>Destination</th>
+        <th>Original Price</th>
+        <th>Discount %</th>
+        <th>Final Price</th>
+        <th>Dates</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var d in Model)
+    {
+        <tr>
+            <td>@d.PackageID</td>
+            <td>@d.Destination</td>
+            <td><span class="strike">@d.OriginalPrice</span></td>
+            <td>@d.DiscountPercent%</td>
+            <td class="final">@d.FinalPrice</td>
+            <td>@d.StartDate.ToShortDateString() - @d.EndDate.ToShortDateString()</td>
+            <td>@d.Status</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@d.DiscountID" class="btn btn-primary">Edit</a>
+                <a asp-action="Delete" asp-route-id="@d.DiscountID" class="btn btn-danger">Delete</a>
+            </td>
+            
+        </tr>
+    }
+    </tbody>
+</table>

@@ -26,5 +26,6 @@ namespace TripsProject.Models
         public string Password { get; set; }
 
         public string Role { get; set; } = "User";   // בעתיד נשתמש לזה ל-Admin
+        public bool IsActive { get; set; } = true;
     }
 }
