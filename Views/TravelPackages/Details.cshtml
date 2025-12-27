@@ -1,0 +1,51 @@
+@model TripsProject.Models.TravelPackage
+
+<div class="container mt-5" style="max-width:800px;">
+    <div class="card shadow-lg p-4">
+
+        <h2 class="text-center mb-4">
+            @Model.Destination (@Model.Country)
+        </h2>
+
+        <p class="text-center text-muted">
+            <strong>תאריכים:</strong>
+            @Model.StartDate.ToShortDateString() -
+            @Model.EndDate.ToShortDateString()
+        </p>
+
+        <hr />
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <p><strong>סוג חבילה:</strong> @Model.PackageType</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>חדרים פנויים:</strong> @Model.NumOfRooms</p>
+            </div>
+        </div>
+
+        <p><strong>מחיר:</strong> 
+            <span class="fs-4 text-success">₪@Model.Price</span>
+        </p>
+
+        @if (Model.AgeLimit != null)
+        {
+            <p><strong>הגבלת גיל:</strong> @Model.AgeLimit+</p>
+        }
+
+        <hr />
+
+        <p><strong>תיאור החבילה:</strong></p>
+        <p>@Model.Description</p>
+
+        <div class="text-center mt-4">
+            <a asp-controller="Orders"
+               asp-action="Create"
+               asp-route-packageId="@Model.PackageId"
+               class="btn btn-lg btn-primary px-5">
+                הזמן עכשיו
+            </a>
+        </div>
+
+    </div>
+</div>
