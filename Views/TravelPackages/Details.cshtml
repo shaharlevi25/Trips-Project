@@ -1,32 +1,25 @@
 @model TripsProject.Models.TravelPackage
 
+@{
+    ViewData["Title"] = "פרטי חבילה";
+}
+
 <div class="container mt-5" style="max-width:800px;">
     <div class="card shadow-lg p-4">
+        <h2 class="text-center mb-3">@Model.Destination (@Model.Country)</h2>
 
-        <h2 class="text-center mb-4">
-            @Model.Destination (@Model.Country)
-        </h2>
-
-        <p class="text-center text-muted">
-            <strong>תאריכים:</strong>
-            @Model.StartDate.ToShortDateString() -
-            @Model.EndDate.ToShortDateString()
+        <p class="text-center text-muted mb-0">
+            @Model.StartDate.ToString("dd/MM/yyyy") - @Model.EndDate.ToString("dd/MM/yyyy")
         </p>
 
         <hr />
 
         <div class="row mb-3">
-            <div class="col-md-6">
-                <p><strong>סוג חבילה:</strong> @Model.PackageType</p>
-            </div>
-            <div class="col-md-6">
-                <p><strong>חדרים פנויים:</strong> @Model.NumOfRooms</p>
-            </div>
+            <div class="col-md-6"><strong>סוג חבילה:</strong> @Model.PackageType</div>
+            <div class="col-md-6"><strong>חדרים:</strong> @Model.NumOfRooms</div>
         </div>
 
-        <p><strong>מחיר:</strong> 
-            <span class="fs-4 text-success">₪@Model.Price</span>
-        </p>
+        <p><strong>מחיר:</strong> <span class="fs-4 text-success">₪@Model.Price</span></p>
 
         @if (Model.AgeLimit != null)
         {
@@ -35,17 +28,13 @@
 
         <hr />
 
-        <p><strong>תיאור החבילה:</strong></p>
+        <p class="fw-bold mb-1">תיאור:</p>
         <p>@Model.Description</p>
 
-        <div class="text-center mt-4">
-            <a asp-controller="Orders"
-               asp-action="Create"
-               asp-route-packageId="@Model.PackageId"
-               class="btn btn-lg btn-primary px-5">
-                הזמן עכשיו
-            </a>
-        </div>
-
+        <a asp-controller="Trips"
+           asp-action="Index"
+           class="btn btn-outline-secondary mt-3">
+            חזרה לכל החבילות
+        </a>
     </div>
 </div>

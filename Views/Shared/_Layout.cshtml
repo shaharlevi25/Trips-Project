@@ -9,6 +9,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>@ViewData["Title"]</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" 
@@ -17,6 +20,18 @@
     <!-- Site CSS -->
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
+
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+  flatpickr(".ta-date", {
+    dateFormat: "d/m/Y",   // מציג DD/MM/YYYY
+    minDate: "today",      // רק מהיום
+    allowInput: true
+  });
+</script>
+
 
 <body>
 
@@ -43,7 +58,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/Trips">טיולים</a>
+                    <a class="nav-link" href="/Travels">טיולים</a>
                 </li>
 
                 <li class="nav-item">

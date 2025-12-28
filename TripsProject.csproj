@@ -21,4 +21,16 @@
       <_ContentIncludedByDefault Remove="Views\Admin\Packages\Index.cshtml" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Views\Home\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="Views\Home\Index.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Views\Home\Index.cshtml" />
+    </ItemGroup>
+
 </Project>

@@ -1,0 +1,366 @@
+﻿@model List<TripsProject.Models.TravelPackage>
+
+@functions {
+    string GetCityImage(string city)
+    {
+        if (string.IsNullOrEmpty(city))
+            return Url.Content("~/images/trips/placeholder.jpg");
+
+        city = city.Trim().ToLower();
+
+        return city switch
+        {
+            "barcelona" => Url.Content("~/images/trips/barcelona.jpg"),
+            "dubai" => Url.Content("~/images/trips/dubai.jpg"),
+            "bucharest" => Url.Content("~/images/trips/bucharest.jpg"),
+            "budapest" => Url.Content("~/images/trips/budapest.jpg"),
+            "copenhagen" => Url.Content("~/images/trips/copenhagen.jpg"),
+            "london" => Url.Content("~/images/trips/london.jpg"),
+            "miami" => Url.Content("~/images/trips/miami.jpg"),
+            "phuket" => Url.Content("~/images/trips/phuket.jpg"),
+            _ => Url.Content("~/images/trips/placeholder.jpg")
+        };
+    }
+}
+
+@{
+    ViewData["Title"] = "כל חבילות הטיול";
+
+    // קיבוץ לפי מדינה ואז לפי קטגוריה (PackageType)
+    var byCountry = (Model ?? new List<TripsProject.Models.TravelPackage>())
+        .GroupBy(p => p.Country ?? "Unknown")
+        .OrderBy(g => g.Key);
+}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4 fw-bold text-center">כל חבילות הטיול</h2>
+    
+    <h3 class="Searching Function Title">רוצה לחפש טיול בעצמך?</h3>
+    
+    
+    @* Searching Line *@
+    <form method="get" class="ta-search" dir="rtl">
+    <button type="submit" class="ta-search__btn">חיפוש</button>
+
+    <div class="ta-search__field">
+        <span class="ta-search__icon">📍</span>
+        <input name="destination"
+               class="ta-search__input"
+               placeholder="לאן?"
+               value="@(ViewBag.Destination ?? "")" />
+    </div>
+
+    <div class="ta-search__sep"></div>
+
+    
+    
+    
+    
+    @*  data fields *@
+    
+    <div class="ta-search__field ta-search__field--dates">
+        <span class="ta-search__icon">📅</span>
+        <input type="date" name="start" class="ta-search__input" value="@(ViewBag.Start ?? "")" />
+        <span class="ta-search__dash">–</span>
+        <input type="date" name="end" class="ta-search__input" value="@(ViewBag.End ?? "")" />
+    </div>
+
+    <div class="ta-search__sep"></div>
+
+    <div class="ta-search__field ta-search__field--people">
+        <span class="ta-search__icon">👤</span>
+
+        <select name="adults" class="ta-search__select">
+            @{
+                int adults = ViewBag.Adults ?? 2;
+                for (int i = 1; i <= 6; i++)
+                {
+                    <option value="@i" selected="@(i == adults)">@i מבוגרים</option>
+                }
+            }
+        </select>
+
+        <select name="children" class="ta-search__select">
+            @{
+                int children = ViewBag.Children ?? 0;
+                for (int i = 0; i <= 6; i++)
+                {
+                    <option value="@i" selected="@(i == children)">@i ילדים</option>
+                }
+            }
+        </select>
+
+        <select name="rooms" class="ta-search__select">
+            @{
+                int rooms = ViewBag.Rooms ?? 1;
+                for (int i = 1; i <= 4; i++)
+                {
+                    <option value="@i" selected="@(i == rooms)">@i חדר@(i == 1 ? "" : "ים")</option>
+                }
+            }
+        </select>
+    </div>
+
+    <div class="ta-search__sep"></div>
+
+    <div class="ta-search__field ta-search__field--right">
+        <label class="ta-search__check">
+            <input type="checkbox" name="business" value="true" checked="@(ViewBag.Business == true)" />
+            <span>נסיעת עסקים</span>
+        </label>
+
+        <a class="ta-search__clear" href="/Travels">נקה</a>
+    </div>
+</form>
+
+
+    
+    
+    
+    
+    @if (!Model?.Any() ?? true)
+    {
+        <div class="alert alert-info">אין חבילות להצגה.</div>
+    }
+    else
+    {
+        @foreach (var countryGroup in byCountry)
+        {
+            <div class="country-section mb-5">
+                <!-- כותרת מדינה -->
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <h3 class="fw-bold m-0">@countryGroup.Key</h3>
+                    <span class="text-muted">(@countryGroup.Count() חבילות)</span>
+                    <hr class="flex-grow-1 m-0" />
+                </div>
+
+                <div class="country-box mb-4">
+    <div class="scroll-track" dir="rtl">
+
+        @foreach (var p in countryGroup.OrderBy(x => x.StartDate))
+        {
+            var start = p.StartDate < p.EndDate ? p.StartDate : p.EndDate;
+            var end = p.StartDate < p.EndDate ? p.EndDate : p.StartDate;
+
+            <div class="trip-item">
+                <div class="card trip-card h-100 shadow-sm">
+
+                    <!-- סוג הטיול מעל האובייקט -->
+                    <div class="type-badge-wrap">
+                        <span class="badge bg-primary">@p.PackageType</span>
+                    </div>
+
+                    <!-- תמונה -->
+                    <img src="@GetCityImage(p.Destination)"
+                         class="card-img-top trip-img"
+                         alt="@p.Destination"
+                         onerror="this.onerror=null; this.src='@Url.Content("~/images/trips/placeholder.jpg")';" />
+
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="fw-bold mb-1">@p.Destination</h5>
+
+                        <div class="text-muted small mb-2">
+                            @start.ToString("dd/MM/yyyy") - @end.ToString("dd/MM/yyyy")
+                        </div>
+
+                        <div class="d-flex gap-2 mb-2">
+                            @if (!p.IsAvailable)
+                            {
+                                <span class="badge bg-secondary">לא זמין</span>
+                            }
+                            @if (p.AgeLimit != null)
+                            {
+                                <span class="badge bg-warning text-dark">@p.AgeLimit+ גיל</span>
+                            }
+                        </div>
+
+                        <p class="text-muted trip-desc mb-3">@p.Description</p>
+
+                        <div class="mt-auto">
+                            <div class="fw-bold text-success mb-2">₪@p.Price</div>
+
+                            <a asp-controller="Trips"
+                               asp-action="Details"
+                               asp-route-id="@p.PackageId"
+                               class="btn btn-outline-primary w-100">
+                                פרטים
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+            </div>
+        }
+    }
+</div>
+
+<style>
+    .trip-card {
+        border-radius: 16px;
+        overflow: hidden;
+        transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .trip-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 28px rgba(0,0,0,.15);
+    }
+    .trip-img {
+        height: 180px;
+        object-fit: cover;
+    }
+    .trip-desc {
+        height: 52px;
+        overflow: hidden;
+    }
+
+    .ta-search{
+        display:flex;
+        align-items:stretch;
+        width:100%;
+        border:3px solid #f6b400;
+        border-radius:10px;
+        overflow:hidden;
+        background:#fff;
+    }
+
+    .ta-search__btn{
+        background:#0d6efd;        /* כחול של Bootstrap primary */
+        color:#fff;
+        border:none;
+        padding:0 26px;
+        font-weight:800;
+        min-width:120px;
+        cursor:pointer;
+    }
+
+    .ta-search__btn:hover{ filter: brightness(0.95); }
+
+    .ta-search__field{
+        display:flex;
+        align-items:center;
+        gap:10px;
+        padding:10px 14px;
+        min-height:58px;
+        flex:1;
+    }
+
+    .ta-search__sep{
+        width:1px;
+        background:rgba(0,0,0,.14);
+    }
+
+    .ta-search__icon{
+        opacity:.75;
+        font-size:18px;
+        flex:0 0 auto;
+    }
+
+    .ta-search__input{
+        border:none;
+        outline:none;
+        width:100%;
+        min-width:0;
+        background:transparent;
+    }
+
+    .ta-search__dash{
+        opacity:.6;
+        padding:0 6px;
+        flex:0 0 auto;
+    }
+
+    .ta-search__select{
+        border:none;
+        outline:none;
+        background:transparent;
+        padding:0;
+        min-width:0;
+    }
+
+    .ta-search__field--dates .ta-search__input{
+        width:140px; /* כדי שלא יתפוצץ */
+    }
+
+    .ta-search__field--people{
+        flex:1.2; /* קצת יותר מקום */
+    }
+
+    .ta-search__field--right{
+        flex:0 0 240px;
+        justify-content:space-between;
+    }
+
+    .ta-search__check{
+        display:flex;
+        align-items:center;
+        gap:10px;
+        margin:0;
+        cursor:pointer;
+        user-select:none;
+        font-size:14px;
+    }
+    .ta-search__check input{ margin:0; }
+
+    .ta-search__clear{
+        text-decoration:none;
+        font-weight:700;
+        color:#0d6efd;
+        padding:6px 10px;
+        border-radius:8px;
+    }
+    .ta-search__clear:hover{
+        background:rgba(13,110,253,.08);
+    }
+
+    
+.badge-bg-primary
+
+    .small-field{
+        flex:0 0 auto;
+        min-width:220px;
+        justify-content:space-between;
+    }
+
+    .clear-link{
+        text-decoration:none;
+        font-weight:600;
+        opacity:.8;
+    }
+    .clear-link:hover{ opacity:1; }
+
+    .country-box{
+        border: 1px solid rgba(0,0,0,.12);
+        border-radius: 16px;
+        padding: 14px;
+        background: #fff;
+    }
+
+    .scroll-track{
+        display: flex;
+        gap: 16px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-bottom: 8px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .trip-item{
+        flex: 0 0 320px;
+        scroll-snap-align: start;
+    }
+
+    .type-badge-wrap{
+        padding: 10px 12px 0 12px;
+        color:white;
+    }
+
+
+</style>
