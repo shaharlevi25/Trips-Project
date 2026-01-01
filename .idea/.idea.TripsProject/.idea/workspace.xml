@@ -9,8 +9,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8853538f-a415-4999-9a0f-49efd8f4d6ff" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Controllers/TripsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/TripsController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.TripsProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TripsProject/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/UserController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Shared/_Layout.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/TravelPackages/Details.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/TravelPackages/Details.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Views/Trips/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Trips/Index.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -20,6 +23,13 @@
   </component>
   <component name="DpaMonitoringSettings">
     <option name="firstShow" value="false" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CSS File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -78,6 +88,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "git-widget-placeholder": "main",
+    "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -155,7 +166,15 @@
       <option name="project" value="LOCAL‎" />
       <updated>1764767703069</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="חיבורשיין">
+      <option name="closed" value="true" />
+      <created>1767266991222</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1767266991222</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -197,7 +216,8 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="HomePage Start" />
     <MESSAGE value="HomePage Updated" />
-    <option name="LAST_COMMIT_MESSAGE" value="HomePage Updated" />
+    <MESSAGE value="חיבורשיין" />
+    <option name="LAST_COMMIT_MESSAGE" value="חיבורשיין" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -214,6 +234,11 @@
           <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
           <option name="timeStamp" value="3" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Views/TravelPackages/Details.cshtml</url>
+          <line>51</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
