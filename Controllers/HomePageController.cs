@@ -16,7 +16,7 @@ public class HomePageController : Controller
   
     public IActionResult HomePage()
     {
-        return View();
+        return RedirectToAction("Index", "Trips");
     }
 
     public IActionResult Privacy()
