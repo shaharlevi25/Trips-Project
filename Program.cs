@@ -1,4 +1,5 @@
 using TripsProject.Data;
+using TripsProject.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<PackageRepository>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<DiscountRepository>();
+builder.Services.AddScoped<BookingRulesRepository>();
+builder.Services.AddScoped<PolicyTextService>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

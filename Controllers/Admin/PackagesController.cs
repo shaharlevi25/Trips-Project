@@ -95,6 +95,22 @@ namespace TripsProject.Controllers.Admin
             _repo.UpdatePackage(package);
             return RedirectToAction("Index");
         }
+        public IActionResult Delete(int packageId)
+        {
+            var package = _repo.GetPackageById(packageId);
+            if (package == null)
+                return NotFound();
+
+            return View(package);
+        }
+        public IActionResult DeleteConfirmed(int packageId)
+        {
+            _repo.DeletePackage(packageId);
+            return RedirectToAction("Index");
+        }
+
+
+
         
     }
 }

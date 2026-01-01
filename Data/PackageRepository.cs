@@ -136,6 +136,19 @@ public class PackageRepository
             cmd.ExecuteNonQuery();
         }
     }
+    
+    public void DeletePackage(int packageId)
+    {
+        using (var conn = new SqlConnection(_connectionString))
+        {
+            conn.Open();
+            var cmd = new SqlCommand(
+                "DELETE FROM TravelPackages WHERE PackageId = @PackageId", conn);
+
+            cmd.Parameters.AddWithValue("@PackageId", packageId);
+            cmd.ExecuteNonQuery();
+        }
+    }
 }
 
 
