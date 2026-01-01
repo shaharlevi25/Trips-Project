@@ -13,6 +13,7 @@ public class HomePageController : Controller
         _logger = logger;
     }
 
+  
     public IActionResult HomePage()
     {
         return View();
