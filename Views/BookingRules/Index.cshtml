@@ -1,0 +1,45 @@
+﻿@model TripsProject.Models.ViewModel.BookingRulesVM
+
+<link rel="stylesheet" href="~/css/packages.css" />
+
+<h1>Booking Rules</h1>
+
+@if (ViewBag.Success != null)
+{
+    <div style="margin-bottom:12px; color: green; font-weight:600;">
+        @ViewBag.Success
+    </div>
+}
+
+<form asp-action="Index" method="post">
+    <div class="form-group">
+        <label>Latest booking (days before trip start)</label>
+        <input asp-for="LatestBookingDaysBeforeStart" type="number" min="0" max="365" />
+        <span asp-validation-for="LatestBookingDaysBeforeStart" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Cancellation allowed (days before trip start)</label>
+        <input asp-for="CancellationDaysBeforeStart" type="number" min="0" max="365" />
+        <span asp-validation-for="CancellationDaysBeforeStart" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Reminder (days before trip start)</label>
+        <input asp-for="ReminderDaysBeforeStart" type="number" min="0" max="365" />
+        <span asp-validation-for="ReminderDaysBeforeStart" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Save Changes</button>
+</form>
+
+<br />
+
+<div class="info-box">
+    <h3>Booking & Cancellation Policy (User View)</h3>
+    <p>@ViewBag.PolicyText</p>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
