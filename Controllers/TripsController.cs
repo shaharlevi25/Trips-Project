@@ -7,6 +7,7 @@ namespace TripsProject.Controllers
     [Route("Trips")]
     public class TripsController : Controller
     {
+        
         private readonly string _connectionString;
 
         public TripsController(IConfiguration config)

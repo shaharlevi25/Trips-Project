@@ -64,7 +64,9 @@ namespace TripsProject.Controllers
             {
                 conn.Open();
 
-                string sql = "SELECT * FROM Users WHERE Email = @Email AND Password = @Password";
+                string sql = @"SELECT FirstName, Email, Role 
+                       FROM Users 
+                       WHERE Email = @Email AND Password = @Password";
 
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@Email", Email);
@@ -74,19 +76,26 @@ namespace TripsProject.Controllers
 
                 if (reader.Read())
                 {
-                    // התחברות הצליחה
+                    // ✅ כאן שומרים ב-Session
+                    HttpContext.Session.SetString("UserEmail", reader["Email"].ToString());
+                    HttpContext.Session.SetString("UserFirstName", reader["FirstName"].ToString());
+                    HttpContext.Session.SetString("UserRole", reader["Role"].ToString());
+
                     return Redirect("/");
                 }
                 else
                 {
-                    // שגיאה
                     ViewBag.Error = "Incorrect email or password";
                     return View();
                 }
             }
         }
-        
-        
-        
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Trips");
+        }
     }
+    
 }

@@ -4,22 +4,30 @@
     ViewData["Title"] = "פרטי חבילה";
 }
 
-<div class="container mt-5" style="max-width:800px;">
-    <div class="card shadow-lg p-4">
-        <h2 class="text-center mb-3">@Model.Destination (@Model.Country)</h2>
+<div class="container package-details">
+    <div class="card package-card shadow-lg">
 
-        <p class="text-center text-muted mb-0">
-            @Model.StartDate.ToString("dd/MM/yyyy") - @Model.EndDate.ToString("dd/MM/yyyy")
+        <h2 class="text-center package-title">
+            @Model.Destination (@Model.Country)
+        </h2>
+
+        <p class="text-center package-dates">
+            @Model.StartDate.ToString("dd/MM/yyyy") -
+            @Model.EndDate.ToString("dd/MM/yyyy")
         </p>
 
         <hr />
 
         <div class="row mb-3">
-            <div class="col-md-6"><strong>סוג חבילה:</strong> @Model.PackageType</div>
-            <div class="col-md-6"><strong>חדרים:</strong> @Model.NumOfRooms</div>
+            <div class="col-md-6">
+                <strong>סוג חבילה:</strong> @Model.PackageType
+            </div>
+            <div class="col-md-6">
+                <strong>חדרים:</strong> @Model.NumOfRooms
+            </div>
         </div>
 
-        <p><strong>מחיר:</strong> <span class="fs-4 text-success">₪@Model.Price</span></p>
+        <p class="package-price">₪@Model.Price</p>
 
         @if (Model.AgeLimit != null)
         {
@@ -29,12 +37,22 @@
         <hr />
 
         <p class="fw-bold mb-1">תיאור:</p>
-        <p>@Model.Description</p>
+        <p class="package-desc">@Model.Description</p>
 
-        <a asp-controller="Trips"
-           asp-action="Index"
-           class="btn btn-outline-secondary mt-3">
-            חזרה לכל החבילות
-        </a>
+        <div class="package-actions">
+            <a asp-controller="Trips"
+               asp-action="Index"
+               class="btn btn-outline-secondary">
+                חזרה לכל החבילות
+            </a>
+
+            <a asp-controller="Orders"
+               asp-action="Create"
+               asp-route-packageId="@Model.PackageId"
+               class="btn btn-primary">
+                הזמן עכשיו
+            </a>
+        </div>
+
     </div>
 </div>

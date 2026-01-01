@@ -7,6 +7,7 @@ builder.Services.AddScoped<PackageRepository>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<DiscountRepository>();
 builder.Services.AddControllersWithViews();
+builder.Services.AddSession();
 
 var app = builder.Build();
 
@@ -21,9 +22,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthorization();
-
 app.MapStaticAssets();
 
 app.MapControllerRoute(
