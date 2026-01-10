@@ -1,0 +1,34 @@
+﻿@model IEnumerable<TripsProject.Models.ViewModel.BookingRowVM>
+
+<table>
+    <thead>
+    <tr>
+        <th>BookingId</th>
+        <th>User</th>
+        <th>PackageId</th>
+        <th>Destination</th>
+        <th>Rooms</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Created</th>
+        <th>Paid</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    @foreach (var b in Model)
+    {
+        <tr>
+            <td>@b.BookingId</td>
+            <td>@b.UserEmail</td>
+            <td>@b.PackageId</td>
+            <td>@b.Destination</td>
+            <td>@b.RoomsBooked</td>
+            <td>@b.TotalAmount @b.Currency</td>
+            <td>@b.Status</td>
+            <td>@b.CreatedAt.ToString("yyyy-MM-dd")</td>
+            <td>@(b.PaidAt?.ToString("yyyy-MM-dd") ?? "-")</td>
+        </tr>
+    }
+    </tbody>
+</table>
