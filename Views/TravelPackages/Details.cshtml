@@ -1,0 +1,126 @@
+@model TripsProject.Models.TravelPackage
+<!-- SCRIPT-->
+<script>
+    function confirmPayment(packageId) {
+        const message = "You are being redirected to the payment page. Do you want to continue?";
+
+        if (confirm(message)) {
+            window.location.href = `/Orders/Create?packageId=${packageId}`;
+        }
+    }
+
+    
+        function joinWaitlist() {alert("You have been added to the waiting list.");}
+    
+        async function joinWaitlist(packageId) {
+        // 1) alert/confirm לפני הכל
+        const ok = confirm("You will be added to the waiting list. Continue?");
+        if (!ok) return;
+
+        try {
+        // 2) בקשה לשרת (POST) שמכניסה ל-WaitingList
+        const res = await fetch("/Waitlist/Join", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ packageId })
+    });
+
+        const data = await res.json();
+
+        // 3) תגובות לפי מה שהשרת מחזיר
+        if (data.status === "not_logged_in") {
+        alert("Please login first.");
+        // אופציונלי: להעביר להתחברות
+        // window.location.href = "/Account/Login";
+        return;
+    }
+
+        if (data.status === "already_exists") {
+        alert("You are already on the waiting list for this package.");
+        return;
+    }
+
+        if (data.status === "ok") {
+        alert("You have been added to the waiting list.");
+        return;
+    }
+
+        // fallback
+        alert("Something went wrong. Please try again.");
+    } catch (e) {
+        alert("Network error. Please try again.");
+    }
+    }
+</script>
+
+
+@{
+    ViewData["Title"] = "Package Details";
+}
+
+<div class="container package-details">
+    <div class="card package-card shadow-lg">
+
+        <h2 class="text-center package-title">
+            @Model.Destination (@Model.Country)
+        </h2>
+
+        <p class="text-center package-dates">
+            @Model.StartDate.ToString("dd/MM/yyyy") -
+            @Model.EndDate.ToString("dd/MM/yyyy")
+        </p>
+
+        <hr />
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <strong>Package Type:</strong> @Model.PackageType
+            </div>
+            <div class="col-md-6">
+                <strong>חדרים:</strong> @Model.NumOfRooms
+            </div>
+        </div>
+
+        <p class="package-price">₪@Model.Price</p>
+
+        @if (Model.AgeLimit != null)
+        {
+            <p><strong>הגבלת גיל:</strong> @Model.AgeLimit+</p>
+        }
+
+        <hr />
+
+        <p class="fw-bold mb-1">Description:</p>
+        <p class="package-desc">@Model.Description</p>
+
+        <div class="package-actions">
+            <a asp-controller="Trips"
+               asp-action="Index"
+               class="btn btn-outline-secondary">
+                Back to all packages
+            </a>
+            
+            <!-- PAYMENT BUTTON -->
+            @if (Model.IsAvailable)
+            {
+                <a href="javascript:void(0);" class="btn btn-primary"
+                   onclick="confirmPayment(@Model.PackageId)">
+                    Book Now!
+                </a>
+            }
+            else
+            {
+                <button type="button"
+                        class="btn btn-warning"
+                        onclick="joinWaitlist(@Model.PackageId)">
+                    Join Wait List
+                </button>
+
+            }
+
+
+
+        </div>
+
+    </div>
+</div>

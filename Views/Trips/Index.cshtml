@@ -1,0 +1,477 @@
+﻿@model List<TripsProject.Models.TravelPackage>
+
+<script>
+    function updateDateText(input, key){
+        const valueSpan = document.querySelector(`.date-value[data-target="${key}"]`);
+        if (!input.value) {
+            valueSpan.textContent = "Select date";
+            return;
+        }
+
+        const d = new Date(input.value);
+        const formatted =
+            String(d.getDate()).padStart(2,'0') + "." +
+            String(d.getMonth()+1).padStart(2,'0') + "." +
+            d.getFullYear();
+
+        valueSpan.textContent = formatted;
+    }
+</script>
+@functions {
+    string GetCityImage(string city)
+    {
+        if (string.IsNullOrEmpty(city))
+            return Url.Content("~/images/trips/placeholder.jpg");
+
+        city = city.Trim().ToLower();
+
+        return city switch
+        {
+            "barcelona" => Url.Content("~/images/trips/barcelona.jpg"),
+            "dubai" => Url.Content("~/images/trips/dubai.jpg"),
+            "bucharest" => Url.Content("~/images/trips/bucharest.jpg"),
+            "budapest" => Url.Content("~/images/trips/budapest.jpg"),
+            "copenhagen" => Url.Content("~/images/trips/copenhagen.jpg"),
+            "london" => Url.Content("~/images/trips/london.jpg"),
+            "miami" => Url.Content("~/images/trips/miami.jpg"),
+            "phuket" => Url.Content("~/images/trips/phuket.jpg"),
+            _ => Url.Content("~/images/trips/placeholder.jpg")
+        };
+    }
+}
+
+@{
+    ViewData["Title"] = "All Packages";
+
+    // קיבוץ לפי מדינה ואז לפי קטגוריה (PackageType)
+    var byCountry = (Model ?? new List<TripsProject.Models.TravelPackage>())
+        .GroupBy(p => p.Country ?? "Unknown")
+        .OrderBy(g => g.Key);
+}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4 fw-bold text-center">Find your trip</h2>
+    
+    <h3 class="Searching Function Title">Want to search by Yourself?</h3>
+    
+    
+    @* Searching Line *@
+    <form method="get" class="ta-search" dir="ltr">
+
+    <div class="ta-search__field">
+        <span class="ta-search__icon">📍</span>
+        <input name="destination"
+               class="ta-search__input"
+               placeholder="To where?"
+               value="@(ViewBag.Destination ?? "")" />
+    </div>
+
+    <div class="ta-search__sep"></div>
+    
+    @*  data fields *@
+    
+    <div class="ta-search__field ta-search__field--dates">
+        <span class="ta-search__icon">📅</span>
+
+        <div class="date-overlay">
+            <span class="date-label">Arrival date</span>
+            <span class="date-value" data-target="start">Select date</span>
+
+            <input class="date-hit"
+                   type="date"
+                   name="start"
+                   value="@(ViewBag.Start ?? "")"
+                   onchange="updateDateText(this,'start')" />
+        </div>
+
+
+        <label class="date-overlay" for="endDate">
+            <span class="date-label">Departure date</span>
+            <span class="date-value" data-target="end">Select date</span>
+        </label>
+        <input id="endDate"
+               type="date"
+               name="end"
+               value="@(ViewBag.End ?? "")"
+               onchange="updateDateText(this, 'end')" />
+    </div>
+
+
+
+    <div class="ta-search__sep"></div>
+
+    <div class="ta-search__field ta-search__field--people">
+        <span class="ta-search__icon">👤</span>
+
+        <select name="adults" class="ta-search__select">
+            @{
+                int adults = ViewBag.Adults ?? 2;
+                for (int i = 1; i <= 6; i++)
+                {
+                    <option value="@i" selected="@(i == adults)">@i Adults</option>
+                }
+            }
+        </select>
+
+        <select name="children" class="ta-search__select">
+            @{
+                int children = ViewBag.Children ?? 0;
+                for (int i = 0; i <= 6; i++)
+                {
+                    <option value="@i" selected="@(i == children)">@i Kids</option>
+                }
+            }
+        </select>
+
+        <select name="rooms" class="ta-search__select">
+            @{
+                int rooms = ViewBag.Rooms ?? 1;
+                for (int i = 1; i <= 4; i++)
+                {
+                    <option value="@i" selected="@(i == rooms)">@i Room@(i == 1 ? "" : "s")</option>
+                }
+            }
+        </select>
+    </div>
+
+    <div class="ta-search__sep"></div>
+
+    <div class="ta-search__field ta-search__field--right">
+        <label class="ta-search__check">
+            <input type="checkbox" name="business" value="true" checked="@(ViewBag.Business == true)" />
+            <span>Business Trip</span>
+        </label>
+
+        <a class="ta-search__clear" href="/Trips">Clean</a>
+    </div>
+    <button type="submit" class="ta-search__btn">Search</button>
+</form>
+
+
+    
+    
+    
+    
+    @if (!Model?.Any() ?? true)
+    {
+        <div class="alert alert-info">There are no packages to that correct your details.</div>
+    }
+    else
+    {
+        @foreach (var countryGroup in byCountry)
+        {
+            <div class="country-section mb-5">
+                
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <h3 class="fw-bold m-0">@countryGroup.Key</h3>
+                    <span class="text-muted">(@countryGroup.Count() Packages)</span>
+                    <hr class="flex-grow-1 m-0" />
+                </div>
+
+                <div class="country-box mb-4">
+    <div class="scroll-track" dir="ltr">
+
+        @foreach (var p in countryGroup.OrderBy(x => x.StartDate))
+        {
+            var start = p.StartDate < p.EndDate ? p.StartDate : p.EndDate;
+            var end = p.StartDate < p.EndDate ? p.EndDate : p.StartDate;
+
+            <div class="trip-item">
+                <div class="card trip-card h-100 shadow-sm @(p.IsAvailable ? "" : "trip-card--unavailable")">
+
+                    <!-- type of trip -->
+                    
+                    <div class="type-badge-wrap">
+                        <span class="badge bg-primary">@p.PackageType</span>
+                    </div>
+
+                    <!-- Image -->
+                    <img src="@GetCityImage(p.Destination)"
+                         class="card-img-top trip-img"
+                         alt="@p.Destination"
+                         onerror="this.onerror=null; this.src='@Url.Content("~/images/trips/placeholder.jpg")';" />
+
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="fw-bold mb-1">@p.Destination</h5>
+
+                        <div class="text-muted small mb-2">
+                            @start.ToString("dd/MM/yyyy") - @end.ToString("dd/MM/yyyy")
+                        </div>
+
+                        <div class="d-flex gap-2 mb-2">
+                            @if (!p.IsAvailable)
+                            {
+                                <span class="badge bg-secondary">Unavailable</span>
+                            }
+                            @if (p.AgeLimit != null)
+                            {
+                                <span class="badge bg-warning text-dark">@p.AgeLimit+ Age:</span>
+                            }
+                        </div>
+
+                        <p class="text-muted trip-desc mb-3">@p.Description</p>
+
+                        <div class="mt-auto">
+                            <div class="fw-bold text-success mb-2">₪@p.Price</div>
+                            
+                            <a asp-controller="TravelPackages"
+                               asp-action="Details"
+                               asp-route-id="@p.PackageId"
+                               class="btn btn-outline-primary w-100">
+                                Details
+                            </a>
+
+                            @if (!p.IsAvailable)
+                            {
+                                <div class="text-muted small mt-1">This package is currently unavailable</div>
+                            }
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+            </div>
+        }
+    }
+</div>
+
+<style>
+    .trip-card {
+        border-radius: 16px;
+        overflow: hidden;
+        transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .trip-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 28px rgba(0,0,0,.15);
+    }
+    .trip-img {
+        height: 180px;
+        object-fit: cover;
+    }
+    .trip-desc {
+        height: 52px;
+        overflow: hidden;
+    }
+    /* UNAVAILABLE TRIP CARD */
+    .trip-card--unavailable {
+        opacity: 0.55;
+        filter: grayscale(1);
+        position: relative;
+    }
+
+    .trip-card--unavailable::after {
+        content: "Unavailable";
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: rgba(0,0,0,0.75);
+        color: #fff;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: 12px;
+    }
+
+    /* ===== SEARCH BAR (DESKTOP 100%) ===== */
+    .ta-search{
+        display: grid;
+        grid-template-columns: 1.1fr 2.2fr 1.7fr 1.1fr 160px; /* יעד | תאריכים | אנשים | צד ימין | כפתור */
+        align-items: stretch;
+        width: 100%;
+        border: 2px solid #f6b400;
+        border-radius: 14px;
+        overflow: hidden;
+        background: #fff;
+        gap: 0; /* חשוב: שלא יהיו רווחים */
+    }
+
+    .ta-search__field{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        min-height: 56px;
+        border-left: 1px solid rgba(0,0,0,.12); /* מפריד בין עמודות */
+        background: #fff;
+    }
+
+    /* השדה הראשון בלי מפריד משמאל */
+    .ta-search__field:first-child{
+        border-left: none;
+    }
+
+    .ta-search__icon{
+        flex: 0 0 auto;
+        opacity: .85;
+    }
+
+    .ta-search__input{
+        width: 100%;
+        border: none;
+        outline: none;
+        background: transparent;
+    }
+
+    .ta-search__field--dates{
+        display: flex;
+        align-items: stretch;  /* חשוב: שימתח לגובה */
+    }
+    .ta-search__field--dates .ta-search__input{
+        min-width: 140px;
+    }
+
+    .ta-search__dash{
+        opacity: .6;
+        flex: 0 0 auto;
+    }
+
+    .ta-search__field--people{
+        gap: 10px;
+    }
+    .ta-search__select{
+        border: none;
+        outline: none;
+        background: transparent;
+        min-width: 90px;
+    }
+
+    .ta-search__field--right{
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .ta-search__check{
+        display:flex;
+        align-items:center;
+        gap:8px;
+        margin:0;
+        user-select:none;
+        font-size:14px;
+    }
+    .ta-search__check input{ margin:0; }
+
+    .ta-search__clear{
+        text-decoration:none;
+        font-weight:700;
+        color:#0d6efd;
+        padding:6px 10px;
+        border-radius:8px;
+        white-space: nowrap;
+    }
+    .ta-search__clear:hover{
+        background:rgba(13,110,253,.08);
+    }
+
+    /* הכפתור כחלק מה-grid (עמודה אחרונה) */
+    .ta-search__btn{
+        height: 100%;
+        border: none;
+        background: #0d6efd;
+        color: #fff;
+        font-weight: 800;
+        cursor: pointer;
+        padding: 0 18px;
+    }
+    .ta-search__btn:hover{ filter: brightness(.95); }
+
+    .ta-search__sep{ display:none; }
+
+
+    .badge-bg-primary
+
+    .small-field{
+        flex:0 0 auto;
+        min-width:220px;
+        justify-content:space-between;
+    }
+
+    .clear-link{
+        text-decoration:none;
+        font-weight:600;
+        opacity:.8;
+    }
+    .clear-link:hover{ opacity:1; }
+
+    .country-box{
+        border: 1px solid rgba(0,0,0,.12);
+        border-radius: 16px;
+        padding: 14px;
+        background: #fff;
+    }
+
+    .scroll-track{
+        display: flex;
+        gap: 16px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-bottom: 8px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .trip-item{
+        flex: 0 0 320px;
+        scroll-snap-align: start;
+    }
+
+    .type-badge-wrap{
+        padding: 10px 12px 0 12px;
+        color:white;
+    }
+
+    .ta-search__field--dates{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .date-overlay{
+        flex: 1 1 0;
+        min-width: 170px;
+        padding: 6px 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .date-overlay:hover{
+        background: rgba(13,110,253,.04);
+    }
+
+    .date-label{
+        font-size: 11px;
+        font-weight: 700;
+        color: #6c757d;
+        line-height: 1.1;
+    }
+
+    .date-value{
+        font-size: 14px;
+        color: #212529;
+        line-height: 1.2;
+    }
+
+    .ta-search__field--dates input[type="date"]{
+        position: absolute;
+        left: -9999px;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+    }
+
+
+
+
+
+</style>

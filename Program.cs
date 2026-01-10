@@ -13,8 +13,19 @@ builder.Services.AddScoped<WaitingListRepository>();
 builder.Services.AddScoped<BookingRepository>();
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddSession();
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromHours(2);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -25,10 +36,10 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthorization();
-
 app.MapStaticAssets();
 
 app.MapControllerRoute(
