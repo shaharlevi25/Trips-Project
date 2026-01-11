@@ -5,18 +5,23 @@ using TripsProject.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
+using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
+using TripsProject.Services;
 
 namespace TripsProject.Controllers
 {
     public class UserController : Controller
     {
         private string connectionString;
+        private readonly EmailService _emailService;
         
 
-        public UserController(IConfiguration config)
+        public UserController(IConfiguration config, EmailService emailService)
         {
             connectionString = config.GetConnectionString("TravelDb");
+            _emailService = emailService;
         }
         
 
@@ -28,7 +33,7 @@ namespace TripsProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(User model)
+        public async Task<IActionResult> Register(User model)
         {
             if (!ModelState.IsValid)
                 return View(model);
@@ -50,9 +55,14 @@ namespace TripsProject.Controllers
                 cmd.Parameters.AddWithValue("@Role", model.Role);
 
                 cmd.ExecuteNonQuery();
+                await _emailService.SendAsync(
+                    model.Email,
+                    "ברוך הבא ל-TripsProject",
+                    $"<h2>שלום {model.FirstName}</h2><p>נרשמת בהצלחה למערכת.</p>"
+                );
             }
 
-            return Redirect("/");
+            return RedirectToAction("Login", "User");
         }
 
         [HttpGet]
@@ -98,6 +108,12 @@ namespace TripsProject.Controllers
                         principal
                     );
 
+                    await _emailService.SendAsync(
+                        reader["Email"].ToString(),
+                        "Login notification",
+                        "התחברת בהצלחה למערכת TripsProject"
+                    );
+
                     return Redirect("/");
                 }
                 else
@@ -107,6 +123,93 @@ namespace TripsProject.Controllers
                 }
             }
         }
+
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return View();
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+
+                string sql = @"SELECT FirstName, Email FROM Users WHERE Email = @Email";
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@Email", email);
+
+                using var reader = cmd.ExecuteReader();
+                if (!reader.Read())
+                {
+                    ViewBag.Sent = true;
+                    ViewBag.Mode = "sent";
+                    return View();
+                }
+
+                var userEmail = reader["Email"].ToString();
+                var firstName = reader["FirstName"].ToString();
+
+                var link = Url.Action(
+                    "ResetPassword",
+                    "User",
+                    new { email = userEmail },
+                    Request.Scheme
+                );
+
+                await _emailService.SendAsync(
+                    userEmail,
+                    "איפוס סיסמה",
+                    $"<h2>שלום {firstName}</h2><p>לחץ כאן לאיפוס הסיסמה:</p><p><a href='{link}'>איפוס סיסמה</a></p>"
+                );
+
+                ViewBag.Sent = true;
+                ViewBag.Mode = "sent";
+                return View();
+            }
+        }
+
+        [HttpGet]
+        public IActionResult ResetPassword(string email)
+        {
+            ViewBag.Mode = "reset";
+            ViewBag.Email = email;
+            return View("ForgotPassword");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(string email, string newPassword)
+        {
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(newPassword))
+                return View(model: email);
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+
+                string sql = @"UPDATE Users SET Password = @Password WHERE Email = @Email";
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@Email", email);
+                cmd.Parameters.AddWithValue("@Password", newPassword);
+
+                cmd.ExecuteNonQuery();
+            }
+
+            await _emailService.SendAsync(
+                email,
+                "הסיסמה עודכנה",
+                "<p>הסיסמה שלך עודכנה בהצלחה. אם לא אתה ביצעת את הפעולה, פנה לתמיכה.</p>"
+            );
+
+            ViewBag.Mode = "request";
+            return RedirectToAction("Login");
+        }
+
         [HttpGet]
         public async Task<IActionResult> Logout()
         {

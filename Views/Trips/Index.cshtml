@@ -59,7 +59,7 @@
     @* Searching Line *@
     <form method="get" class="ta-search" dir="ltr">
 
-    <div class="ta-search__field">
+        <div class="ta-search__field">
         <span class="ta-search__icon">📍</span>
         <input name="destination"
                class="ta-search__input"
@@ -109,7 +109,7 @@
                 int adults = ViewBag.Adults ?? 2;
                 for (int i = 1; i <= 6; i++)
                 {
-                    <option value="@i" selected="@(i == adults)">@i Adults</option>
+                    <option value="@i" selected="@(i == adults)">@i Adult</option>
                 }
             }
         </select>
@@ -119,33 +119,42 @@
                 int children = ViewBag.Children ?? 0;
                 for (int i = 0; i <= 6; i++)
                 {
-                    <option value="@i" selected="@(i == children)">@i Kids</option>
+                    <option value="@i" selected="@(i == children)">@i Children</option>
                 }
             }
         </select>
-
-        <select name="rooms" class="ta-search__select">
-            @{
-                int rooms = ViewBag.Rooms ?? 1;
-                for (int i = 1; i <= 4; i++)
-                {
-                    <option value="@i" selected="@(i == rooms)">@i Room@(i == 1 ? "" : "s")</option>
-                }
-            }
-        </select>
+        
     </div>
 
     <div class="ta-search__sep"></div>
 
-    <div class="ta-search__field ta-search__field--right">
-        <label class="ta-search__check">
-            <input type="checkbox" name="business" value="true" checked="@(ViewBag.Business == true)" />
-            <span>Business Trip</span>
-        </label>
+        <div class="ta-search__field ta-search__field--right">
+            <span class="ta-search__icon">🏷️</span>
 
-        <a class="ta-search__clear" href="/Trips">Clean</a>
-    </div>
-    <button type="submit" class="ta-search__btn">Search</button>
+            <select name="packageType" class="ta-search__select">
+                @{
+                    string selectedType = ViewBag.PackageType ?? "";
+                }
+
+                <option value="" selected="@(string.IsNullOrEmpty(selectedType))">
+                    Trip Type (Any)
+                </option>
+
+                <option value="LUXURY"     selected="@(selectedType == "LUXURY")">Luxury</option>
+                <option value="ADVENTURE"  selected="@(selectedType == "ADVENTURE")">Adventure</option>
+                <option value="FAMILY"     selected="@(selectedType == "FAMILY")">Family</option>
+                <option value="ROMANTIC"   selected="@(selectedType == "ROMANTIC")">Romantic</option>
+                <option value="CULTURAL"   selected="@(selectedType == "CULTURAL")">Cultural</option>
+                <option value="BUSINESS"   selected="@(selectedType == "BUSINESS")">Business</option>
+                <option value="HONEYMOON"  selected="@(selectedType == "HONEYMOON")">Honeymoon</option>
+                <option value="VACATION"   selected="@(selectedType == "VACATION")">Vacation</option>
+            </select>
+
+            <a class="ta-search__clear" href="/Trips">Clean</a>
+        </div>
+        
+        <input type="hidden" name="searched" value="true" />
+        <button type="submit" class="ta-search__btn">Search</button>
 </form>
 
 
