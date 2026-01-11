@@ -2,6 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using TripsProject.Data;
 using TripsProject.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace TripsProject.Controllers
 {
@@ -58,7 +62,7 @@ namespace TripsProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(string Email, string Password)
+        public async Task<IActionResult> Login(string Email, string Password)
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -76,10 +80,23 @@ namespace TripsProject.Controllers
 
                 if (reader.Read())
                 {
-                    // ✅ כאן שומרים ב-Session
-                    HttpContext.Session.SetString("UserEmail", reader["Email"].ToString());
-                    HttpContext.Session.SetString("UserFirstName", reader["FirstName"].ToString());
-                    HttpContext.Session.SetString("UserRole", reader["Role"].ToString());
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, reader["Email"].ToString()),
+                        new Claim(ClaimTypes.Role, reader["Role"].ToString())
+                    };
+
+                    var identity = new ClaimsIdentity(
+                        claims,
+                        CookieAuthenticationDefaults.AuthenticationScheme
+                    );
+
+                    var principal = new ClaimsPrincipal(identity);
+
+                    await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        principal
+                    );
 
                     return Redirect("/");
                 }
@@ -91,9 +108,11 @@ namespace TripsProject.Controllers
             }
         }
         [HttpGet]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            HttpContext.Session.Clear();
+            await HttpContext.SignOutAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme
+            );
             return RedirectToAction("Index", "Trips");
         }
     }

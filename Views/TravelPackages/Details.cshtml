@@ -1,24 +1,111 @@
+
 @model TripsProject.Models.TravelPackage
-<!-- SCRIPT-->
+
+<style>
+    body {
+        background: #f4f6f9;
+    }
+
+    .package-details {
+        margin-top: 40px;
+        margin-bottom: 60px;
+    }
+
+    .package-card {
+        border-radius: 18px;
+        padding: 35px;
+        background: #ffffff;
+    }
+
+    .package-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1f2937;
+    }
+
+    .package-dates {
+        color: #6b7280;
+        font-size: 15px;
+    }
+
+    .package-price {
+        font-size: 34px;
+        font-weight: bold;
+        color: #2563eb;
+        text-align: center;
+        margin: 25px 0;
+    }
+
+    .package-desc {
+        color: #374151;
+        line-height: 1.6;
+    }
+
+    .package-actions {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    .package-actions .btn {
+        flex: 1;
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 10px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #1e40af, #1d4ed8);
+    }
+
+    .btn-warning {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        border: none;
+        color: #fff;
+    }
+
+    .btn-warning:hover {
+        background: linear-gradient(135deg, #d97706, #b45309);
+    }
+
+    .btn-outline-secondary {
+        border-radius: 10px;
+    }
+
+    hr {
+        margin: 25px 0;
+    }
+</style>
+
 <script>
     function confirmPayment(packageId) {
-        const message = "You are being redirected to the payment page. Do you want to continue?";
+        const isAuthenticated = @((User.Identity != null && User.Identity.IsAuthenticated).ToString().ToLower());
 
-        if (confirm(message)) {
-            window.location.href = `/Orders/Create?packageId=${packageId}`;
+        if (!isAuthenticated) {
+            alert("כדי לרכוש חבילה יש להירשם או להתחבר לאתר");
+            window.location.href = "/User/Register";
+            return;
         }
+
+        window.location.href = `/Payment/Checkout?packageId=${packageId}`;
     }
 
     
         function joinWaitlist() {alert("You have been added to the waiting list.");}
     
         async function joinWaitlist(packageId) {
-        // 1) alert/confirm לפני הכל
+        
         const ok = confirm("You will be added to the waiting list. Continue?");
         if (!ok) return;
 
         try {
-        // 2) בקשה לשרת (POST) שמכניסה ל-WaitingList
+        
         const res = await fetch("/Waitlist/Join", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -27,11 +114,10 @@
 
         const data = await res.json();
 
-        // 3) תגובות לפי מה שהשרת מחזיר
+        
         if (data.status === "not_logged_in") {
         alert("Please login first.");
-        // אופציונלי: להעביר להתחברות
-        // window.location.href = "/Account/Login";
+        
         return;
     }
 
@@ -45,7 +131,7 @@
         return;
     }
 
-        // fallback
+        
         alert("Something went wrong. Please try again.");
     } catch (e) {
         alert("Network error. Please try again.");
@@ -100,7 +186,6 @@
                 Back to all packages
             </a>
             
-            <!-- PAYMENT BUTTON -->
             @if (Model.IsAvailable)
             {
                 <a href="javascript:void(0);" class="btn btn-primary"

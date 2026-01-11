@@ -1,21 +1,43 @@
+@model TripsProject.Models.TravelPackage
 @{
     ViewData["Title"] = "Checkout";
 }
 
-<h2>תשלום (PayPal Sandbox)</h2>
 
-<div id="paypal-button-container"></div>
+
+<div class="checkout-wrapper">
+    <div class="checkout-card">
+        <h2>תשלום מאובטח</h2>
+        <p>בחר את אמצעי התשלום שלך</p>
+
+        <div class="price-box">
+            סה״כ לתשלום: ₪@Model.Price
+        </div>
+
+        <div id="paypal-button-container"></div>
+
+        <div class="secure-text">
+            🔒 תשלום מאובטח • ללא חיוב אמיתי
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <script src="https://www.paypal.com/sdk/js?client-id=Ael4rJ-S6MF3rP4w-T68HxJ9dazfikloZ8HSQFyU2rJdb2MIu66_lktw5rYqA2WWzp_-zfmm4qBI7BD-&currency=ILS"></script>
 
     <script>
         paypal.Buttons({
+            style: {
+                layout: 'vertical',
+                color: 'blue',
+                shape: 'pill',
+                label: 'paypal'
+            },
             createOrder: function (data, actions) {
                 return actions.order.create({
                     purchase_units: [{
                         amount: {
-                            value: '50.00'
+                            value: '@Model.Price'
                         }
                     }]
                 });
@@ -30,4 +52,52 @@
             }
         }).render('#paypal-button-container');
     </script>
+    
+    <style>
+    .checkout-wrapper {
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f5f7fa;
+    }
+
+    .checkout-card {
+        background: #ffffff;
+        padding: 40px 35px;
+        border-radius: 16px;
+        width: 100%;
+        max-width: 420px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+        text-align: center;
+    }
+
+    .checkout-card h2 {
+        margin-bottom: 10px;
+        font-size: 24px;
+        color: #1f2937;
+    }
+
+    .checkout-card p {
+        font-size: 15px;
+        color: #6b7280;
+        margin-bottom: 25px;
+    }
+
+    .price-box {
+        background: #f0f4ff;
+        color: #1d4ed8;
+        font-size: 20px;
+        font-weight: bold;
+        padding: 14px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+    }
+
+    .secure-text {
+        margin-top: 18px;
+        font-size: 13px;
+        color: #9ca3af;
+    }
+</style>
 }
