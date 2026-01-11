@@ -9,11 +9,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8853538f-a415-4999-9a0f-49efd8f4d6ff" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Controllers/DashboardController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Views/Dashboard/User.cshtml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wwwroot/css/user.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TripsProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TripsProject/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TripsProject.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/TripsProject.sln.DotSettings.user" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/TravelPackagesController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/TravelPackagesController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/TripsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/TripsController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/TravelPackage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/TravelPackage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Shared/_Layout.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/TravelPackages/Details.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/TravelPackages/Details.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Trips/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Trips/Index.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +42,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -47,7 +53,7 @@
   <component name="GithubPullRequestsUISettings"><![CDATA[{
   "selectedUrlAndAccountId": {
     "url": "https://github.com/shaharlevi25/Trips-Project.git",
-    "accountId": "493e1743-f6df-462d-9a24-148f6ca11873"
+    "accountId": "7f733a30-0965-4e0b-baa4-9844a5fe0f1a"
   },
   "recentNewPullRequestHead": {
     "server": {
@@ -61,14 +67,13 @@
   }
 }]]></component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/956fa71d1764d6fe8f60412ec69cd89ea7a306cb45963dac5d9a7bb6d39715/RazorPageBase.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Controllers/DashboardController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controllers/TripsController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controllers/WaitListController.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Models/Services/EmailService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/TravelPackage.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Properties/launchSettings.json" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Views/Trips/Index.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Views/User/ForgotPassword.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/bf9021a960b74107a7e141aa06bc9d8a0a53c929178c2fb95b1597be8af8dc/ExceptionDispatchInfo.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="McpProjectServerCommands">
     <commands />
@@ -86,25 +91,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.TripsProject: http.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.TripsProject: http.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "git-widget-placeholder": "YagelSofer",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.TripsProject: http">
     <configuration name="TripsProject: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/TripsProject.csproj" />
@@ -156,7 +161,6 @@
       <workItem from="1764751517367" duration="19810000" />
       <workItem from="1766865562755" duration="989000" />
       <workItem from="1766866777249" duration="19244000" />
-      <workItem from="1768147215485" duration="530000" />
     </task>
     <task id="LOCAL‎-00001" summary="HomePage Start">
       <option name="closed" value="true" />
@@ -190,23 +194,15 @@
       <option name="project" value="LOCAL" />
       <updated>1767273832481</updated>
     </task>
-    <task id="LOCAL-00005" summary="אאע">
+    <task id="LOCAL‎-00005" summary="Yagel Mini Changes">
       <option name="closed" value="true" />
-      <created>1768140509554</created>
+      <created>1768128672830</created>
       <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1768140509554</updated>
+      <option name="presentableId" value="LOCAL‎-00005" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1768128672830</updated>
     </task>
-    <task id="LOCAL-00006" summary="עדכון">
-      <option name="closed" value="true" />
-      <created>1768142163480</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1768142163480</updated>
-    </task>
-    <option name="localTasksCounter" value="7" />
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -250,9 +246,8 @@
     <MESSAGE value="HomePage Updated" />
     <MESSAGE value="חיבורשיין" />
     <MESSAGE value="סידור משתמש" />
-    <MESSAGE value="אאע" />
-    <MESSAGE value="עדכון" />
-    <option name="LAST_COMMIT_MESSAGE" value="עדכון" />
+    <MESSAGE value="Yagel Mini Changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Yagel Mini Changes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -269,14 +264,6 @@
           <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
           <option name="timeStamp" value="3" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Views/TravelPackages/Details.cshtml</url>
-          <line>51</line>
-          <properties isMultiMethodBreakpoint="true">
-            <option name="multiMethodBreakpoint" value="true" />
-          </properties>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
