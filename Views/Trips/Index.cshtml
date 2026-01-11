@@ -105,29 +105,26 @@
         <span class="ta-search__icon">👤</span>
 
         <select name="adults" class="ta-search__select">
-            @{
-                int adults = ViewBag.Adults ?? -1; // -1 = Any
-            }
-            <option value="-1" selected="@(adults == -1)">Adults (Any)</option>
-            @for (int i = 1; i <= 6; i++)
-            {
-                <option value="@i" selected="@(i == adults)">@i Adult@(i == 1 ? "" : "s")</option>
-            }
-        </select>
-
+    @{
+        int adults = ViewBag.Adults ?? -1; // -1 = Any
+    }
+    <option value="-1" selected="@(adults == -1)">Adults (Any)</option>
+    @for (int i = 1; i <= 6; i++)
+    {
+        <option value="@i" selected="@(i == adults)">@i Adult@(i == 1 ? "" : "s")</option>
+    }
+</select>
 
 
         <select name="children" class="ta-search__select">
             @{
-                int children = ViewBag.Children ?? -1; // -1 = Any
-            }
-            <option value="-1" selected="@(children == -1)">Children (Any)</option>
-            @for (int i = 0; i <= 6; i++)
-            {
-                <option value="@i" selected="@(i == children)">@i Child@(i == 1 ? "" : "ren")</option>
+                int children = ViewBag.Children ?? 0;
+                for (int i = 0; i <= 6; i++)
+                {
+                    <option value="@i" selected="@(i == children)">@i Children</option>
+                }
             }
         </select>
-
         
     </div>
 
