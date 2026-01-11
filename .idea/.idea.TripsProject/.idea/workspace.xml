@@ -11,7 +11,9 @@
     <list default="true" id="8853538f-a415-4999-9a0f-49efd8f4d6ff" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TripsProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TripsProject/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controllers/PaymentController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/PaymentController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/Payment/Checkout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Payment/Checkout.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/UserController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Shared/_Layout.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Views/TravelPackages/Details.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/TravelPackages/Details.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -179,7 +181,15 @@
       <option name="project" value="LOCAL" />
       <updated>1767273832481</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="מערכת תשלום">
+      <option name="closed" value="true" />
+      <created>1768124217597</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1768124217597</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -223,7 +233,8 @@
     <MESSAGE value="HomePage Updated" />
     <MESSAGE value="חיבורשיין" />
     <MESSAGE value="סידור משתמש" />
-    <option name="LAST_COMMIT_MESSAGE" value="סידור משתמש" />
+    <MESSAGE value="מערכת תשלום" />
+    <option name="LAST_COMMIT_MESSAGE" value="מערכת תשלום" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -242,7 +253,7 @@
         </breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Views/TravelPackages/Details.cshtml</url>
-          <line>133</line>
+          <line>129</line>
           <properties isMultiMethodBreakpoint="true">
             <option name="multiMethodBreakpoint" value="true" />
           </properties>

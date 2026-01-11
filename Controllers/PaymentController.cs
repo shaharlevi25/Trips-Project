@@ -27,6 +27,12 @@ namespace TripsProject.Controllers
         }
         public IActionResult Checkout(int packageId)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                TempData["AuthMessage"] = "כדי להזמין חבילה יש להירשם או להתחבר למערכת";
+                return RedirectToAction("Register", "User");
+            }
+
             TravelPackage package = null;
 
             using (SqlConnection conn = new SqlConnection(_connectionString))
