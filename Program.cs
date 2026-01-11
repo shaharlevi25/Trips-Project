@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using TripsProject.Data;
 using TripsProject.Services;
 
@@ -13,6 +14,13 @@ builder.Services.AddScoped<WaitingListRepository>();
 builder.Services.AddScoped<BookingRepository>();
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/User/Login";
+        options.LogoutPath = "/User/Logout";
+        options.AccessDeniedPath = "/User/Login";
+    });
 builder.Services.AddSession();
 
 builder.Services.AddDistributedMemoryCache();
@@ -39,6 +47,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseSession();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapStaticAssets();
 
