@@ -37,7 +37,8 @@ public class PackageRepository
                     PackageType = reader["PackageType"].ToString(),
                     AgeLimit = (int)reader["AgeLimit"],
                     Description = reader["Description"].ToString(),
-                    IsAvailable = (bool)reader["IsAvailable"]
+                    IsAvailable = (bool)reader["IsAvailable"],
+                    Amount = (int)reader["Amount"]
                 });
             }
         }
@@ -51,8 +52,8 @@ public class PackageRepository
         {
             conn.Open();
             var cmd = new SqlCommand(
-                "INSERT INTO TravelPackages (Destination, Country, StartDate, EndDate, Price, NumOfPeople, PackageType, AgeLimit, Description, IsAvailable) " +
-                "VALUES (@Destination, @Country, @StartDate, @EndDate, @Price, @NumOfPeople, @PackageType, @AgeLimit, @Description, @IsAvailable)",
+                "INSERT INTO TravelPackages (Destination, Country, StartDate, EndDate, Price, NumOfPeople, PackageType, AgeLimit, Description, IsAvailable,  Amount) " +
+                "VALUES (@Destination, @Country, @StartDate, @EndDate, @Price, @NumOfPeople, @PackageType, @AgeLimit, @Description, @IsAvailable, @Amount)",
                 conn);
 
             cmd.Parameters.AddWithValue("@Destination", package.Destination);
@@ -65,6 +66,7 @@ public class PackageRepository
             cmd.Parameters.AddWithValue("@AgeLimit", package.AgeLimit);
             cmd.Parameters.AddWithValue("@Description", package.Description);
             cmd.Parameters.AddWithValue("@IsAvailable", package.IsAvailable);
+            cmd.Parameters.AddWithValue("@Amount", package.Amount);
 
             cmd.ExecuteNonQuery();
         }
@@ -94,7 +96,8 @@ public class PackageRepository
                     PackageType = reader["PackageType"].ToString(),
                     AgeLimit = (int)reader["AgeLimit"],
                     Description = reader["Description"].ToString(),
-                    IsAvailable = (bool)reader["IsAvailable"]
+                    IsAvailable = (bool)reader["IsAvailable"],
+                    Amount = (int)reader["Amount"]
                 };
             }
         }
@@ -118,6 +121,7 @@ public class PackageRepository
                 AgeLimit = @AgeLimit,
                 Description = @Description,
                 IsAvailable = @IsAvailable
+                Amount = @Amount
             WHERE PackageId = @PackageId
         ", conn);
 
@@ -132,6 +136,7 @@ public class PackageRepository
             cmd.Parameters.AddWithValue("@AgeLimit", package.AgeLimit);
             cmd.Parameters.AddWithValue("@Description", package.Description);
             cmd.Parameters.AddWithValue("@IsAvailable", package.IsAvailable);
+            cmd.Parameters.AddWithValue("@Amount", package.Amount);
 
             cmd.ExecuteNonQuery();
         }
