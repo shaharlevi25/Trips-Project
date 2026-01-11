@@ -19,7 +19,7 @@ public class Package
     [DateGreaterThan("StartDate", ErrorMessage = "End date must be after start date")]
     public DateTime EndDate { get; set; }
     public decimal Price { get; set; }  
-    public int NumOfRooms { get; set; }
+    public int NumOfPeople { get; set; }
     public string PackageType { get; set; }
     public int AgeLimit { get; set; }
     public string Description { get; set; }

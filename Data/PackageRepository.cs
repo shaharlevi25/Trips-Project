@@ -33,7 +33,7 @@ public class PackageRepository
                     StartDate = (DateTime)reader["StartDate"],
                     EndDate = (DateTime)reader["EndDate"],
                     Price = (decimal)reader["Price"],
-                    NumOfRooms = (int)reader["NumOfRooms"],
+                    NumOfPeople = (int)reader["NumOfPeople"],
                     PackageType = reader["PackageType"].ToString(),
                     AgeLimit = (int)reader["AgeLimit"],
                     Description = reader["Description"].ToString(),
@@ -51,8 +51,8 @@ public class PackageRepository
         {
             conn.Open();
             var cmd = new SqlCommand(
-                "INSERT INTO TravelPackages (Destination, Country, StartDate, EndDate, Price, NumOfRooms, PackageType, AgeLimit, Description, IsAvailable) " +
-                "VALUES (@Destination, @Country, @StartDate, @EndDate, @Price, @NumOfRooms, @PackageType, @AgeLimit, @Description, @IsAvailable)",
+                "INSERT INTO TravelPackages (Destination, Country, StartDate, EndDate, Price, NumOfPeople, PackageType, AgeLimit, Description, IsAvailable) " +
+                "VALUES (@Destination, @Country, @StartDate, @EndDate, @Price, @NumOfPeople, @PackageType, @AgeLimit, @Description, @IsAvailable)",
                 conn);
 
             cmd.Parameters.AddWithValue("@Destination", package.Destination);
@@ -60,7 +60,7 @@ public class PackageRepository
             cmd.Parameters.AddWithValue("@StartDate", package.StartDate);
             cmd.Parameters.AddWithValue("@EndDate", package.EndDate);
             cmd.Parameters.AddWithValue("@Price", package.Price);
-            cmd.Parameters.AddWithValue("@NumOfRooms", package.NumOfRooms);
+            cmd.Parameters.AddWithValue("@NumOfPeople", package.NumOfPeople);
             cmd.Parameters.AddWithValue("@PackageType", package.PackageType);
             cmd.Parameters.AddWithValue("@AgeLimit", package.AgeLimit);
             cmd.Parameters.AddWithValue("@Description", package.Description);
@@ -90,7 +90,7 @@ public class PackageRepository
                     StartDate = (DateTime)reader["StartDate"],
                     EndDate = (DateTime)reader["EndDate"],
                     Price = (decimal)reader["Price"],
-                    NumOfRooms = (int)reader["NumOfRooms"],
+                    NumOfPeople = (int)reader["NumOfPeople"],
                     PackageType = reader["PackageType"].ToString(),
                     AgeLimit = (int)reader["AgeLimit"],
                     Description = reader["Description"].ToString(),
@@ -113,7 +113,7 @@ public class PackageRepository
                 StartDate = @StartDate,
                 EndDate = @EndDate,
                 Price = @Price,
-                NumOfRooms = @NumOfRooms,
+                NumOfPeople = @NumOfPeople,
                 PackageType = @PackageType,
                 AgeLimit = @AgeLimit,
                 Description = @Description,
@@ -127,7 +127,7 @@ public class PackageRepository
             cmd.Parameters.AddWithValue("@StartDate", package.StartDate);
             cmd.Parameters.AddWithValue("@EndDate", package.EndDate);
             cmd.Parameters.AddWithValue("@Price", package.Price);
-            cmd.Parameters.AddWithValue("@NumOfRooms", package.NumOfRooms);
+            cmd.Parameters.AddWithValue("@NumOfPeople", package.NumOfPeople);
             cmd.Parameters.AddWithValue("@PackageType", package.PackageType);
             cmd.Parameters.AddWithValue("@AgeLimit", package.AgeLimit);
             cmd.Parameters.AddWithValue("@Description", package.Description);
