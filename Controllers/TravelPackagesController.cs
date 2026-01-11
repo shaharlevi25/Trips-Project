@@ -39,7 +39,7 @@ namespace TripsProject.Controllers
                         StartDate = (DateTime)reader["StartDate"],
                         EndDate = (DateTime)reader["EndDate"],
                         Price = (decimal)reader["Price"],
-                        NumOfRooms = (int)reader["NumOfRooms"],
+                        NumOfPeople= (int)reader["NumOfPeople"],
                         PackageType = reader["PackageType"].ToString(),
                         AgeLimit = reader["AgeLimit"] == DBNull.Value ? null : (int?)reader["AgeLimit"],
                         Description = reader["Description"].ToString(),
