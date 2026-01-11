@@ -9,10 +9,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8853538f-a415-4999-9a0f-49efd8f4d6ff" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Controllers/DashboardController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Views/Dashboard/User.cshtml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/wwwroot/css/user.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TripsProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TripsProject/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/Payment/Checkout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Payment/Checkout.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/TravelPackagesController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/TravelPackagesController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/TripsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/TripsController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/TravelPackage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/TravelPackage.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Shared/_Layout.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/TravelPackages/Details.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/TravelPackages/Details.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Views/Trips/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Trips/Index.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -45,25 +50,25 @@
     &quot;assignee&quot;: &quot;yagelso&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/shaharlevi25/Trips-Project.git&quot;,
-    &quot;accountId&quot;: &quot;b5f6f204-4e83-42dd-ac02-15ca4f82cd8a&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/shaharlevi25/Trips-Project.git",
+    "accountId": "7f733a30-0965-4e0b-baa4-9844a5fe0f1a"
   },
-  &quot;recentNewPullRequestHead&quot;: {
-    &quot;server&quot;: {
-      &quot;useHttp&quot;: false,
-      &quot;host&quot;: &quot;github.com&quot;,
-      &quot;port&quot;: null,
-      &quot;suffix&quot;: null
+  "recentNewPullRequestHead": {
+    "server": {
+      "useHttp": false,
+      "host": "github.com",
+      "port": null,
+      "suffix": null
     },
-    &quot;owner&quot;: &quot;shaharlevi25&quot;,
-    &quot;repository&quot;: &quot;Trips-Project&quot;
+    "owner": "shaharlevi25",
+    "repository": "Trips-Project"
   }
-}</component>
+}]]></component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/956fa71d1764d6fe8f60412ec69cd89ea7a306cb45963dac5d9a7bb6d39715/RazorPageBase.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Controllers/Admin/DashboardController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Controllers/DashboardController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controllers/TripsController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controllers/WaitListController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/TravelPackage.cs" root0="FORCE_HIGHLIGHTING" />
@@ -189,7 +194,15 @@
       <option name="project" value="LOCAL" />
       <updated>1767273832481</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL‎-00005" summary="Yagel Mini Changes">
+      <option name="closed" value="true" />
+      <created>1768128672830</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL‎-00005" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1768128672830</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -233,7 +246,8 @@
     <MESSAGE value="HomePage Updated" />
     <MESSAGE value="חיבורשיין" />
     <MESSAGE value="סידור משתמש" />
-    <option name="LAST_COMMIT_MESSAGE" value="סידור משתמש" />
+    <MESSAGE value="Yagel Mini Changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Yagel Mini Changes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -250,14 +264,6 @@
           <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
           <option name="timeStamp" value="3" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Views/TravelPackages/Details.cshtml</url>
-          <line>51</line>
-          <properties isMultiMethodBreakpoint="true">
-            <option name="multiMethodBreakpoint" value="true" />
-          </properties>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
