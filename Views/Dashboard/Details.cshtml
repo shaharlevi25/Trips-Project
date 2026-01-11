@@ -1,0 +1,35 @@
+@model TripsProject.Models.User
+
+<div class="container mt-5" style="max-width:500px">
+    <h2 class="mb-4">My Profile</h2>
+
+    <form method="post" asp-action="SaveDetails">
+
+        <div class="mb-3">
+            <label>First Name</label>
+            <input class="form-control" asp-for="FirstName" />
+        </div>
+
+        <div class="mb-3">
+            <label>Last Name</label>
+            <input class="form-control" asp-for="LastName" />
+        </div>
+
+        <div class="mb-3">
+            <label>Email</label>
+            <input class="form-control" asp-for="Email" readonly />
+        </div>
+
+        <div class="mb-3">
+            <label>Phone</label>
+            <input class="form-control" asp-for="PhoneNumber" />
+        </div>
+
+        <div class="mb-3">
+            <label>Password</label>
+            <input class="form-control" asp-for="Password" type="password" />
+        </div>
+
+        <button class="btn btn-primary w-100">Save Changes</button>
+    </form>
+</div>

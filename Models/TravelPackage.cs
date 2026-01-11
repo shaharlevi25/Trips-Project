@@ -10,8 +10,6 @@ namespace TripsProject.Models
         public DateTime EndDate { get; set; }
 
         public decimal Price { get; set; }
-        public int NumOfRooms { get; set; }
-        
         public int NumOfPeople { get; set; }
 
 
