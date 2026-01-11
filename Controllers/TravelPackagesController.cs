@@ -43,7 +43,9 @@ namespace TripsProject.Controllers
                         PackageType = reader["PackageType"].ToString(),
                         AgeLimit = reader["AgeLimit"] == DBNull.Value ? null : (int?)reader["AgeLimit"],
                         Description = reader["Description"].ToString(),
-                        IsAvailable = (bool)reader["IsAvailable"]
+                        IsAvailable = (bool)reader["IsAvailable"],
+                        Amount = (int)reader["Amount"]
+                        
                     };
                 }
             }
