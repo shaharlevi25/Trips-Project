@@ -11,6 +11,9 @@ namespace TripsProject.Models
 
         public decimal Price { get; set; }
         public int NumOfRooms { get; set; }
+        
+        public int NumOfPeople { get; set; }
+
 
         public string PackageType { get; set; } = "";
         public int? AgeLimit { get; set; }
