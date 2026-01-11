@@ -1,0 +1,28 @@
+﻿@model IEnumerable<TripsProject.Models.ViewModel.WaitingListRowVM>
+
+<table>
+    <thead>
+    <tr>
+        <th>WaitingID</th>
+        <th>User</th>
+        <th>PackageID</th>
+        <th>Destination</th>
+        <th>Request Date</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    @foreach (var w in Model)
+    {
+        <tr>
+            <td>@w.WaitingID</td>
+            <td>@w.UserID</td>
+            <td>@w.PackageID</td>
+            <td>@w.Destination</td>
+            <td>@(w.RequestDate?.ToString("yyyy-MM-dd HH:mm") ?? "-")</td>
+            <td>@w.Status</td>
+        </tr>
+    }
+    </tbody>
+</table>

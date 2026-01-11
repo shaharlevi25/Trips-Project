@@ -1,0 +1,23 @@
+﻿@model TripsProject.Models.Package
+
+<link rel="stylesheet" href="~/css/packages.css" />
+
+<h1>Delete Package</h1>
+
+<div class="info-box">
+    <p><b>Destination:</b> @Model.Destination</p>
+    <p><b>Country:</b> @Model.Country</p>
+    <p><b>Dates:</b> @Model.StartDate.ToShortDateString() - @Model.EndDate.ToShortDateString()</p>
+    <p><b>Price:</b> @Model.Price</p>
+</div>
+
+<div class="warning-box">
+    Are you sure you want to delete this package?
+</div>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" name="packageId" value="@Model.PackageId" />
+
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
