@@ -12,6 +12,7 @@ builder.Services.AddScoped<BookingRulesRepository>();
 builder.Services.AddScoped<PolicyTextService>();
 builder.Services.AddScoped<WaitingListRepository>();
 builder.Services.AddScoped<BookingRepository>();
+builder.Services.AddScoped<EmailService>();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

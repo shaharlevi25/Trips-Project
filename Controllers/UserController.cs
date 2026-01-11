@@ -6,17 +6,20 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using TripsProject.Services;
 
 namespace TripsProject.Controllers
 {
     public class UserController : Controller
     {
         private string connectionString;
+        private readonly EmailService _emailService;
         
 
-        public UserController(IConfiguration config)
+        public UserController(IConfiguration config, EmailService emailService)
         {
             connectionString = config.GetConnectionString("TravelDb");
+            _emailService = emailService;
         }
         
 
@@ -28,7 +31,7 @@ namespace TripsProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(User model)
+        public async Task<IActionResult> Register(User model)
         {
             if (!ModelState.IsValid)
                 return View(model);
@@ -50,6 +53,11 @@ namespace TripsProject.Controllers
                 cmd.Parameters.AddWithValue("@Role", model.Role);
 
                 cmd.ExecuteNonQuery();
+                await _emailService.SendAsync(
+                    model.Email,
+                    "ברוך הבא ל-TripsProject",
+                    $"<h2>שלום {model.FirstName}</h2><p>נרשמת בהצלחה למערכת.</p>"
+                );
             }
 
             return Redirect("/");
@@ -96,6 +104,12 @@ namespace TripsProject.Controllers
                     await HttpContext.SignInAsync(
                         CookieAuthenticationDefaults.AuthenticationScheme,
                         principal
+                    );
+
+                    await _emailService.SendAsync(
+                        reader["Email"].ToString(),
+                        "Login notification",
+                        "התחברת בהצלחה למערכת TripsProject"
                     );
 
                     return Redirect("/");
