@@ -8,12 +8,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8853538f-a415-4999-9a0f-49efd8f4d6ff" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="8853538f-a415-4999-9a0f-49efd8f4d6ff" name="Changes" comment="using System;&#10;using System.Threading.Tasks;&#10;using Microsoft.Extensions.Configuration;&#10;using SendGrid;&#10;using SendGrid.Helpers.Mail;&#10;&#10;public class EmailService&#10;{&#10;    private readonly IConfiguration _config;&#10;&#10;    public EmailService(IConfiguration config)&#10;    {&#10;        _config = config;&#10;    }&#10;&#10;    public async Task SendAsync(string toEmail, string subject, string body)&#10;    {&#10;        var apiKey = Environment.GetEnvironmentVariable(&quot;SENDGRID_API_KEY&quot;) &#10;                     ?? _config[&quot;SendGrid:ApiKey&quot;];&#10;        var fromEmail = _config[&quot;SendGrid:FromEmail&quot;];&#10;        var fromName = _config[&quot;SendGrid:FromName&quot;];&#10;&#10;        var client = new SendGridClient(apiKey);&#10;        var from = new EmailAddress(fromEmail, fromName);&#10;        var to = new EmailAddress(toEmail);&#10;        var msg = MailHelper.CreateSingleEmail(from, to, subject, body, body);&#10;        await client.SendEmailAsync(msg);&#10;    }&#10;}">
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TripsProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TripsProject/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TripsProject.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/TripsProject.sln.DotSettings.user" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Services/EmailService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Services/EmailService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,25 +43,26 @@
     &quot;assignee&quot;: &quot;yagelso&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/shaharlevi25/Trips-Project.git",
-    "accountId": "493e1743-f6df-462d-9a24-148f6ca11873"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/shaharlevi25/Trips-Project.git&quot;,
+    &quot;accountId&quot;: &quot;493e1743-f6df-462d-9a24-148f6ca11873&quot;
   },
-  "recentNewPullRequestHead": {
-    "server": {
-      "useHttp": false,
-      "host": "github.com",
-      "port": null,
-      "suffix": null
+  &quot;recentNewPullRequestHead&quot;: {
+    &quot;server&quot;: {
+      &quot;useHttp&quot;: false,
+      &quot;host&quot;: &quot;github.com&quot;,
+      &quot;port&quot;: null,
+      &quot;suffix&quot;: null
     },
-    "owner": "shaharlevi25",
-    "repository": "Trips-Project"
+    &quot;owner&quot;: &quot;shaharlevi25&quot;,
+    &quot;repository&quot;: &quot;Trips-Project&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Controllers/TripsController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controllers/WaitListController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///Users/shaharlevi/Desktop/לימודים/תואר- הנדסת תוכנה/שנה ג/Project/TripsProject/Models/Services/EmailService.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/Services/EmailService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/TravelPackage.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Properties/launchSettings.json" root0="FORCE_HIGHLIGHTING" />
@@ -156,7 +156,7 @@
       <workItem from="1764751517367" duration="19810000" />
       <workItem from="1766865562755" duration="989000" />
       <workItem from="1766866777249" duration="19244000" />
-      <workItem from="1768147215485" duration="530000" />
+      <workItem from="1768147215485" duration="2144000" />
     </task>
     <task id="LOCAL‎-00001" summary="HomePage Start">
       <option name="closed" value="true" />
@@ -206,7 +206,15 @@
       <option name="project" value="LOCAL" />
       <updated>1768142163480</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="סידור api">
+      <option name="closed" value="true" />
+      <created>1768148210732</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1768148210732</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -252,7 +260,8 @@
     <MESSAGE value="סידור משתמש" />
     <MESSAGE value="אאע" />
     <MESSAGE value="עדכון" />
-    <option name="LAST_COMMIT_MESSAGE" value="עדכון" />
+    <MESSAGE value="סידור api" />
+    <option name="LAST_COMMIT_MESSAGE" value="סידור api" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

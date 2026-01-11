@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using TripsProject.Data;
 using TripsProject.Services;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
