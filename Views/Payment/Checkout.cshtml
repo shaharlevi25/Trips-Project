@@ -12,6 +12,7 @@ ViewData["Title"] = "Checkout";
             סה״כ לתשלום: ₪@Model.Price
         </div>
 
+        <!-- ✅ חובה: זה ה-container שה-PayPal צריך -->
         <div id="paypal-button-container"></div>
 
         <div class="secure-text">
@@ -19,49 +20,6 @@ ViewData["Title"] = "Checkout";
         </div>
     </div>
 </div>
-
-@section Scripts {
-<script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=ILS"></script>
-
-<script>
-    const packageId = @Model.PackageId;
-
-    paypal.Buttons({
-        style: { layout: 'vertical', color: 'blue', shape: 'pill', label: 'paypal' },
-
-        // createOrder דרך השרת
-        createOrder: async function () {
-            const res = await fetch('/Payment/CreateOrder', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ packageId })
-            });
-
-            const data = await res.json();
-            return data.orderId;
-        },
-
-        // approve -> Capture דרך השרת -> INSERT Orders
-        onApprove: async function (data) {
-            const res = await fetch('/Payment/Capture', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ orderId: data.orderID })
-            });
-
-            if (res.ok) {
-                window.location.href = '/Payment/Success';
-            } else {
-                alert("Payment error: " + await res.text());
-            }
-        },
-
-        onCancel: function () {
-            window.location.href = '/Payment/Cancel';
-        }
-
-    }).render('#paypal-button-container');
-</script>
 
 <style>
     .checkout-wrapper {
@@ -110,4 +68,67 @@ ViewData["Title"] = "Checkout";
         color: #9ca3af;
     }
 </style>
+
+@section Scripts {
+<script src="https://www.paypal.com/sdk/js?client-id=AUIimViTH8m2sDNv8d9Osd9xex0s3b6bmxiXfb8Zx9IGHTtPsa_1P5a7qg5OvA1mVY_PhP05dMyZIWDO&currency=ILS"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const el = document.getElementById("paypal-button-container");
+        console.log("paypal container:", el);
+
+        if (!el) {
+            alert("ERROR: #paypal-button-container not found in the page");
+            return;
+        }
+
+        paypal.Buttons({
+            createOrder: async function () {
+                const packageId = @Model.PackageId;
+
+                const res = await fetch('/Payment/CreateOrder', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ packageId: packageId })
+                });
+
+                if (!res.ok) {
+                    alert(await res.text());
+                    throw new Error("CreateOrder failed");
+                }
+
+                const data = await res.json();
+                return data.orderId;
+            },
+
+            onApprove: async function (data) {
+                const res = await fetch('/Payment/Capture', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ orderId: data.orderID })
+                });
+
+                if (res.ok) {
+                    window.location.href = '/Payment/Success';
+                } else {
+                    alert("Payment error: " + await res.text());
+                }
+            },
+
+            onCancel: async function (data) {
+                try {
+                    await fetch('/Payment/CancelReservation', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ orderId: data.orderID })
+                    });
+                } catch (e) { }
+
+                window.location.href = '/Payment/Cancel';
+            }
+        }).render('#paypal-button-container');
+
+    });
+</script>
 }

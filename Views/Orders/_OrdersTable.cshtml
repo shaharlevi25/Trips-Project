@@ -1,0 +1,34 @@
+﻿@model IEnumerable<TripsProject.Models.ViewModel.OrderRowVM>
+
+<table>
+    <thead>
+    <tr>
+        <th>OrderId</th>
+        <th>User</th>
+        <th>PackageId</th>
+        <th>Destination</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>OrderDate</th>
+        <th>PaidAt</th>
+        <th>PayPalOrderId</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    @foreach (var o in Model)
+    {
+        <tr>
+            <td>@o.OrderId</td>
+            <td>@o.UserEmail</td>
+            <td>@o.PackageId</td>
+            <td>@o.Destination</td>
+            <td>@o.TotalPrice</td>
+            <td>@o.Status</td>
+            <td>@o.OrderDate.ToString("yyyy-MM-dd")</td>
+            <td>@(o.PaidAt?.ToString("yyyy-MM-dd") ?? "-")</td>
+            <td>@(o.PayPalOrderId ?? "-")</td>
+        </tr>
+    }
+    </tbody>
+</table>
