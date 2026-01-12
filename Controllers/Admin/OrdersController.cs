@@ -5,15 +5,18 @@ namespace TripsProject.Controllers.Admin;
 
 public class OrdersController : Controller
 {
+
     private readonly OrderRepository _repo;
 
-    public OrdersController(OrderRepository repo)
+    public OrdersController(OrderRepository repo,OrderCleanupService cleanup)
     {
         _repo = repo;
+       
     }
 
     public IActionResult Index()
     {   
+      
         var orders = _repo.GetAll();
         return View(orders);
     }
