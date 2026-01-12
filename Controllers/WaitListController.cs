@@ -23,15 +23,12 @@ namespace TripsProject.Controllers
         [HttpPost("Join")]
         public IActionResult Join([FromBody] JoinWaitlistRequest req)
         {
-           
-            var email = HttpContext.Session.GetString("UserEmail");
-
-
-            if (string.IsNullOrWhiteSpace(email))
+            if (!User.Identity.IsAuthenticated)
             {
-                return Json(new { status = "not_logged_in" });
+                return Unauthorized();
             }
-            email = email.Trim();
+
+            var email = User.Identity.Name;
 
 
             using var conn = new SqlConnection(_connectionString);
