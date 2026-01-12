@@ -4,6 +4,7 @@ using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using TripsProject.Data;
+using TripsProject.Services;
 
 namespace TripsProject.Controllers
 {
@@ -11,11 +12,67 @@ namespace TripsProject.Controllers
     {
         private readonly OrderRepository _repo;
         private readonly string _cs;
+        private readonly EmailService _email;
 
-        public UserOrdersController(OrderRepository repo,IConfiguration config)
+        public UserOrdersController(OrderRepository repo,IConfiguration config, EmailService email)
         {
             _repo = repo;
             _cs = config.GetConnectionString("TravelDb");
+            _email = email;
+        }
+        
+        public async Task<IActionResult> Cancel(int orderId)
+        {
+            if (!User.Identity.IsAuthenticated)
+                return Unauthorized();
+
+            string email = User.Identity!.Name!;
+
+            var result = _repo.CancelPaidOrderByUser(orderId, email);
+            if (!result.Success)
+                return BadRequest(result.Error);
+
+            // שליחת מייל ל-waitlist רק אם לפני הביטול היה Amount==0
+            if (result.WasAmountZeroBeforeCancel)
+            {
+                try
+                {
+                    var waitlistEmails = _repo.GetWaitlistEmailsForPackage(result.PackageId);
+
+                    if (waitlistEmails.Count > 0)
+                    {
+                        string subject = "A spot just opened up for a travel package!";
+                        string body = $@"
+<div style='font-family:Arial'>
+  <h2>Good news ✅</h2>
+  <p>A package you are waiting for is now available.</p>
+  <p><b>Package ID:</b> {result.PackageId}</p>
+  <p>Please log in and book as soon as possible.</p>
+  <hr/>
+  <p>TripsProject Team</p>
+</div>";
+
+                        // best-effort: לא מפילים את הביטול אם מייל נכשל
+                        foreach (var to in waitlistEmails)
+                        {
+                            try
+                            {
+                                await _email.SendAsync(to, subject, body);
+                            }
+                            catch { /* ignore per-recipient */ }
+                        }
+
+                        // אופציונלי: לשנות סטטוס ב-WaitingList כדי לא להודיע שוב
+                        _repo.MarkWaitlistNotified(result.PackageId);
+                    }
+                }
+                catch
+                {
+                    // best effort: מתעלמים
+                }
+            }
+
+            return Ok(new { success = true });
         }
 
         // GET: /UserOrders/MyOrders

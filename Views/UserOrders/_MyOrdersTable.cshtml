@@ -11,6 +11,7 @@
         <th>Order Date</th>
         <th>Paid At</th>
         <th>Invoice</th>
+        <th>Actions</th>
     </tr>
     </thead>
 
@@ -42,6 +43,20 @@
                 else
                 {
                     <span style="color:#9ca3af;">-</span>
+                }
+            </td>
+            
+            <td>
+                @if (o.Status == "Paid")
+                {
+                    <button class="btn btn-danger btn-sm"
+                            onclick="cancelOrder(@o.OrderID)">
+                        Cancel
+                    </button>
+                }
+                else
+                {
+                    <span>-</span>
                 }
             </td>
         </tr>
