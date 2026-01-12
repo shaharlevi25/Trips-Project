@@ -125,12 +125,19 @@ ViewData["Title"] = "Checkout";
                     body: JSON.stringify({ orderId: data.orderID })
                 });
 
+                // קוראים את התוכן פעם אחת
+                const bodyText = await res.text();
+
                 if (res.ok) {
-                    window.location.href = '/Payment/Success';
+                    // מצפים שהשרת יחזיר: { success: true, orderId: "..." }
+                    const data2 = JSON.parse(bodyText);
+
+                    window.location.href =
+                        '/Payment/Success?orderId=' + encodeURIComponent(data2.orderId);
                 } else {
-                    alert("Payment error: " + await res.text());
+                    alert("Payment error: " + bodyText);
                 }
-            },
+},
 
             onCancel: async function (data) {
                 try {

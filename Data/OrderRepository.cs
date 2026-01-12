@@ -65,4 +65,58 @@ ORDER BY o.OrderDate DESC;
 
         return list;
         }
+    public List<MyOrderRowVM> GetUserOrders(string userEmail, string? search = null)
+    {
+        var list = new List<MyOrderRowVM>();
+
+        using var conn = new SqlConnection(_connectionString);
+        conn.Open();
+
+        var sql = @"
+SELECT
+    o.OrderID,
+    o.PackageID,
+    o.TotalPrice,
+    o.Status,
+    o.OrderDate,
+    o.PaidAt,
+    p.Destination,
+    p.Country
+FROM Orders o
+JOIN TravelPackages p ON p.PackageId = o.PackageID
+WHERE
+    o.UserEmail = @Email
+    AND (
+        @q IS NULL OR @q = '' OR
+        p.Destination LIKE '%' + @q + '%' OR
+        p.Country LIKE '%' + @q + '%' OR
+        o.Status LIKE '%' + @q + '%' OR
+        CAST(o.OrderID AS NVARCHAR(20)) = @q OR
+        CAST(o.PackageID AS NVARCHAR(20)) = @q
+    )
+ORDER BY o.OrderDate DESC;
+";
+
+        using var cmd = new SqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@Email", userEmail);
+        cmd.Parameters.AddWithValue("@q", (object?)search ?? "");
+
+        using var r = cmd.ExecuteReader();
+        while (r.Read())
+        {
+            list.Add(new MyOrderRowVM
+            {
+                OrderID = (int)r["OrderID"],
+                PackageID = (int)r["PackageID"],
+                Destination = r["Destination"].ToString()!,
+                Country = r["Country"].ToString()!,
+                TotalPrice = (decimal)r["TotalPrice"],
+                Status = r["Status"].ToString()!,
+                OrderDate = (DateTime)r["OrderDate"],
+                PaidAt = r["PaidAt"] == DBNull.Value ? null : (DateTime?)r["PaidAt"]
+            });
+        }
+
+        return list;
+    }
 }

@@ -17,6 +17,7 @@ builder.Services.AddScoped<OrderCleanupService>();
 
 
 
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

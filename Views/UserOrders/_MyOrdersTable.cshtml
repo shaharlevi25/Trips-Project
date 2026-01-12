@@ -1,0 +1,50 @@
+﻿@model IEnumerable<TripsProject.Models.ViewModel.MyOrderRowVM>
+
+<table>
+    <thead>
+    <tr>
+        <th>OrderId</th>
+        <th>Package</th>
+        <th>Destination</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Order Date</th>
+        <th>Paid At</th>
+        <th>Invoice</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    @foreach (var o in Model)
+    {
+        var cls = o.Status == "Paid" ? "paid" :
+            o.Status == "PendingPayment" ? "pending" : "cancelled";
+
+        <tr>
+            <td>#@o.OrderID</td>
+            <td>@o.PackageID</td>
+            <td>@o.Destination (@o.Country)</td>
+            <td>₪@o.TotalPrice</td>
+            <td><span class="badge @cls">@o.Status</span></td>
+            <td>@o.OrderDate.ToString("dd/MM/yyyy")</td>
+            <td>@(o.PaidAt?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
+            <td>
+                @if (o.Status == "Paid")
+                {
+                    <a class="btn btn-sm btn-outline-primary"
+                       asp-controller="UserOrders"
+                       asp-action="InvoicePdf"
+                       asp-route-orderId="@o.OrderID"
+                       target="_blank">
+                        PDF
+                    </a>
+                }
+                else
+                {
+                    <span style="color:#9ca3af;">-</span>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
