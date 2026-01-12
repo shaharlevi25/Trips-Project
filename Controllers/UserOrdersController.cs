@@ -13,14 +13,18 @@ namespace TripsProject.Controllers
         private readonly OrderRepository _repo;
         private readonly string _cs;
         private readonly EmailService _email;
+        private readonly PackageRepository _package;
 
-        public UserOrdersController(OrderRepository repo,IConfiguration config, EmailService email)
+        public UserOrdersController(OrderRepository repo,IConfiguration config, EmailService email,PackageRepository pack)
         {
             _repo = repo;
             _cs = config.GetConnectionString("TravelDb");
             _email = email;
+            _package = pack;
         }
         
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Cancel(int orderId)
         {
             if (!User.Identity.IsAuthenticated)
@@ -41,16 +45,54 @@ namespace TripsProject.Controllers
 
                     if (waitlistEmails.Count > 0)
                     {
+                        var package = _package.GetPackageById(result.PackageId);
                         string subject = "A spot just opened up for a travel package!";
                         string body = $@"
-<div style='font-family:Arial'>
-  <h2>Good news ✅</h2>
-  <p>A package you are waiting for is now available.</p>
-  <p><b>Package ID:</b> {result.PackageId}</p>
-  <p>Please log in and book as soon as possible.</p>
-  <hr/>
-  <p>TripsProject Team</p>
-</div>";
+<div style='font-family:Arial; line-height:1.6; color:#1f2937'>
+  <h2 style='margin:0 0 10px;'>Good news ✅</h2>
+  <p style='margin:0 0 14px;'>A spot has just opened for a package you are waiting for.</p>
+
+  <table style='border-collapse:collapse; width:100%; max-width:650px;'>
+    <tr>
+      <td style='padding:8px; border:1px solid #e5e7eb; width:180px;'><b>Package</b></td>
+      <td style='padding:8px; border:1px solid #e5e7eb;'>
+        {(package != null
+            ? $"{package.Destination}, {package.Country} | {package.StartDate:dd/MM/yyyy} - {package.EndDate:dd/MM/yyyy} | {package.PackageType}"
+            : "N/A")}
+      </td>
+    </tr>
+
+    <tr>
+      <td style='padding:8px; border:1px solid #e5e7eb;'><b>Destination</b></td>
+      <td style='padding:8px; border:1px solid #e5e7eb;'>
+        {(package != null ? $"{package.Destination}, {package.Country}" : "N/A")}
+      </td>
+    </tr>
+
+    <tr>
+      <td style='padding:8px; border:1px solid #e5e7eb;'><b>Dates</b></td>
+      <td style='padding:8px; border:1px solid #e5e7eb;'>
+        {(package != null ? $"{package.StartDate:dd/MM/yyyy} - {package.EndDate:dd/MM/yyyy}" : "N/A")}
+      </td>
+    </tr>
+
+    <tr>
+      <td style='padding:8px; border:1px solid #e5e7eb;'><b>Price</b></td>
+      <td style='padding:8px; border:1px solid #e5e7eb;'>
+        {(package != null ? package.Price.ToString("0.00") + " USD" : "N/A")}
+      </td>
+    </tr>
+  </table>
+
+  <p style='margin:16px 0 10px;'>
+    ⏳ Availability is limited — please log in and book as soon as possible.
+  </p>
+
+  <hr style='border:none; border-top:1px solid #e5e7eb; margin:18px 0;' />
+
+  <p style='margin:0;'>TripsProject Team</p>
+</div>
+";
 
                         // best-effort: לא מפילים את הביטול אם מייל נכשל
                         foreach (var to in waitlistEmails)
@@ -72,7 +114,7 @@ namespace TripsProject.Controllers
                 }
             }
 
-            return Ok(new { success = true });
+            return RedirectToAction("MyOrders");
         }
 
         // GET: /UserOrders/MyOrders

@@ -12,6 +12,7 @@
         <th>OrderDate</th>
         <th>PaidAt</th>
         <th>PayPalOrderId</th>
+        <th>CancelledAt</th>
     </tr>
     </thead>
 
@@ -28,6 +29,7 @@
             <td>@o.OrderDate.ToString("yyyy-MM-dd")</td>
             <td>@(o.PaidAt?.ToString("yyyy-MM-dd") ?? "-")</td>
             <td>@(o.PayPalOrderId ?? "-")</td>
+            <td>@(o.CancelledAt ?.ToString("yyyy-MM-dd") ?? "-")</td>
         </tr>
     }
     </tbody>

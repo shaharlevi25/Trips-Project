@@ -49,10 +49,19 @@
             <td>
                 @if (o.Status == "Paid")
                 {
-                    <button class="btn btn-danger btn-sm"
-                            onclick="cancelOrder(@o.OrderID)">
-                        Cancel
-                    </button>
+                    <form asp-controller="UserOrders"
+                          asp-action="Cancel"
+                          method="post"
+                          style="display:inline;"
+                          onsubmit="return confirm('Are you sure you want to cancel this order?');">
+
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="orderId" value="@o.OrderID" />
+
+                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                            Cancel
+                        </button>
+                    </form>
                 }
                 else
                 {

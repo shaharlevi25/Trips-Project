@@ -157,7 +157,7 @@ public class OrderRepository
                 SELECT UserID
                 FROM WaitingList
                 WHERE PackageID = @PackageId
-                  AND Status = 'Waiting'
+                  AND Status = 'Pending'
                 ORDER BY RequestDate ASC;
             ", conn);
 
@@ -203,7 +203,8 @@ SELECT
     o.Status,
     o.OrderDate,
     o.PaidAt,
-    o.PayPalOrderId
+    o.PayPalOrderId,
+    o.CancelledAt
 FROM Orders o
 JOIN TravelPackages p ON p.PackageId = o.PackageID
 WHERE
@@ -233,7 +234,8 @@ ORDER BY o.OrderDate DESC;
                 Status = r["Status"].ToString()!,
                 OrderDate = (DateTime)r["OrderDate"],
                 PaidAt = r["PaidAt"] == DBNull.Value ? null : (DateTime?)r["PaidAt"],
-                PayPalOrderId = r["PayPalOrderId"] == DBNull.Value ? null : r["PayPalOrderId"].ToString()
+                PayPalOrderId = r["PayPalOrderId"] == DBNull.Value ? null : r["PayPalOrderId"].ToString(),
+                CancelledAt = r["CancelledAt"] == DBNull.Value ? null : (DateTime?)r["CancelledAt"]
             });
         }
 
