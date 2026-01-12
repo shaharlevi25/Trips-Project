@@ -44,8 +44,8 @@
     ViewData["Title"] = "All Packages";
 
     // קיבוץ לפי מדינה ואז לפי קטגוריה (PackageType)
-    var byCountry = (Model ?? new List<TripsProject.Models.TravelPackage>())
-        .GroupBy(p => p.Country ?? "Unknown")
+    var byType = (Model ?? new List<TripsProject.Models.TravelPackage>())
+        .GroupBy(p => p.PackageType ?? "Unknown")
         .OrderBy(g => g.Key);
 }
 
@@ -173,7 +173,7 @@
     }
     else
     {
-        @foreach (var countryGroup in byCountry)
+        @foreach (var countryGroup in byType)
         {
             <div class="country-section mb-5">
                 
