@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
 using TripsProject.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TripsProject.Controllers
 {
@@ -106,12 +107,6 @@ namespace TripsProject.Controllers
                     await HttpContext.SignInAsync(
                         CookieAuthenticationDefaults.AuthenticationScheme,
                         principal
-                    );
-
-                    await _emailService.SendAsync(
-                        reader["Email"].ToString(),
-                        "Login notification",
-                        "התחברת בהצלחה למערכת TripsProject"
                     );
 
                     return Redirect("/");
@@ -219,12 +214,10 @@ namespace TripsProject.Controllers
             return RedirectToAction("Index", "Trips");
         }
         // Details Getter
+        [Authorize]
         [HttpGet]
         public IActionResult Details()
         {
-            if (!User.Identity.IsAuthenticated)
-                return RedirectToAction("Login");
-
             string email = User.Identity.Name;
 
             User user = null;
@@ -251,7 +244,7 @@ namespace TripsProject.Controllers
                 }
             }
 
-            return View(Details);
+            return View(user);
         }
         
         // Save Details

@@ -1,23 +1,12 @@
-
 @model TripsProject.Models.TravelPackage
 
 
 
 <script>
     function confirmPayment(packageId) {
-        const isAuthenticated = @((User.Identity != null && User.Identity.IsAuthenticated).ToString().ToLower());
-
-        if (!isAuthenticated) {
-            alert("כדי לרכוש חבילה יש להירשם או להתחבר לאתר");
-            window.location.href = "/User/Register";
-            return;
-        }
-
         window.location.href = `/Payment/Checkout?packageId=${packageId}`;
     }
 
-    
-        function joinWaitlist() {alert("You have been added to the waiting list.");}
     
         async function joinWaitlist(packageId) {
         
@@ -28,30 +17,41 @@
         
         const res = await fetch("/Waitlist/Join", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ packageId })
     });
 
+        if (res.status === 401) {
+            alert("To join the waiting list you must be logged in / registered.");
+            window.location.href = "/User/Register";
+            return;
+        }
+
+        const contentType = res.headers.get("content-type") || "";
+        if (!contentType.includes("application/json")) {
+            alert("Something went wrong. Please try again.");
+            return;
+        }
+
         const data = await res.json();
 
-        
-        if (data.status === "not_logged_in") {
-        alert("Please login first.");
-        
-        return;
-    }
-
         if (data.status === "already_exists") {
-        alert("You are already on the waiting list for this package.");
-        return;
-    }
+            alert("You are already on the waiting list for this package.");
+            return;
+        }
 
         if (data.status === "ok") {
-        alert("You have been added to the waiting list.");
-        return;
-    }
+            alert("You have been added to the waiting list.");
+            return;
+        }
 
-        
+        if (data.status === "not_logged_in") {
+            alert("To join the waiting list you must be logged in / registered.");
+            window.location.href = data.redirectUrl || "/User/Register";
+            return;
+        }
+
         alert("Something went wrong. Please try again.");
     } catch (e) {
         alert("Network error. Please try again.");
