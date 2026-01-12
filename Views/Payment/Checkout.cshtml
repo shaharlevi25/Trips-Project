@@ -12,7 +12,11 @@ ViewData["Title"] = "Checkout";
             סה״כ לתשלום: ₪@Model.Price
         </div>
 
-        <!-- ✅ חובה: זה ה-container שה-PayPal צריך -->
+        <div class="timer-box">
+            ⏳ הזמן שנותר לתשלום:
+            <span id="timer">--:--</span>
+        </div>
+
         <div id="paypal-button-container"></div>
 
         <div class="secure-text">
@@ -67,17 +71,25 @@ ViewData["Title"] = "Checkout";
         font-size: 13px;
         color: #9ca3af;
     }
+
+    .timer-box {
+        margin-bottom: 15px;
+        font-size: 16px;
+        color: #dc2626;
+        font-weight: bold;
+    }
 </style>
 
 @section Scripts {
 <script src="https://www.paypal.com/sdk/js?client-id=AUIimViTH8m2sDNv8d9Osd9xex0s3b6bmxiXfb8Zx9IGHTtPsa_1P5a7qg5OvA1mVY_PhP05dMyZIWDO&currency=ILS"></script>
 
 <script>
+    // ✅ חשוב: משתנה גלובלי שישמר את ה-OrderId של PayPal שנוצר
+    window.currentPayPalOrderId = null;
+
     document.addEventListener("DOMContentLoaded", function () {
 
         const el = document.getElementById("paypal-button-container");
-        console.log("paypal container:", el);
-
         if (!el) {
             alert("ERROR: #paypal-button-container not found in the page");
             return;
@@ -99,6 +111,10 @@ ViewData["Title"] = "Checkout";
                 }
 
                 const data = await res.json();
+
+               
+                window.currentPayPalOrderId = data.orderId;
+
                 return data.orderId;
             },
 
@@ -130,5 +146,48 @@ ViewData["Title"] = "Checkout";
         }).render('#paypal-button-container');
 
     });
+</script>
+
+<script>
+    const expireAt = new Date('@ViewBag.ExpireAt.ToString("yyyy-MM-ddTHH:mm:ssZ")');
+
+    function startTimer() {
+        const timerEl = document.getElementById("timer");
+
+        const interval = setInterval(async () => {
+            const now = new Date();
+            const diff = expireAt - now;
+
+            if (diff <= 0) {
+                clearInterval(interval);
+                timerEl.innerText = "00:00";
+
+                // ✅ לשחרר רק אם באמת נוצר PayPal OrderId (כלומר בוצע reserve)
+                if (window.currentPayPalOrderId) {
+                    try {
+                        await fetch('/Payment/CancelReservation', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ orderId: window.currentPayPalOrderId })
+                        });
+                    } catch (e) { }
+                }
+
+                alert("זמן התשלום הסתיים, ההזמנה בוטלה");
+                window.location.href = '/Payment/Cancel';
+                return;
+            }
+
+            const minutes = Math.floor(diff / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
+
+            timerEl.innerText =
+                String(minutes).padStart(2, '0') + ":" +
+                String(seconds).padStart(2, '0');
+
+        }, 1000);
+    }
+
+    document.addEventListener("DOMContentLoaded", startTimer);
 </script>
 }
