@@ -251,14 +251,34 @@ namespace TripsProject.Controllers
                 }
             }
 
-            return View(Details);
+            
+            // בסוף Details()
+            if (user == null)
+            {
+                // אם לא נמצא משתמש במסד הנתונים לפי האימייל של המחובר
+                return RedirectToAction("Login");
+            }
+
+            return View("~/Views/Dashboard/Details.cshtml", user);
+
+            
+            return View();
         }
         
         // Save Details
         
         [HttpPost]
+        [HttpPost]
+        [HttpPost]
         public IActionResult SaveDetails(User model)
         {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Login");
+
+            string email = User.Identity.Name;
+
+            int rowsAffected;
+
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
@@ -270,22 +290,35 @@ namespace TripsProject.Controllers
                 PhoneNumber = @Phone,
                 Password = @Password
             WHERE Email = @Email
+              AND (
+                    FirstName <> @FirstName OR
+                    LastName <> @LastName OR
+                    PhoneNumber <> @Phone OR
+                    Password <> @Password
+                  )
         ";
 
                 SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@FirstName", model.FirstName);
-                cmd.Parameters.AddWithValue("@LastName", model.LastName);
-                cmd.Parameters.AddWithValue("@Phone", model.PhoneNumber);
-                cmd.Parameters.AddWithValue("@Password", model.Password);
-                cmd.Parameters.AddWithValue("@Email", model.Email);
+                cmd.Parameters.AddWithValue("@FirstName", model.FirstName ?? "");
+                cmd.Parameters.AddWithValue("@LastName", model.LastName ?? "");
+                cmd.Parameters.AddWithValue("@Phone", model.PhoneNumber ?? "");
+                cmd.Parameters.AddWithValue("@Password", model.Password ?? "");
+                cmd.Parameters.AddWithValue("@Email", email);
 
-                cmd.ExecuteNonQuery();
+                rowsAffected = cmd.ExecuteNonQuery();
             }
 
-            TempData["Msg"] = "Profile updated successfully!";
+            if (rowsAffected == 0)
+            {
+                TempData["Error"] = "לא בוצע שינוי בפרטים.";
+            }
+            else
+            {
+                TempData["Msg"] = "הפרטים עודכנו בהצלחה ✔";
+            }
+
             return RedirectToAction("Details");
         }
-
 
     }
     

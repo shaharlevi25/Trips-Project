@@ -8,16 +8,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8853538f-a415-4999-9a0f-49efd8f4d6ff" name="Changes" comment="Main Changes">
-      <change afterPath="$PROJECT_DIR$/Views/Dashboard/Bookings.cshtml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Views/Dashboard/Details.cshtml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Views/Dashboard/Waitings.cshtml" afterDir="false" />
+    <list default="true" id="8853538f-a415-4999-9a0f-49efd8f4d6ff" name="Changes" comment="Changes Fix">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TripsProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TripsProject/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controllers/DashboardController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/DashboardController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controllers/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/UserController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/TravelPackage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/TravelPackage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Dashboard/Details.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Dashboard/Details.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Views/Dashboard/User.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Dashboard/User.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/TravelPackages/Details.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/TravelPackages/Details.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Trips/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Trips/Index.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,6 +37,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
