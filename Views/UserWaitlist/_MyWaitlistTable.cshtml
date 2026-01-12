@@ -1,0 +1,48 @@
+﻿@model IEnumerable<TripsProject.Models.ViewModel.MyWaitlistRowVM>
+
+<table>
+    <thead>
+    <tr>
+        <th>WaitingId</th>
+        <th>Package</th>
+        <th>Destination</th>
+        <th>Dates</th>
+        <th>Status</th>
+        <th>Request Date</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    @foreach (var w in Model)
+    {
+        // כמו אצלך: map ל-3 צבעים
+        var cls = w.Status == "Notified" ? "paid"
+            : w.Status == "Pending" ? "pending"
+            : "cancelled";
+
+        <tr>
+            <td>#@w.WaitingId</td>
+            <td>@w.PackageId</td>
+            <td>@w.Destination (@w.Country)</td>
+            <td>@w.StartDate.ToString("dd/MM/yyyy") - @w.EndDate.ToString("dd/MM/yyyy")</td>
+            <td><span class="badge @cls">@w.Status</span></td>
+            <td>@w.RequestDate.ToString("dd/MM/yyyy HH:mm")</td>
+
+            <td>
+                <form asp-controller="UserWaitlist"
+                      asp-action="Leave"
+                      method="post"
+                      style="display:inline;"
+                      onsubmit="return confirm('Are you sure you want to leave this waitlist?');">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="waitingId" value="@w.WaitingId" />
+                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                        Leave
+                    </button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

@@ -11,6 +11,7 @@
         <th>Order Date</th>
         <th>Paid At</th>
         <th>Invoice</th>
+        <th>Actions</th>
     </tr>
     </thead>
 
@@ -42,6 +43,29 @@
                 else
                 {
                     <span style="color:#9ca3af;">-</span>
+                }
+            </td>
+            
+            <td>
+                @if (o.Status == "Paid")
+                {
+                    <form asp-controller="UserOrders"
+                          asp-action="Cancel"
+                          method="post"
+                          style="display:inline;"
+                          onsubmit="return confirm('Are you sure you want to cancel this order?');">
+
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="orderId" value="@o.OrderID" />
+
+                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                            Cancel
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <span>-</span>
                 }
             </td>
         </tr>

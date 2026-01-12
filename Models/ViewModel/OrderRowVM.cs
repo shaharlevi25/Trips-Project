@@ -13,6 +13,8 @@ public class OrderRowVM
 
     public DateTime OrderDate { get; set; }
     public DateTime? PaidAt { get; set; }
+    
+    public DateTime? CancelledAt { get; set; }
 
     public string? PayPalOrderId { get; set; }
 }
