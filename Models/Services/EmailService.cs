@@ -18,8 +18,9 @@ namespace TripsProject.Services
         public async Task SendAsync(string to, string subject, string body)
         {
             var sendGrid = _config.GetSection("SendGrid");
-
-            var apiKey = sendGrid["ApiKey"];
+                var apiKey =
+                _config["SendGrid:ApiKey"]
+                ?? Environment.GetEnvironmentVariable("SENDGRID__ApiKey");
             var fromEmail = sendGrid["FromEmail"];
             var fromName = sendGrid["FromName"];
 
