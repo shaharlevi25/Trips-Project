@@ -50,7 +50,12 @@ public IActionResult Index(
         // יעד/עיר (Destination) - LIKE
         if (!string.IsNullOrWhiteSpace(destination))
         {
-            sql += " AND Destination LIKE '%' + @destination + '%'";
+            sql += @"
+                    AND (
+                        Destination LIKE '%' + @destination + '%'
+                        OR Country LIKE '%' + @destination + '%'
+                    )";
+
             cmd.Parameters.AddWithValue("@destination", destination.Trim());
         }
 

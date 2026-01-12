@@ -218,6 +218,76 @@ namespace TripsProject.Controllers
             );
             return RedirectToAction("Index", "Trips");
         }
+        // Details Getter
+        [HttpGet]
+        public IActionResult Details()
+        {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Login");
+
+            string email = User.Identity.Name;
+
+            User user = null;
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+
+                string sql = "SELECT * FROM Users WHERE Email = @Email";
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@Email", email);
+
+                var reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    user = new User
+                    {
+                        FirstName = reader["FirstName"].ToString(),
+                        LastName = reader["LastName"].ToString(),
+                        Email = reader["Email"].ToString(),
+                        PhoneNumber = reader["PhoneNumber"].ToString(),
+                        Password = reader["Password"].ToString()
+                    };
+                }
+            }
+
+            return View(Details);
+        }
+        
+        // Save Details
+        
+        [HttpPost]
+        public IActionResult SaveDetails(User model)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+
+                string sql = @"
+            UPDATE Users
+            SET FirstName = @FirstName,
+                LastName = @LastName,
+                PhoneNumber = @Phone,
+                Password = @Password
+            WHERE Email = @Email
+        ";
+
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@FirstName", model.FirstName);
+                cmd.Parameters.AddWithValue("@LastName", model.LastName);
+                cmd.Parameters.AddWithValue("@Phone", model.PhoneNumber);
+                cmd.Parameters.AddWithValue("@Password", model.Password);
+                cmd.Parameters.AddWithValue("@Email", model.Email);
+
+                cmd.ExecuteNonQuery();
+            }
+
+            TempData["Msg"] = "Profile updated successfully!";
+            return RedirectToAction("Details");
+        }
+
+
     }
+    
     
 }
