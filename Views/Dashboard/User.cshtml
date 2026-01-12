@@ -8,7 +8,7 @@
     <h1>Hello @(User.Identity?.Name?.Split('@')[0])!</h1>
 
     <div class="cards">
-        <a asp-controller="MyBookings" asp-action="Index" class="card">
+        <a asp-controller="Bookings" asp-action="MyBookings" class="card">
             <h2>📑 My Bookings</h2>
             <p>View your current and past bookings</p>
         </a>
