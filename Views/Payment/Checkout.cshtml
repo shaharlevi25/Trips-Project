@@ -1,9 +1,7 @@
 @model TripsProject.Models.TravelPackage
 @{
-    ViewData["Title"] = "Checkout";
+ViewData["Title"] = "Checkout";
 }
-
-
 
 <div class="checkout-wrapper">
     <div class="checkout-card">
@@ -17,43 +15,55 @@
         <div id="paypal-button-container"></div>
 
         <div class="secure-text">
-            🔒 תשלום מאובטח • ללא חיוב אמיתי
+            🔒 תשלום מאובטח • ללא חיוב אמיתי (Sandbox)
         </div>
     </div>
 </div>
 
 @section Scripts {
-    <script src="https://www.paypal.com/sdk/js?client-id=Ael4rJ-S6MF3rP4w-T68HxJ9dazfikloZ8HSQFyU2rJdb2MIu66_lktw5rYqA2WWzp_-zfmm4qBI7BD-&currency=ILS"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=ILS"></script>
 
-    <script>
-        paypal.Buttons({
-            style: {
-                layout: 'vertical',
-                color: 'blue',
-                shape: 'pill',
-                label: 'paypal'
-            },
-            createOrder: function (data, actions) {
-                return actions.order.create({
-                    purchase_units: [{
-                        amount: {
-                            value: '@Model.Price'
-                        }
-                    }]
-                });
-            },
-            onApprove: function (data, actions) {
-                return actions.order.capture().then(function (details) {
-                    window.location.href = '/Payment/Success';
-                });
-            },
-            onCancel: function () {
-                window.location.href = '/Payment/Cancel';
+<script>
+    const packageId = @Model.PackageId;
+
+    paypal.Buttons({
+        style: { layout: 'vertical', color: 'blue', shape: 'pill', label: 'paypal' },
+
+        // createOrder דרך השרת
+        createOrder: async function () {
+            const res = await fetch('/Payment/CreateOrder', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ packageId })
+            });
+
+            const data = await res.json();
+            return data.orderId;
+        },
+
+        // approve -> Capture דרך השרת -> INSERT Orders
+        onApprove: async function (data) {
+            const res = await fetch('/Payment/Capture', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ orderId: data.orderID })
+            });
+
+            if (res.ok) {
+                window.location.href = '/Payment/Success';
+            } else {
+                alert("Payment error: " + await res.text());
             }
-        }).render('#paypal-button-container');
-    </script>
-    
-    <style>
+        },
+
+        onCancel: function () {
+            window.location.href = '/Payment/Cancel';
+        }
+
+    }).render('#paypal-button-container');
+</script>
+
+<style>
     .checkout-wrapper {
         min-height: 70vh;
         display: flex;
