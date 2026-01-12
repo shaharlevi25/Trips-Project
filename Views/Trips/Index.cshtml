@@ -17,6 +17,7 @@
         valueSpan.textContent = formatted;
     }
 </script>
+
 @functions {
     string GetCityImage(string city)
     {
@@ -43,7 +44,6 @@
 @{
     ViewData["Title"] = "All Packages";
 
-    // קיבוץ לפי סוג טיול ואז לפי (PackageType)
     var byType = (Model ?? new List<TripsProject.Models.TravelPackage>())
         .GroupBy(p => p.PackageType ?? "Unknown")
         .OrderBy(g => g.Key);
@@ -52,83 +52,82 @@
 <div class="container mt-4">
 
     <h2 class="mb-4 fw-bold text-center">Find your trip</h2>
-    
-    <h3 class="Searching Function Title">Want to search by Yourself?</h3>
-    
-    
-    @* Searching Line *@
+
+    <div class="search-header">
+        <h3 class="Searching Function Title m-0">Want to search by Yourself?</h3>
+        <div class="now-on-site">
+            Now on site: @ViewBag.TotalTrips trips • @ViewBag.TotalAmount seats
+        </div>
+    </div>
+
     <form method="get" class="ta-search" dir="ltr">
 
         <div class="ta-search__field">
-        <span class="ta-search__icon">📍</span>
-        <input name="destination"
-               class="ta-search__input"
-               placeholder="To where?"
-               value="@(ViewBag.Destination ?? "")" />
-    </div>
+            <span class="ta-search__icon">📍</span>
+            <input name="destination"
+                   class="ta-search__input"
+                   placeholder="To where?"
+                   value="@(ViewBag.Destination ?? "")" />
+        </div>
 
-    <div class="ta-search__sep"></div>
-    
-    @*  data fields *@
-    
-    <div class="ta-search__field ta-search__field--dates">
-        <span class="ta-search__icon">📅</span>
+        <div class="ta-search__sep"></div>
+
+        <div class="ta-search__field ta-search__field--dates">
+            <span class="ta-search__icon">📅</span>
+
+            <div class="date-overlay">
+                <span class="date-label">Arrival date</span>
+                <span class="date-value" data-target="start">Select date</span>
+
+                <input class="date-hit"
+                       type="date"
+                       name="start"
+                       value="@(ViewBag.Start ?? "")"
+                       onchange="updateDateText(this,'start')" />
+            </div>
 
         <div class="date-overlay">
-            <span class="date-label">Arrival date</span>
-            <span class="date-value" data-target="start">Select date</span>
+            <span class="date-label">Departure date</span>
+            <span class="date-value" data-target="end">Select date</span>
 
             <input class="date-hit"
+                   id="endDate"
                    type="date"
-                   name="start"
-                   value="@(ViewBag.Start ?? "")"
-                   onchange="updateDateText(this,'start')" />
+                   name="end"
+                   value="@(ViewBag.End ?? "")"
+                   onchange="updateDateText(this, 'end')" />
+        </div>
         </div>
 
 
-        <label class="date-overlay" for="endDate">
-            <span class="date-label">Departure date</span>
-            <span class="date-value" data-target="end">Select date</span>
-        </label>
-        <input id="endDate"
-               type="date"
-               name="end"
-               value="@(ViewBag.End ?? "")"
-               onchange="updateDateText(this, 'end')" />
-    </div>
+        <div class="ta-search__sep"></div>
 
+        <div class="ta-search__field ta-search__field--people">
+            <span class="ta-search__icon">👤</span>
 
-
-    <div class="ta-search__sep"></div>
-
-    <div class="ta-search__field ta-search__field--people">
-        <span class="ta-search__icon">👤</span>
-
-        <select name="adults" class="ta-search__select">
-    @{
-        int adults = ViewBag.Adults ?? -1; // -1 = Any
-    }
-    <option value="-1" selected="@(adults == -1)">Adults (Any)</option>
-    @for (int i = 1; i <= 6; i++)
-    {
-        <option value="@i" selected="@(i == adults)">@i Adult@(i == 1 ? "" : "s")</option>
-    }
-</select>
-
-
-        <select name="children" class="ta-search__select">
-            @{
-                int children = ViewBag.Children ?? 0;
-                for (int i = 0; i <= 6; i++)
-                {
-                    <option value="@i" selected="@(i == children)">@i Children</option>
+            <select name="adults" class="ta-search__select">
+                @{
+                    int adults = ViewBag.Adults ?? -1;
                 }
-            }
-        </select>
-        
-    </div>
+                <option value="-1" selected="@(adults == -1)">Adults (Any)</option>
+                @for (int i = 1; i <= 6; i++)
+                {
+                    <option value="@i" selected="@(i == adults)">@i Adult@(i == 1 ? "" : "s")</option>
+                }
+            </select>
 
-    <div class="ta-search__sep"></div>
+            <select name="children" class="ta-search__select">
+                @{
+                    int children = ViewBag.Children ?? 0;
+                    for (int i = 0; i <= 6; i++)
+                    {
+                        <option value="@i" selected="@(i == children)">@i Children</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="ta-search__sep"></div>
 
         <div class="ta-search__field ta-search__field--right">
             <span class="ta-search__icon">🏷️</span>
@@ -154,16 +153,45 @@
 
             <a class="ta-search__clear" href="/Trips">Clean</a>
         </div>
-        
+
         <input type="hidden" name="searched" value="true" />
         <button type="submit" class="ta-search__btn">Search</button>
-</form>
 
+        @* Filters / Sorting *@
+        <div class="ta-filters">
+            @{
+                string sort = ViewBag.Sort ?? "";
+                string maxPrice = ViewBag.MaxPrice ?? "";
+                bool discountOnly = ViewBag.DiscountOnly ?? false;
+            }
 
-    
-    
-    
-    
+            <div class="ta-filter">
+                <span class="ta-filter__label">Sort</span>
+                <select name="sort" class="ta-filter__control">
+                    <option value="" selected="@(string.IsNullOrEmpty(sort))">Default</option>
+                    <option value="price_asc" selected="@(sort == "price_asc")">Price: Low → High</option>
+                    <option value="price_desc" selected="@(sort == "price_desc")">Price: High → Low</option>
+                </select>
+            </div>
+
+            <div class="ta-filter">
+                <span class="ta-filter__label">Max price (₪)</span>
+                <input type="number"
+                       name="maxPrice"
+                       class="ta-filter__control"
+                       min="0"
+                       step="1"
+                       placeholder="Any"
+                       value="@maxPrice" />
+            </div>
+
+            <label class="ta-filter ta-filter--check">
+                <input type="checkbox" name="discountOnly" value="true" @(discountOnly ? "checked" : "") />
+                <span>Discount only</span>
+            </label>
+        </div>
+    </form>
+
     @if (!Model?.Any() ?? true)
     {
         <div class="alert alert-info">There are no packages to that correct your details.</div>
@@ -173,7 +201,7 @@
         @foreach (var countryGroup in byType)
         {
             <div class="country-section mb-5">
-                
+
                 <div class="d-flex align-items-center gap-3 mb-3">
                     <h3 class="fw-bold m-0">@countryGroup.Key</h3>
                     <span class="text-muted">(@countryGroup.Count() Packages)</span>
@@ -181,79 +209,94 @@
                 </div>
 
                 <div class="country-box mb-4">
-    <div class="scroll-track" dir="ltr">
+                    <div class="scroll-track" dir="ltr">
 
-        @foreach (var p in countryGroup.OrderBy(x => x.StartDate))
-        {
-            var start = p.StartDate < p.EndDate ? p.StartDate : p.EndDate;
-            var end = p.StartDate < p.EndDate ? p.EndDate : p.StartDate;
+                        @{
+                            // Sorting inside each group (view-level), default = by date
+                            string sort = ViewBag.Sort ?? "";
+                            var orderedGroup = sort == "price_asc"
+                                ? countryGroup.OrderBy(x => (x.DiscountedPrice ?? x.Price))
+                                : sort == "price_desc"
+                                    ? countryGroup.OrderByDescending(x => (x.DiscountedPrice ?? x.Price))
+                                    : countryGroup.OrderBy(x => x.StartDate);
+                        }
 
-            <div class="trip-item">
-                <div class="card trip-card h-100 shadow-sm @(p.IsAvailable ? "" : "trip-card--unavailable")">
+                        @foreach (var p in orderedGroup)
+                        {
+                            var start = p.StartDate < p.EndDate ? p.StartDate : p.EndDate;
+                            var end = p.StartDate < p.EndDate ? p.EndDate : p.StartDate;
 
-                    <!-- type of trip -->
-                    
-                    <div class="type-badge-wrap">
-                        <span class="badge bg-primary">@p.PackageType</span>
+                            <div class="trip-item">
+                                <div class="card trip-card h-100 shadow-sm @(p.IsAvailable ? "" : "trip-card--unavailable")">
+
+                                    <div class="type-badge-wrap">
+                                        <span class="badge bg-primary">@p.PackageType</span>
+                                    </div>
+
+                                    <img src="@GetCityImage(p.Destination)"
+                                         class="card-img-top trip-img"
+                                         alt="@p.Destination"
+                                         onerror="this.onerror=null; this.src='@Url.Content("~/images/trips/placeholder.jpg")';" />
+
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="fw-bold mb-1">@p.Destination</h5>
+
+                                        <div class="text-muted small mb-2">
+                                            @start.ToString("dd/MM/yyyy") - @end.ToString("dd/MM/yyyy")
+                                        </div>
+
+                                        <div class="d-flex gap-2 mb-2">
+                                            @if (!p.IsAvailable)
+                                            {
+                                                <span class="badge bg-secondary">Unavailable</span>
+                                            }
+                                            @if (p.AgeLimit != null)
+                                            {
+                                                <span class="badge bg-warning text-dark">@p.AgeLimit+ Age:</span>
+                                            }
+                                        </div>
+
+                                        <p class="text-muted trip-desc mb-3">@p.Description</p>
+
+                                        <div class="mt-auto">
+                                            @if (p.DiscountedPrice != null)
+                                            {
+                                                <div class="price-wrap">
+                                                    <span class="old-price">₪@p.Price</span>
+                                                    <span class="new-price">₪@p.DiscountedPrice</span>
+                                                    <span class="discount-badge">-@p.DiscountPercent%</span>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="fw-bold text-success mb-2">₪@p.Price</div>
+                                            }
+
+                                            <a asp-controller="TravelPackages"
+                                               asp-action="Details"
+                                               asp-route-id="@p.PackageId"
+                                               class="btn btn-outline-primary w-100">
+                                                Details
+                                            </a>
+
+                                            @if (!p.IsAvailable)
+                                            {
+                                                <div class="text-muted small mt-1">This package is currently unavailable</div>
+                                            }
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+
                     </div>
-
-                    <!-- Image -->
-                    <img src="@GetCityImage(p.Destination)"
-                         class="card-img-top trip-img"
-                         alt="@p.Destination"
-                         onerror="this.onerror=null; this.src='@Url.Content("~/images/trips/placeholder.jpg")';" />
-
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="fw-bold mb-1">@p.Destination</h5>
-
-                        <div class="text-muted small mb-2">
-                            @start.ToString("dd/MM/yyyy") - @end.ToString("dd/MM/yyyy")
-                        </div>
-
-                        <div class="d-flex gap-2 mb-2">
-                            @if (!p.IsAvailable)
-                            {
-                                <span class="badge bg-secondary">Unavailable</span>
-                            }
-                            @if (p.AgeLimit != null)
-                            {
-                                <span class="badge bg-warning text-dark">@p.AgeLimit+ Age:</span>
-                            }
-                        </div>
-
-                        <p class="text-muted trip-desc mb-3">@p.Description</p>
-
-                        <div class="mt-auto">
-                            <div class="fw-bold text-success mb-2">₪@p.Price</div>
-                            
-                            <a asp-controller="TravelPackages"
-                               asp-action="Details"
-                               asp-route-id="@p.PackageId"
-                               class="btn btn-outline-primary w-100">
-                                Details
-                            </a>
-
-                            @if (!p.IsAvailable)
-                            {
-                                <div class="text-muted small mt-1">This package is currently unavailable</div>
-                            }
-
-
-                        </div>
-                    </div>
-
                 </div>
-            </div>
-        }
-
-    </div>
-</div>
 
             </div>
         }
     }
 </div>
-
 <style>
     .trip-card {
         border-radius: 16px;
@@ -295,14 +338,14 @@
     /* ===== SEARCH BAR (DESKTOP 100%) ===== */
     .ta-search{
         display: grid;
-        grid-template-columns: 1.1fr 2.2fr 1.7fr 1.1fr 160px; /* יעד | תאריכים | אנשים | צד ימין | כפתור */
+        grid-template-columns: 1.1fr 2.2fr 1.7fr 1.1fr 160px; 
         align-items: stretch;
         width: 100%;
         border: 2px solid #f6b400;
         border-radius: 14px;
         overflow: hidden;
         background: #fff;
-        gap: 0; /* חשוב: שלא יהיו רווחים */
+        gap: 0; 
     }
 
     .ta-search__field{
@@ -311,11 +354,11 @@
         gap: 10px;
         padding: 10px 12px;
         min-height: 56px;
-        border-left: 1px solid rgba(0,0,0,.12); /* מפריד בין עמודות */
+        border-left: 1px solid rgba(0,0,0,.12); 
         background: #fff;
     }
 
-    /* השדה הראשון בלי מפריד משמאל */
+
     .ta-search__field:first-child{
         border-left: none;
     }
@@ -334,7 +377,7 @@
 
     .ta-search__field--dates{
         display: flex;
-        align-items: stretch;  /* חשוב: שימתח לגובה */
+        align-items: stretch;  
     }
     .ta-search__field--dates .ta-search__input{
         min-width: 140px;
@@ -382,7 +425,6 @@
         background:rgba(13,110,253,.08);
     }
 
-    /* הכפתור כחלק מה-grid (עמודה אחרונה) */
     .ta-search__btn{
         height: 100%;
         border: none;
@@ -473,15 +515,158 @@
         line-height: 1.2;
     }
 
+    .ta-search__field--dates .date-overlay{
+        position: relative;
+    }
+
+    .ta-search__field--dates .date-hit,
     .ta-search__field--dates input[type="date"]{
         position: absolute;
-        left: -9999px;
-        width: 1px;
-        height: 1px;
+        inset: 0;              
+        width: 100%;
+        height: 100%;
+        opacity: 0;            
+        cursor: pointer;
+    }
+    .date-overlay{
+        position: relative;
+    }
+
+    .date-overlay .date-label,
+    .date-overlay .date-value{
+        pointer-events: none;
+    }
+
+    .date-overlay input[type="date"]{
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
         opacity: 0;
+        cursor: pointer;
+        z-index: 5;
     }
 
 
+    /* ===== DISCOUNT PRICE (only) ===== */
+    .price-wrap{
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        margin-bottom: 8px;     /* כמו שהיה לך mb-2 */
+        flex-wrap: wrap;        /* שלא יישבר על מסכים קטנים */
+    }
+
+    .old-price{
+        position: relative;
+        font-weight: 700;
+        color: #6c757d;
+        opacity: .85;
+        white-space: nowrap;
+        text-decoration: line-through;
+        text-decoration-thickness: 2px;
+    }
+
+    .new-price{
+        font-weight: 900;
+        font-size: 18px;
+        color: #198754;         /* Bootstrap success */
+        white-space: nowrap;
+    }
+
+    .discount-badge{
+        font-weight: 800;
+        font-size: 12px;
+        line-height: 1;
+        padding: 4px 8px;
+        border-radius: 999px;
+        white-space: nowrap;
+
+        /* מראה "מבצע" עדין */
+        background: rgba(220, 53, 69, .12);  /* אדום שקוף */
+        color: #dc3545;                      /* Bootstrap danger */
+        border: 1px solid rgba(220, 53, 69, .25);
+    }
+
+    /* ===== SEARCH HEADER ROW ===== */
+    .search-header{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+    }
+
+    .search-title{
+        font-size: 20px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .now-on-site{
+        font-size: 14px;
+        font-weight: 700;
+        color: #1d4ed8;
+        background: #eef2ff;
+        padding: 6px 14px;
+        border-radius: 999px;
+        white-space: nowrap;
+    }
+    /* ===== FILTERS ROW (same line) ===== */
+    .ta-filters{
+        grid-column: 1 / -1;                 /* שורה שנייה בכל הרוחב של ה-grid */
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: nowrap;                    /* חשוב: לא לשבור שורות */
+
+        padding: 10px 12px;
+        border-top: 1px solid rgba(0,0,0,.12);
+        background: #fff;
+    }
+
+    /* כל פילטר = שורה אחת */
+    .ta-filter{
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0;
+        white-space: nowrap;
+    }
+
+    .ta-filter__label{
+        font-size: 12px;
+        font-weight: 800;
+        color: #6c757d;
+        margin: 0;
+    }
+
+    /* הגובה/רוחב של select + input כדי שייראה אחיד */
+    .ta-filter__control{
+        height: 34px;
+        border: 1px solid rgba(0,0,0,.16);
+        border-radius: 10px;
+        padding: 6px 10px;
+        outline: none;
+        background: #fff;
+        min-width: 180px;
+    }
+
+    /* checkbox באותה שורה */
+    .ta-filter--check{
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .ta-filter--check input{
+        margin: 0;
+    }
+
+    /* אם המסך צר מדי – רק אז נשבור שורה בצורה יפה */
+    
 
 
 

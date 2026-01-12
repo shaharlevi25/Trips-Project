@@ -91,7 +91,19 @@
             </div>
         </div>
 
-        <p class="package-price">₪@Model.Price</p>
+        @if (Model.DiscountedPrice != null)
+        {
+            <div class="package-price discount-price">
+                <div class="old-price">₪@Model.Price</div>
+                <div class="new-price">₪@Model.DiscountedPrice</div>
+                <div class="discount-badge">-@Model.DiscountPercent%</div>
+            </div>
+        }
+        else
+        {
+            <p class="package-price">₪@Model.Price</p>
+        }
+
 
         @if (Model.AgeLimit != null)
         {
@@ -213,5 +225,37 @@
     hr {
         margin: 25px 0;
     }
-</style>
+
+    .discount-price{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .discount-price .old-price{
+        font-size: 18px;
+        color: #6b7280;
+        text-decoration: line-through;
+        text-decoration-thickness: 2px;
+        font-weight: 700;
+    }
+
+    .discount-price .new-price{
+        font-size: 34px;
+        font-weight: 900;
+        color: #2563eb;
+    }
+
+    .discount-price .discount-badge{
+        font-size: 12px;
+        font-weight: 800;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: rgba(220, 53, 69, .12);
+        color: #dc3545;
+        border: 1px solid rgba(220, 53, 69, .25);
+    }
+
+    </style>
 </div>
