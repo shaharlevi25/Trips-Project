@@ -9,6 +9,9 @@ namespace TripsProject.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
+        public int? DiscountPercent { get; set; }
+        public decimal? DiscountedPrice { get; set; }
+
         public decimal Price { get; set; }
         public int NumOfPeople { get; set; }
 
