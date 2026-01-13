@@ -45,6 +45,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/Trips">Search</a>
                 </li>
+                
+                 <!-- ADMIN TEST LINK -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/Admin/Dashboard">Admin</a>
+                </li>
 
                 <li class="nav-item">
                     <a class="nav-link" href="/HomePage/Privacy">Policies</a>
@@ -63,24 +68,16 @@
                         </span>
                     </li>
 
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Admin/Dashboard">Admin</a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Dashboard/User">My Dashboard</a>
-                        </li>
-                    }
-
                     <li class="nav-item">
                         <a class="nav-link text-danger" href="/User/Logout">
                             Logout
                         </a>
                     </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Dashboard/User">My Dashboard</a>
+                    </li>
+
                 }
                 else
                 {
