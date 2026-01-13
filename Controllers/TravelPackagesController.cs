@@ -29,7 +29,8 @@ public IActionResult Details(int id)
     using (var cmd = new SqlCommand(@"
         SELECT PackageId, Destination, Country, StartDate, EndDate,
                Price, NumOfPeople, PackageType, AgeLimit,
-               Description, CreatedAt, IsAvailable, Amount
+               Description, CreatedAt, IsAvailable, Amount, TrackDesc
+
         FROM TravelPackages
         WHERE PackageId = @id;
     ", conn))
@@ -54,7 +55,9 @@ public IActionResult Details(int id)
             Description = r.IsDBNull(9) ? "" : r.GetString(9),
             CreatedAt = r.GetDateTime(10),
             IsAvailable = r.GetBoolean(11),
-            Amount = r.IsDBNull(12) ? 0 : r.GetInt32(12)
+            Amount = r.IsDBNull(12) ? 0 : r.GetInt32(12),
+            TrackDesc = r.IsDBNull(13) ? null : r.GetString(13)
+
         };
     }
 

@@ -120,6 +120,14 @@
 
         <p class="fw-bold mb-1">Description:</p>
         <p class="package-desc">@Model.Description</p>
+        @if (!string.IsNullOrWhiteSpace(Model.TrackDesc))
+        {
+            <p class="fw-bold mb-1">Trip Route & Highlights:</p>
+            <div class="track-desc">@Model.TrackDesc</div>
+        }
+
+        
+
 
         <div class="package-actions">
             <a asp-controller="Trips"

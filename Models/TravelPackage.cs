@@ -11,6 +11,8 @@ namespace TripsProject.Models
 
         public int? DiscountPercent { get; set; }
         public decimal? DiscountedPrice { get; set; }
+        
+        public string? TrackDesc { get; set; }
 
         public decimal Price { get; set; }
         public int NumOfPeople { get; set; }
