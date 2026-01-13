@@ -12,6 +12,13 @@ builder.Services.AddScoped<PolicyTextService>();
 builder.Services.AddScoped<WaitingListRepository>();
 builder.Services.AddScoped<BookingRepository>();
 builder.Services.AddScoped<EmailService>();
+builder.Services.AddScoped<OrderRepository>();
+builder.Services.AddScoped<OrderCleanupService>();
+builder.Services.AddScoped<DiscountService>();
+
+
+
+
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -50,6 +57,7 @@ app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapStaticAssets();
+
 
 app.MapControllerRoute(
         name: "default",

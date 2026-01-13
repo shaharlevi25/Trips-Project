@@ -8,18 +8,18 @@
     <h1>Hello @(User.Identity?.Name?.Split('@')[0])!</h1>
 
     <div class="cards">
-        <a asp-controller="Bookings" asp-action="MyBookings" class="card">
+        <a asp-controller="UserOrders" asp-action="MyOrders" class="card">
             <h2>📑 My Bookings</h2>
             <p>View your current and past bookings</p>
         </a>
 
-        <a asp-controller="User" asp-action="Details" class="card">
+        <a asp-controller="Dashboard" asp-action="Details" class="card">
             <h2>👤 My Details</h2>
             <p>View and update your personal information</p>
         </a>
 
 
-        <a asp-controller="MyWaitingList" asp-action="Index" class="card">
+        <a asp-controller="UserWaitlist" asp-action="MyWaitlist" class="card">
             <h2>⏳ Waiting List</h2>
             <p>See bookings you’re waiting for</p>
         </a>

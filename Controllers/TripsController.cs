@@ -20,6 +20,7 @@ namespace TripsProject.Controllers
         // GET /Trips
         [HttpGet("")]
         public IActionResult Index(
+            string? q,
             string? destination,
             DateTime? start,
             DateTime? end,
@@ -75,6 +76,33 @@ namespace TripsProject.Controllers
                         )";
 
                     cmd.Parameters.AddWithValue("@destination", destination.Trim());
+                }
+                // Free text search (q): "Paris honeymoon package"
+                if (!string.IsNullOrWhiteSpace(q))
+                {
+                    ViewBag.Q = q;
+
+                    var tokens = q.Trim()
+                        .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+                    int ti = 0;
+                    foreach (var token in tokens)
+                    {
+                        var paramName = $"@q{ti}";
+                        sql += $@"
+                        AND (
+                            Destination LIKE '%' + {paramName} + '%'
+                            OR Country LIKE '%' + {paramName} + '%'
+                            OR PackageType LIKE '%' + {paramName} + '%'
+                            OR Description LIKE '%' + {paramName} + '%'
+                        )";
+                                    cmd.Parameters.AddWithValue(paramName, token);
+                        ti++;
+                    }
+                }
+                else
+                {
+                    ViewBag.Q = "";
                 }
 
                 // טווח תאריכים - חפיפה בין הטווח המבוקש לחבילה
@@ -213,7 +241,7 @@ namespace TripsProject.Controllers
                 ViewBag.PackageType = packageType;
                 ViewBag.Adults = adults;
                 ViewBag.Children = children;
-
+                ViewBag.Q = q ?? "";
                 ViewBag.Sort = sort ?? "";
                 ViewBag.MaxPrice = maxPrice?.ToString() ?? "";
                 ViewBag.DiscountOnly = discountOnly;
