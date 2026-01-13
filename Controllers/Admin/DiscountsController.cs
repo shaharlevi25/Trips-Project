@@ -92,6 +92,15 @@ public class DiscountsController : Controller
             // 4) Only one active discount now (today) for the package
             if (_repo.HasActiveDiscountNow(vm.PackageID))
                 ModelState.AddModelError("", "This package already has an active discount right now");
+            int diffDays = (vm.EndDate.Date - vm.StartDate.Date).Days;
+            if (diffDays > 7)
+            {
+                ModelState.AddModelError(
+                    "",
+                    "Discount dates must be within a week"
+                );
+            }
+            
 
             if (!ModelState.IsValid)
                 return View(vm);
@@ -137,6 +146,15 @@ public class DiscountsController : Controller
                 ModelState.AddModelError("", "Discount dates must be within the package dates");
             if (_repo.HasOverlap(vm.PackageID, vm.StartDate, vm.EndDate))
                 ModelState.AddModelError("", "This package already has a discount overlapping these dates.");
+           
+            int diffDays = (vm.EndDate.Date - vm.StartDate.Date).Days;
+            if (diffDays > 7)
+            {
+                ModelState.AddModelError(
+                    "",
+                    "Discount dates must be within a week"
+                );
+            }
 
             // 3) only one active discount now (exclude this discount)
             if (_repo.HasActiveDiscountNow(vm.PackageID, excludeDiscountId: vm.DiscountID))

@@ -1,0 +1,176 @@
+﻿@model TripsProject.Models.ViewModel.OrderDetailsVM
+@{
+ViewData["Title"] = "Order Completed";
+}
+
+<div class="success-wrapper">
+    <div class="success-card">
+
+        <div class="success-icon">✔</div>
+
+        <h2>Payment Successful</h2>
+        <p class="subtitle">Thank you for your order!</p>
+
+        <div class="order-box">
+            <div class="row">
+                <span>Order Number</span>
+                <strong>#@Model.OrderID</strong>
+            </div>
+
+            <div class="row">
+                <span>Destination</span>
+                <strong>@Model.Destination (@Model.Country)</strong>
+            </div>
+
+            <div class="row">
+                <span>Total Paid</span>
+                <strong>₪@Model.TotalPrice</strong>
+            </div>
+
+            <div class="row">
+                <span>Payment Date</span>
+                <strong>
+                    @(Model.PaidAt?.ToString("dd/MM/yyyy HH:mm") ?? "-")
+                </strong>
+            </div>
+        </div>
+
+        <div class="actions">
+            <a href="/" class="btn primary">Back to Home</a>
+            <a asp-controller="UserOrders" asp-action="MyOrders" class="btn outline">
+                My Orders
+            </a>
+        </div>
+
+        <div class="redirect">
+            Redirecting to home in <span id="countdown">10</span> seconds…
+        </div>
+
+    </div>
+</div>
+
+<style>
+    body {
+        background: #f3f4f6;
+    }
+
+    .success-wrapper {
+        min-height: 75vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .success-card {
+        background: #ffffff;
+        padding: 40px;
+        border-radius: 18px;
+        width: 100%;
+        max-width: 480px;
+        box-shadow: 0 25px 60px rgba(0,0,0,.1);
+        text-align: center;
+    }
+
+    .success-icon {
+        width: 70px;
+        height: 70px;
+        margin: 0 auto 15px;
+        background: #22c55e;
+        color: white;
+        font-size: 36px;
+        font-weight: bold;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .success-card h2 {
+        margin: 10px 0 5px;
+        color: #1f2937;
+    }
+
+    .subtitle {
+        color: #6b7280;
+        margin-bottom: 25px;
+    }
+
+    .order-box {
+        background: #f9fafb;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 25px;
+        text-align: left;
+    }
+
+    .order-box .row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        font-size: 15px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .order-box .row:last-child {
+        border-bottom: none;
+    }
+
+    .order-box span {
+        color: #6b7280;
+    }
+
+    .actions {
+        display: flex;
+        gap: 15px;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 15px;
+        text-decoration: none;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .btn.primary {
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        color: white;
+    }
+
+    .btn.primary:hover {
+        background: linear-gradient(135deg, #1e40af, #1d4ed8);
+    }
+
+    .btn.outline {
+        border: 2px solid #2563eb;
+        color: #2563eb;
+        background: white;
+    }
+
+    .btn.outline:hover {
+        background: #eff6ff;
+    }
+
+    .redirect {
+        margin-top: 15px;
+        font-size: 13px;
+        color: #6b7280;
+    }
+</style>
+
+<script>
+    let seconds = 10;
+    const el = document.getElementById("countdown");
+
+    const timer = setInterval(() => {
+        seconds--;
+        if (el) el.innerText = seconds;
+
+        if (seconds <= 0) {
+            clearInterval(timer);
+            window.location.href = "/";
+        }
+    }, 1000);
+</script>

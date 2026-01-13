@@ -1,0 +1,27 @@
+﻿@model IEnumerable<TripsProject.Models.ViewModel.WaitingListRowVM>
+
+<link rel="stylesheet" href="~/css/packages.css" />
+
+<h1>Waiting List</h1>
+
+<input type="text" id="searchBox" placeholder="Search by user / destination / packageId / status..." class="form-control mb-3" />
+
+<div id="waitingTable">
+    <partial name="_WaitingTable" model="Model" />
+</div>
+
+@section Scripts{
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function filterWaitingList() {
+            $.get('@Url.Action("Search", "WaitingList")', {
+                query: $('#searchBox').val()
+            }, function (html) {
+                $('#waitingTable').html(html);
+            });
+        }
+
+        // live typing
+        $('#searchBox').on('keyup', filterWaitingList);
+    </script>
+}

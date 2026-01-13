@@ -1,51 +1,340 @@
 @model TripsProject.Models.TravelPackage
 
-<div class="container mt-5" style="max-width:800px;">
-    <div class="card shadow-lg p-4">
 
-        <h2 class="text-center mb-4">
+<script xmlns="http://www.w3.org/1999/html">
+    function confirmPayment(packageId) {
+        window.location.href = `/Payment/Checkout?packageId=${packageId}`;
+    }
+
+    
+        async function joinWaitlist(packageId) {
+        
+        const ok = confirm("You will be added to the waiting list. Continue?");
+        if (!ok) return;
+
+        try {
+        
+        const res = await fetch("/Waitlist/Join", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ packageId })
+    });
+
+        if (res.status === 401) {
+            alert("To join the waiting list you must be logged in / registered.");
+            window.location.href = "/User/Register";
+            return;
+        }
+
+        const contentType = res.headers.get("content-type") || "";
+        if (!contentType.includes("application/json")) {
+            alert("Something went wrong. Please try again.");
+            return;
+        }
+
+        const data = await res.json();
+
+        if (data.status === "already_exists") {
+            alert("You are already on the waiting list for this package.");
+            return;
+        }
+
+        if (data.status === "ok") {
+            alert("You have been added to the waiting list.");
+            return;
+        }
+
+        if (data.status === "not_logged_in") {
+            alert("To join the waiting list you must be logged in / registered.");
+            window.location.href = data.redirectUrl || "/User/Register";
+            return;
+        }
+
+        alert("Something went wrong. Please try again.");
+    } catch (e) {
+        alert("Network error. Please try again.");
+    }
+    }
+</script>
+
+
+@{
+    ViewData["Title"] = "Package Details";
+}
+
+<div class="container package-details">
+    <div class="card package-card shadow-lg">
+
+        <h2 class="text-center package-title">
             @Model.Destination (@Model.Country)
         </h2>
 
-        <p class="text-center text-muted">
-            <strong>תאריכים:</strong>
-            @Model.StartDate.ToShortDateString() -
-            @Model.EndDate.ToShortDateString()
+        <p class="text-center package-dates">
+            @Model.StartDate.ToString("dd/MM/yyyy") -
+            @Model.EndDate.ToString("dd/MM/yyyy")
         </p>
 
         <hr />
 
         <div class="row mb-3">
             <div class="col-md-6">
-                <p><strong>סוג חבילה:</strong> @Model.PackageType</p>
+                <strong>Package Type:</strong> @Model.PackageType
             </div>
             <div class="col-md-6">
-                <p><strong>חדרים פנויים:</strong> @Model.NumOfRooms</p>
+                <strong>Amount of people:</strong> @Model.NumOfPeople
+            </div>
+            
+            <div class="col-md-6">
+                <strong>Remaining packages:</strong> @Model.Amount
             </div>
         </div>
 
-        <p><strong>מחיר:</strong> 
-            <span class="fs-4 text-success">₪@Model.Price</span>
-        </p>
+        @if (Model.DiscountPercent.HasValue && Model.DiscountedPrice.HasValue)
+        {
+            <div class="text-center">
+                <div class="text-danger fw-bold" style="font-size:18px;">
+                    @Model.DiscountPercent% OFF
+                </div>
+
+                <div style="font-size:22px; color:#6b7280; text-decoration:line-through;">
+                    ₪@Model.Price
+                </div>
+
+                <div class="package-price">
+                    ₪@Model.DiscountedPrice
+                </div>
+            </div>
+        }
+        else
+        {
+            <p class="package-price">₪@Model.Price</p>
+        }
 
         @if (Model.AgeLimit != null)
         {
-            <p><strong>הגבלת גיל:</strong> @Model.AgeLimit+</p>
+            <p><strong>Age Limit:</strong> @Model.AgeLimit+</p>
         }
 
         <hr />
 
-        <p><strong>תיאור החבילה:</strong></p>
-        <p>@Model.Description</p>
+        <p class="fw-bold mb-1">Description:</p>
+        <p class="package-desc">@Model.Description</p>
 
-        <div class="text-center mt-4">
-            <a asp-controller="Orders"
-               asp-action="Create"
-               asp-route-packageId="@Model.PackageId"
-               class="btn btn-lg btn-primary px-5">
-                הזמן עכשיו
+        <div class="package-actions">
+            <a asp-controller="Trips"
+               asp-action="Index"
+               class="btn btn-outline-secondary">
+                Back to all packages
             </a>
+            
+            @if (Model.IsAvailable)
+            {
+                <a href="javascript:void(0);" class="btn btn-primary"
+                   onclick="confirmPayment(@Model.PackageId)">
+                    Book Now!
+                </a>
+            }
+            else
+            {
+                <button type="button"
+                        class="btn btn-warning"
+                        onclick="joinWaitlist(@Model.PackageId)">
+                    Join Wait List
+                </button>
+
+            }
+
+
+
         </div>
 
     </div>
+    <style>
+        body {
+        background: linear-gradient(180deg, #f1f5f9 0%, #f8fafc 100%);
+        }
+    
+    /* container */
+    .package-details {
+        margin: 40px auto 70px;
+        max-width: 720px;
+    }
+    
+    /* card */
+    .package-card {
+        background: #ffffff;
+        border-radius: 18px;
+        padding: 26px 24px;
+        text-align: center;
+    
+        border: 1px solid rgba(0,0,0,0.06);
+        box-shadow:
+            0 18px 40px rgba(0,0,0,0.10),
+            0 4px 10px rgba(0,0,0,0.06);
+    
+        transition: transform .15s ease, box-shadow .15s ease;
+    }
+    
+    .package-card:hover {
+        transform: translateY(-3px);
+        box-shadow:
+            0 26px 60px rgba(0,0,0,0.14),
+            0 6px 14px rgba(0,0,0,0.08);
+    }
+    
+    /* title */
+    .package-title {
+        font-size: 24px;
+        font-weight: 900;
+        color: #0f172a;
+        margin-bottom: 4px;
+    }
+    
+    .package-dates {
+        font-size: 13px;
+        font-weight: 600;
+        color: #64748b;
+    }
+    
+    /* section divider */
+    hr {
+        margin: 18px 0;
+        border: none;
+        height: 1px;
+        background: linear-gradient(to right, transparent, #cbd5e1, transparent);
+    }
+    
+    /* info rows */
+    .package-card .row.mb-3 {
+        justify-content: center;
+        row-gap: 10px;
+    }
+    
+    .package-card .row.mb-3 > .col-md-6 {
+        width: 100%;
+        max-width: 360px;
+        margin: 0 auto;
+    
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 10px 14px;
+    
+        font-size: 14px;
+        font-weight: 600;
+        color: #1e293b;
+    }
+    
+    /* price */
+    .package-price {
+        font-size: 30px;
+        font-weight: 900;
+        color: #2563eb;
+        margin: 18px 0 14px;
+    }
+    
+    /* discount */
+    .text-danger.fw-bold {
+        display: inline-block;
+        padding: 6px 14px;
+        border-radius: 999px;
+        background: rgba(220,38,38,0.12);
+        border: 1px solid rgba(220,38,38,0.25);
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+    
+    div[style*="line-through"] {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 10px;
+        background: #f1f5f9;
+        border: 1px dashed #cbd5e1;
+        font-size: 15px;
+    }
+    
+    /* description */
+    .package-desc {
+        font-size: 14px;
+        line-height: 1.7;
+        color: #334155;
+    
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 12px 14px;
+        margin-top: 8px;
+    }
+    
+    /* actions */
+    .package-actions {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 22px;
+    }
+    
+    .package-actions .btn {
+        flex: 1;
+        max-width: 220px;
+    
+        padding: 10px;
+        font-size: 15px;
+        font-weight: 700;
+        border-radius: 12px;
+    
+        transition: transform .12s ease, box-shadow .12s ease;
+    }
+    
+    .package-actions .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.14);
+    }
+    
+    /* buttons */
+    .btn-primary {
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        border: none;
+    }
+    
+    .btn-warning {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        border: none;
+        color: #fff;
+    }
+    
+    .btn-outline-secondary {
+        border: 1px solid #cbd5e1;
+        color: #0f172a;
+    }
+    
+    /* responsive */
+    @* @media (max-width: 600px) { *@
+    @*     .package-details { *@
+    @*         padding: 0 14px; *@
+    @*     } *@
+    
+        .package-card {
+            padding: 22px 18px;
+        }
+    
+        .package-title {
+            font-size: 22px;
+        }
+    
+        .package-price {
+            font-size: 26px;
+        }
+    
+        .package-actions {
+            flex-direction: column;
+        }
+    
+        .package-actions .btn {
+            max-width: 100%;
+        }
+    
+    </style>
+
 </div>

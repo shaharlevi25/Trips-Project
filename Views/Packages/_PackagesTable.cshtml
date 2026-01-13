@@ -9,10 +9,12 @@
         <th>Start Date</th>
         <th>End Date</th>
         <th>Price</th>
-        <th>Rooms</th>
+        <th>NumOfPeople</th>
         <th>Type</th>
+        <th>Amount</th>
         <th>Available</th>
         <th>Actions</th>
+        
     </tr>
     </thead>
     <tbody>
@@ -25,13 +27,15 @@
             <td>@pkg.StartDate.ToShortDateString()</td>
             <td>@pkg.EndDate.ToShortDateString()</td>
             <td>@pkg.Price</td>
-            <td>@pkg.NumOfRooms</td>
+            <td>@pkg.NumOfPeople</td>
             <td>@pkg.PackageType</td>
+            <td>@pkg.Amount</td>
             <td>
                 @(pkg.IsAvailable ? "✔" : "✖")
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@pkg.PackageId" class="btn btn-primary btn-sm">Edit</a>
+                <a asp-action="Delete" asp-route-packageId="@pkg.PackageId"class="btn btn-danger">Delete</a>
             </td>
         </tr>
     }

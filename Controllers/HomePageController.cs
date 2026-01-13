@@ -13,9 +13,10 @@ public class HomePageController : Controller
         _logger = logger;
     }
 
+  
     public IActionResult HomePage()
     {
-        return View();
+        return RedirectToAction("Index", "Trips");
     }
 
     public IActionResult Privacy()

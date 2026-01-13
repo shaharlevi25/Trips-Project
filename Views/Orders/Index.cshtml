@@ -1,0 +1,28 @@
+﻿@model IEnumerable<TripsProject.Models.ViewModel.OrderRowVM>
+
+<link rel="stylesheet" href="~/css/packages.css" />
+
+<h1>Orders</h1>
+
+<input type="text" id="searchBox"
+       placeholder="Search by email / destination / orderId / packageId / status / paypal..."
+       class="form-control mb-3" />
+
+<div id="ordersTable">
+    <partial name="_OrdersTable" model="Model" />
+</div>
+
+@section Scripts{
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function filterOrders() {
+            $.get('@Url.Action("Search","Orders")', {
+                query: $('#searchBox').val()
+            }, function (html) {
+                $('#ordersTable').html(html);
+            });
+        }
+
+        $('#searchBox').on('keyup', filterOrders);
+    </script>
+}
