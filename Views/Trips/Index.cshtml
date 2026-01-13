@@ -118,13 +118,15 @@ var byType = (Model ?? new List<TripsProject.Models.TravelPackage>())
 
             <select name="children" class="ta-search__select">
                 @{
-                int children = ViewBag.Children ?? 0;
-                for (int i = 0; i <= 6; i++)
-                {
-                <option value="@i" selected="@(i == children)">@i Children</option>
+                    int children = ViewBag.Children ?? -1;
                 }
+                <option value="-1" selected="@(children == -1)">Children (Any)</option>
+                @for (int i = 1; i <= 6; i++)
+                {
+                    <option value="@i" selected="@(i == children)">@i Children@(i == 1 ? "" : "s")</option>
                 }
             </select>
+            
         </div>
 
         <div class="ta-search__sep"></div>
@@ -189,6 +191,15 @@ var byType = (Model ?? new List<TripsProject.Models.TravelPackage>())
                 <input type="checkbox" name="discountOnly" value="true" @(discountOnly ? "checked" : "") />
                 <span>Discount only</span>
             </label>
+            
+            <div class="ta-search__field ta-search__field--text ta-filter__search">
+                <span class="ta-search__icon">🔍</span>
+                <input type="text"
+                       name="q"
+                       class="ta-search__input"
+                       placeholder="What Kind of Trip?"
+                       value="@(ViewBag.Q ?? "")" />
+            </div>
         </div>
     </form>
 
