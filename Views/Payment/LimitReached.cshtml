@@ -1,0 +1,201 @@
+﻿@{
+    ViewData["Title"] = "Order Limit Reached";
+}
+
+<script>
+    // Prevent going back to checkout/payment
+    history.pushState(null, "", location.href);
+    window.addEventListener("popstate", function () {
+        history.pushState(null, "", location.href);
+        window.location.replace("/Trips");
+    });
+</script>
+
+<div class="status-wrapper">
+    <div class="status-card">
+
+        <div class="icon-circle warning">
+            !
+        </div>
+
+        <h2>Order Limit Reached</h2>
+        <p class="sub">
+            You have more than 3 active orders, therefore you cannot book more packages.
+        </p>
+
+        <div class="info-box">
+            <div class="row">
+                <span class="label">Why is this happening?</span>
+                <span class="value">You already have 3 active paid packages.</span>
+            </div>
+            <div class="row">
+                <span class="label">What is an active order?</span>
+                <span class="value">A paid order whose trip has not ended yet.</span>
+            </div>
+            <div class="row">
+                <span class="label">When can I book again?</span>
+                <span class="value">After one of your trips ends.</span>
+            </div>
+        </div>
+
+        <div class="actions">
+            <a class="btn btn-primary" href="/UserOrders/MyOrders">
+                View My Orders
+            </a>
+        </div>
+
+        <div class="hint">
+            This limit helps us ensure availability and fair usage for all customers.
+        </div>
+
+        <div class="redirect">
+            Redirecting to home in <span id="countdown">10</span> seconds…
+        </div>
+
+    </div>
+</div>
+
+<style>
+    body {
+        background: #f5f7fa;
+    }
+
+    .status-wrapper {
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .status-card {
+        background: #ffffff;
+        width: 100%;
+        max-width: 520px;
+        border-radius: 16px;
+        padding: 40px 35px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+        text-align: center;
+    }
+
+    .icon-circle {
+        width: 62px;
+        height: 62px;
+        border-radius: 999px;
+        display: grid;
+        place-items: center;
+        margin: 0 auto 18px auto;
+        font-size: 28px;
+        font-weight: 700;
+    }
+
+    .icon-circle.warning {
+        background: #fff7ed;
+        color: #c2410c;
+        border: 1px solid #fed7aa;
+    }
+
+    h2 {
+        margin: 0 0 8px 0;
+        font-size: 24px;
+        color: #1f2937;
+    }
+
+    .sub {
+        margin: 0 0 20px 0;
+        font-size: 15px;
+        color: #6b7280;
+        line-height: 1.5;
+    }
+
+    .info-box {
+        text-align: left;
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 14px;
+        margin: 18px 0 22px 0;
+    }
+
+    .info-box .row {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 6px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .info-box .row:last-child {
+        border-bottom: none;
+    }
+
+    .label {
+        color: #374151;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .value {
+        color: #6b7280;
+        font-size: 14px;
+        text-align: right;
+        max-width: 55%;
+    }
+
+    .actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 6px;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 12px 14px;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.15s ease-in-out;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        color: #fff;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        filter: brightness(0.95);
+    }
+
+    .hint {
+        margin-top: 16px;
+        font-size: 12px;
+        color: #9ca3af;
+        line-height: 1.4;
+    }
+
+    .redirect {
+        margin-top: 14px;
+        font-size: 13px;
+        color: #6b7280;
+    }
+</style>
+
+<script>
+    let seconds = 10;
+    const el = document.getElementById("countdown");
+
+    const timer = setInterval(() => {
+        seconds--;
+        if (el) el.innerText = seconds;
+
+        if (seconds <= 0) {
+            clearInterval(timer);
+            window.location.href = "/Trips";
+        }
+    }, 1000);
+</script>

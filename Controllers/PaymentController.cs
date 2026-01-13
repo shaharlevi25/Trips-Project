@@ -31,8 +31,13 @@ namespace TripsProject.Controllers
 
         // ========= Pages =========
 
+       
         [HttpGet]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult LimitReached()
+        {
+            return View();
+        }
 
         public IActionResult Success(string orderId)
         {
@@ -64,6 +69,14 @@ namespace TripsProject.Controllers
 
         public IActionResult Checkout(int packageId)
         {
+            string userEmail = User.Identity!.Name!;
+            int activeCount = CountActivePaidOrders(userEmail);
+
+            if (activeCount >= 3)
+            {
+               
+                return RedirectToAction("LimitReached", "Payment");
+            }
             if (!User.Identity.IsAuthenticated)
             {
                 TempData["AuthMessage"] = "To purchase a package you must register or login";
@@ -101,6 +114,14 @@ namespace TripsProject.Controllers
 
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest req)
         {
+            string userEmail = User.Identity!.Name!;
+            int activeCount = CountActivePaidOrders(userEmail);
+
+            if (activeCount >= 3)
+            {
+              
+                return RedirectToAction("LimitReached", "Payment");
+            }
             if (!User.Identity.IsAuthenticated)
                 return Unauthorized();
 
@@ -111,7 +132,7 @@ namespace TripsProject.Controllers
             if (package.Amount <= 0 || !package.IsAvailable)
                 return BadRequest("Out of stock");
 
-            string userEmail = User.Identity!.Name!;
+          
             decimal originalPrice = package.Price;
 
             int? discountPercent = _discountService.GetActiveDiscountPercent(req.PackageId);
@@ -676,6 +697,24 @@ WHERE o.PayPalOrderId = @PayPalOrderId;
                 NumOfPeople = (int)r["NumOfPeople"],
                 Description = r["Description"] == DBNull.Value ? null : r["Description"].ToString(),
             };
+        }
+        
+        private int CountActivePaidOrders(string userEmail)
+        {
+            using var conn = new SqlConnection(_connectionString);
+            conn.Open();
+
+            using var cmd = new SqlCommand(@"
+SELECT COUNT(*)
+FROM Orders o
+JOIN TravelPackages p ON p.PackageId = o.PackageID
+WHERE o.UserEmail = @Email
+  AND o.Status = 'Paid'
+  AND p.EndDate >= CAST(GETDATE() AS date);
+", conn);
+
+            cmd.Parameters.AddWithValue("@Email", userEmail);
+            return (int)cmd.ExecuteScalar();
         }
 
         private byte[] BuildInvoicePdf(InvoiceData data)
