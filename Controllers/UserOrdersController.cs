@@ -154,12 +154,10 @@ namespace TripsProject.Controllers
             if (data == null)
                 return NotFound("Order not found");
 
-            // (אופציונלי) תתן להדפיס רק אם Paid
-            // אם אתה רוצה לאפשר גם Pending, תוריד את זה:
+           
             if (!string.Equals(data.Status, "Paid", StringComparison.OrdinalIgnoreCase))
                 return BadRequest("Invoice is available only for paid orders.");
 
-            // חובה פעם אחת בפרויקט (אפשר גם ב-Program.cs)
             QuestPDF.Settings.License = LicenseType.Community;
 
             byte[] pdf = Document.Create(container =>

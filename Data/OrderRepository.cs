@@ -25,7 +25,6 @@ public class OrderRepository
         using var conn = new SqlConnection(_connectionString);
         conn.Open();
 
-        // לוקחים את החוקים האחרונים (אם יש כמה שורות)
         using var cmd = new SqlCommand(@"
                 SELECT TOP 1 CancellationDaysBeforeStart
                 FROM BookingRules
@@ -33,7 +32,7 @@ public class OrderRepository
             ", conn);
 
         var obj = cmd.ExecuteScalar();
-        if (obj == null) return 0; // ברירת מחדל אם לא הוגדר
+        if (obj == null) return 0; 
         return (int)obj;
     }
     
@@ -57,7 +56,6 @@ public class OrderRepository
             { var obj = cmdRules.ExecuteScalar(); cancelDays = obj == null ? 0 : (int)obj;
             }
 
-                // 2) מביאים את ההזמנה + החבילה עם נעילה כדי למנוע race
                 int packageId;
                 string status;
                 DateTime startDate;
@@ -86,15 +84,12 @@ public class OrderRepository
                     amount = (int)r["Amount"];
                 }
 
-                // רק הזמנה ששולמה אפשר לבטל (אם אתה רוצה גם PendingPayment, תגיד)
                 if (!string.Equals(status, "Paid", StringComparison.OrdinalIgnoreCase))
                 {
                     tx.Rollback();
                     return new CancelOrderResult(false, "Only Paid orders can be cancelled", packageId, false, startDate);
                 }
 
-                // 3) חוק ביטול: צריך להיות לפני StartDate - CancellationDaysBeforeStart
-                // לדוגמה: cancelDays=3 => אפשר לבטל עד 3 ימים לפני
                 var deadline = startDate.AddDays(-cancelDays);
                 if (DateTime.Now > deadline)
                 {
@@ -104,7 +99,6 @@ public class OrderRepository
 
                 bool wasZero = (amount == 0);
 
-                // 4) עדכון ההזמנה ל-Cancelled
                 using (var cmdCancel = new SqlCommand(@"
                     UPDATE Orders
                     SET Status = 'Cancelled',
@@ -125,7 +119,6 @@ public class OrderRepository
                     }
                 }
 
-                // 5) מחזירים מלאי + זמינות
                 using (var cmdBack = new SqlCommand(@"
                     UPDATE TravelPackages
                     SET Amount = Amount + 1,

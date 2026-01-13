@@ -2,6 +2,14 @@
     ViewData["Title"] = "Payment Cancelled";
     var msg = ViewBag.Msg as string ?? "Payment was cancelled. No charge was made.";
 }
+<script>
+    // מונע חזרה לדף הקודם
+    history.pushState(null, "", location.href);
+    window.addEventListener("popstate", function () {
+        history.pushState(null, "", location.href);
+        window.location.replace("/Trips");
+    });
+</script>
 
 <div class="status-wrapper">
     <div class="status-card">
