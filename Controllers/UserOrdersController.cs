@@ -22,7 +22,11 @@ namespace TripsProject.Controllers
             _email = email;
             _package = pack;
         }
-        
+        public IActionResult CancelNotAllowed()
+        {
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Cancel(int orderId)
@@ -34,7 +38,12 @@ namespace TripsProject.Controllers
 
             var result = _repo.CancelPaidOrderByUser(orderId, email);
             if (!result.Success)
-                return BadRequest(result.Error);
+            {
+                TempData["CancelTitle"] = "Cancellation Not Allowed";
+                TempData["CancelMsg"] = result.Error ?? "You cannot cancel this order.";
+                return RedirectToAction("CancelNotAllowed");
+
+            }
 
             // שליחת מייל ל-waitlist רק אם לפני הביטול היה Amount==0
             if (result.WasAmountZeroBeforeCancel)
