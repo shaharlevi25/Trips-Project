@@ -32,6 +32,8 @@ namespace TripsProject.Controllers
         // ========= Pages =========
 
         [HttpGet]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+
         public IActionResult Success(string orderId)
         {
             if (!User.Identity.IsAuthenticated)
@@ -48,7 +50,9 @@ namespace TripsProject.Controllers
 
             return View(order);
         }
-
+        
+        
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Cancel()
         {
             ViewBag.Msg = "Payment was cancelled";
@@ -56,6 +60,8 @@ namespace TripsProject.Controllers
         }
 
         [HttpGet]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+
         public IActionResult Checkout(int packageId)
         {
             if (!User.Identity.IsAuthenticated)
@@ -92,6 +98,7 @@ namespace TripsProject.Controllers
 
         // 1) Create PayPal Order (server): reserve stock + create PendingPayment locally, then create PayPal order
         [HttpPost]
+
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest req)
         {
             if (!User.Identity.IsAuthenticated)

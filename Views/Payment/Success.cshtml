@@ -1,6 +1,6 @@
 ﻿@model TripsProject.Models.ViewModel.OrderDetailsVM
 @{
-    ViewData["Title"] = "Order Completed";
+ViewData["Title"] = "Order Completed";
 }
 
 <div class="success-wrapper">
@@ -41,6 +41,11 @@
                 My Orders
             </a>
         </div>
+
+        <div class="redirect">
+            Redirecting to home in <span id="countdown">10</span> seconds…
+        </div>
+
     </div>
 </div>
 
@@ -147,4 +152,25 @@
     .btn.outline:hover {
         background: #eff6ff;
     }
+
+    .redirect {
+        margin-top: 15px;
+        font-size: 13px;
+        color: #6b7280;
+    }
 </style>
+
+<script>
+    let seconds = 10;
+    const el = document.getElementById("countdown");
+
+    const timer = setInterval(() => {
+        seconds--;
+        if (el) el.innerText = seconds;
+
+        if (seconds <= 0) {
+            clearInterval(timer);
+            window.location.href = "/";
+        }
+    }, 1000);
+</script>
