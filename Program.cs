@@ -14,6 +14,8 @@ builder.Services.AddScoped<BookingRepository>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<OrderRepository>();
 builder.Services.AddScoped<OrderCleanupService>();
+builder.Services.AddScoped<DiscountService>();
+
 
 
 
@@ -55,6 +57,7 @@ app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapStaticAssets();
+
 
 app.MapControllerRoute(
         name: "default",

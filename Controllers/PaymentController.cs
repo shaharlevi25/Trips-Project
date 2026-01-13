@@ -17,12 +17,16 @@ namespace TripsProject.Controllers
         private readonly EmailService _emailService;
         private readonly string _connectionString;
         private readonly IConfiguration _config;
+        private readonly DiscountService _discountService;
 
-        public PaymentController(IConfiguration configuration, EmailService emailService)
+
+        public PaymentController(IConfiguration configuration, EmailService emailService, DiscountService discountService)
         {
             _config = configuration;
             _connectionString = configuration.GetConnectionString("TravelDb");
             _emailService = emailService;
+            _discountService = discountService;
+
         }
 
         // ========= Pages =========
@@ -70,6 +74,13 @@ namespace TripsProject.Controllers
                 TempData["Msg"] = "This package is not available (out of stock).";
                 return RedirectToAction("Details", "Trips", new { id = packageId });
             }
+            var percent = _discountService.GetActiveDiscountPercent(packageId);
+
+            if (percent.HasValue && percent.Value > 0)
+            {
+                package.DiscountPercent = percent.Value;
+                package.DiscountedPrice = Math.Round(package.Price * (100m - percent.Value) / 100m, 2);
+            }
 
             // for client timer (10 minutes)
             ViewBag.ExpireAt = DateTime.UtcNow.AddMinutes(10);
@@ -94,7 +105,14 @@ namespace TripsProject.Controllers
                 return BadRequest("Out of stock");
 
             string userEmail = User.Identity!.Name!;
-            decimal total = package.Price;
+            decimal originalPrice = package.Price;
+
+            int? discountPercent = _discountService.GetActiveDiscountPercent(req.PackageId);
+
+            decimal total = discountPercent.HasValue
+                ? _discountService.ApplyDiscount(originalPrice, discountPercent.Value)
+                : originalPrice;
+
 
             // 1) reserve stock + create PendingPayment order (transaction)
             int? localOrderId = ReserveAndCreatePendingOrder(userEmail, package.PackageId, total);
@@ -223,9 +241,11 @@ namespace TripsProject.Controllers
                     );
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                // do nothing - best effort
+                Console.WriteLine("EMAIL ERROR:");
+                Console.WriteLine(ex.ToString());
+
             }
 
             return Ok(new { success = true, orderId = req.OrderId });

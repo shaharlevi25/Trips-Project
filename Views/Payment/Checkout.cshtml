@@ -1,26 +1,37 @@
+```cshtml
 @model TripsProject.Models.TravelPackage
 @{
-ViewData["Title"] = "Checkout";
+    ViewData["Title"] = "Checkout";
+    var total = Model.DiscountedPrice ?? Model.Price;
 }
 
 <div class="checkout-wrapper">
     <div class="checkout-card">
-        <h2>תשלום מאובטח</h2>
-        <p>בחר את אמצעי התשלום שלך</p>
+        <h2>Secure Checkout</h2>
+        <p>Select your payment method</p>
 
         <div class="price-box">
-            סה״כ לתשלום: ₪@Model.Price
+            Total to pay: ₪@total
         </div>
 
+        @* Optional: show discount details *@
+        @if (Model.DiscountedPrice.HasValue && Model.DiscountPercent.HasValue)
+        {
+            <div class="discount-info">
+                <span class="old-price">₪@Model.Price</span>
+                <span class="discount-badge">@Model.DiscountPercent% OFF</span>
+            </div>
+        }
+
         <div class="timer-box">
-            ⏳ הזמן שנותר לתשלום:
+            ⏳ Time left to pay:
             <span id="timer">--:--</span>
         </div>
 
         <div id="paypal-button-container"></div>
 
         <div class="secure-text">
-            🔒 תשלום מאובטח • ללא חיוב אמיתי (Sandbox)
+            🔒 Secure payment • No real charge (Sandbox)
         </div>
     </div>
 </div>
@@ -63,7 +74,30 @@ ViewData["Title"] = "Checkout";
         font-weight: bold;
         padding: 14px;
         border-radius: 10px;
+        margin-bottom: 10px;
+    }
+
+    .discount-info {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
         margin-bottom: 25px;
+    }
+
+    .old-price {
+        color: #6b7280;
+        text-decoration: line-through;
+        font-size: 16px;
+    }
+
+    .discount-badge {
+        background: #fee2e2;
+        color: #b91c1c;
+        font-weight: 700;
+        font-size: 13px;
+        padding: 6px 10px;
+        border-radius: 999px;
     }
 
     .secure-text {
@@ -81,120 +115,122 @@ ViewData["Title"] = "Checkout";
 </style>
 
 @section Scripts {
-<script src="https://www.paypal.com/sdk/js?client-id=AUIimViTH8m2sDNv8d9Osd9xex0s3b6bmxiXfb8Zx9IGHTtPsa_1P5a7qg5OvA1mVY_PhP05dMyZIWDO&currency=ILS"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=AUIimViTH8m2sDNv8d9Osd9xex0s3b6bmxiXfb8Zx9IGHTtPsa_1P5a7qg5OvA1mVY_PhP05dMyZIWDO&currency=ILS"></script>
 
-<script>
-    // ✅ חשוב: משתנה גלובלי שישמר את ה-OrderId של PayPal שנוצר
-    window.currentPayPalOrderId = null;
+    <script>
+        // Global variable to store the created PayPal OrderId (so we can release reservation on timeout/cancel)
+        window.currentPayPalOrderId = null;
 
-    document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function () {
 
-        const el = document.getElementById("paypal-button-container");
-        if (!el) {
-            alert("ERROR: #paypal-button-container not found in the page");
-            return;
-        }
+            const el = document.getElementById("paypal-button-container");
+            if (!el) {
+                alert("ERROR: #paypal-button-container was not found on the page");
+                return;
+            }
 
-        paypal.Buttons({
-            createOrder: async function () {
-                const packageId = @Model.PackageId;
+            paypal.Buttons({
+                createOrder: async function () {
+                    const packageId = @Model.PackageId;
 
-                const res = await fetch('/Payment/CreateOrder', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ packageId: packageId })
-                });
+                    const res = await fetch('/Payment/CreateOrder', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ packageId: packageId })
+                    });
 
-                if (!res.ok) {
-                    alert(await res.text());
-                    throw new Error("CreateOrder failed");
-                }
+                    if (!res.ok) {
+                        alert(await res.text());
+                        throw new Error("CreateOrder failed");
+                    }
 
-                const data = await res.json();
+                    const data = await res.json();
 
-               
-                window.currentPayPalOrderId = data.orderId;
+                    // Save the PayPal orderId so we can cancel reservation if needed
+                    window.currentPayPalOrderId = data.orderId;
 
-                return data.orderId;
-            },
+                    return data.orderId;
+                },
 
-            onApprove: async function (data) {
-                const res = await fetch('/Payment/Capture', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ orderId: data.orderID })
-                });
-
-                // קוראים את התוכן פעם אחת
-                const bodyText = await res.text();
-
-                if (res.ok) {
-                    // מצפים שהשרת יחזיר: { success: true, orderId: "..." }
-                    const data2 = JSON.parse(bodyText);
-
-                    window.location.href =
-                        '/Payment/Success?orderId=' + encodeURIComponent(data2.orderId);
-                } else {
-                    alert("Payment error: " + bodyText);
-                }
-},
-
-            onCancel: async function (data) {
-                try {
-                    await fetch('/Payment/CancelReservation', {
+                onApprove: async function (data) {
+                    const res = await fetch('/Payment/Capture', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ orderId: data.orderID })
                     });
-                } catch (e) { }
 
-                window.location.href = '/Payment/Cancel';
-            }
-        }).render('#paypal-button-container');
+                    // Read body once
+                    const bodyText = await res.text();
 
-    });
-</script>
+                    if (res.ok) {
+                        // Server should return: { success: true, orderId: "..." }
+                        const data2 = JSON.parse(bodyText);
 
-<script>
-    const expireAt = new Date('@ViewBag.ExpireAt.ToString("yyyy-MM-ddTHH:mm:ssZ")');
+                        window.location.href =
+                            '/Payment/Success?orderId=' + encodeURIComponent(data2.orderId);
+                    } else {
+                        alert("Payment error: " + bodyText);
+                    }
+                },
 
-    function startTimer() {
-        const timerEl = document.getElementById("timer");
-
-        const interval = setInterval(async () => {
-            const now = new Date();
-            const diff = expireAt - now;
-
-            if (diff <= 0) {
-                clearInterval(interval);
-                timerEl.innerText = "00:00";
-
-                // ✅ לשחרר רק אם באמת נוצר PayPal OrderId (כלומר בוצע reserve)
-                if (window.currentPayPalOrderId) {
+                onCancel: async function (data) {
                     try {
                         await fetch('/Payment/CancelReservation', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ orderId: window.currentPayPalOrderId })
+                            body: JSON.stringify({ orderId: data.orderID })
                         });
                     } catch (e) { }
+
+                    window.location.href = '/Payment/Cancel';
+                }
+            }).render('#paypal-button-container');
+
+        });
+    </script>
+
+    <script>
+        // Expiration time comes from server (UTC)
+        const expireAt = new Date('@ViewBag.ExpireAt.ToString("yyyy-MM-ddTHH:mm:ssZ")');
+
+        function startTimer() {
+            const timerEl = document.getElementById("timer");
+
+            const interval = setInterval(async () => {
+                const now = new Date();
+                const diff = expireAt - now;
+
+                if (diff <= 0) {
+                    clearInterval(interval);
+                    timerEl.innerText = "00:00";
+
+                    // Release reservation only if a PayPal order was created
+                    if (window.currentPayPalOrderId) {
+                        try {
+                            await fetch('/Payment/CancelReservation', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ orderId: window.currentPayPalOrderId })
+                            });
+                        } catch (e) { }
+                    }
+
+                    alert("Payment time expired. The reservation was cancelled.");
+                    window.location.href = '/Payment/Cancel';
+                    return;
                 }
 
-                alert("זמן התשלום הסתיים, ההזמנה בוטלה");
-                window.location.href = '/Payment/Cancel';
-                return;
-            }
+                const minutes = Math.floor(diff / 60000);
+                const seconds = Math.floor((diff % 60000) / 1000);
 
-            const minutes = Math.floor(diff / 60000);
-            const seconds = Math.floor((diff % 60000) / 1000);
+                timerEl.innerText =
+                    String(minutes).padStart(2, '0') + ":" +
+                    String(seconds).padStart(2, '0');
 
-            timerEl.innerText =
-                String(minutes).padStart(2, '0') + ":" +
-                String(seconds).padStart(2, '0');
+            }, 1000);
+        }
 
-        }, 1000);
-    }
-
-    document.addEventListener("DOMContentLoaded", startTimer);
-</script>
+        document.addEventListener("DOMContentLoaded", startTimer);
+    </script>
 }
+```
