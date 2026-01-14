@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
 using TripsProject.Services;
-using Microsoft.AspNetCore.Authorization;
 
 namespace TripsProject.Controllers
 {
@@ -107,6 +106,12 @@ namespace TripsProject.Controllers
                     await HttpContext.SignInAsync(
                         CookieAuthenticationDefaults.AuthenticationScheme,
                         principal
+                    );
+
+                    await _emailService.SendAsync(
+                        reader["Email"].ToString(),
+                        "Login notification",
+                        "התחברת בהצלחה למערכת TripsProject"
                     );
 
                     return Redirect("/");
@@ -214,10 +219,12 @@ namespace TripsProject.Controllers
             return RedirectToAction("Index", "Trips");
         }
         // Details Getter
-        [Authorize]
         [HttpGet]
         public IActionResult Details()
         {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Login");
+
             string email = User.Identity.Name;
 
             User user = null;
@@ -244,14 +251,34 @@ namespace TripsProject.Controllers
                 }
             }
 
-            return View(user);
+            
+            // בסוף Details()
+            if (user == null)
+            {
+                // אם לא נמצא משתמש במסד הנתונים לפי האימייל של המחובר
+                return RedirectToAction("Login");
+            }
+
+            return View("~/Views/Dashboard/Details.cshtml", user);
+
+            
+            return View();
         }
         
         // Save Details
         
         [HttpPost]
+        [HttpPost]
+        [HttpPost]
         public IActionResult SaveDetails(User model)
         {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Login");
+
+            string email = User.Identity.Name;
+
+            int rowsAffected;
+
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
@@ -263,22 +290,35 @@ namespace TripsProject.Controllers
                 PhoneNumber = @Phone,
                 Password = @Password
             WHERE Email = @Email
+              AND (
+                    FirstName <> @FirstName OR
+                    LastName <> @LastName OR
+                    PhoneNumber <> @Phone OR
+                    Password <> @Password
+                  )
         ";
 
                 SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@FirstName", model.FirstName);
-                cmd.Parameters.AddWithValue("@LastName", model.LastName);
-                cmd.Parameters.AddWithValue("@Phone", model.PhoneNumber);
-                cmd.Parameters.AddWithValue("@Password", model.Password);
-                cmd.Parameters.AddWithValue("@Email", model.Email);
+                cmd.Parameters.AddWithValue("@FirstName", model.FirstName ?? "");
+                cmd.Parameters.AddWithValue("@LastName", model.LastName ?? "");
+                cmd.Parameters.AddWithValue("@Phone", model.PhoneNumber ?? "");
+                cmd.Parameters.AddWithValue("@Password", model.Password ?? "");
+                cmd.Parameters.AddWithValue("@Email", email);
 
-                cmd.ExecuteNonQuery();
+                rowsAffected = cmd.ExecuteNonQuery();
             }
 
-            TempData["Msg"] = "Profile updated successfully!";
+            if (rowsAffected == 0)
+            {
+                TempData["Error"] = "לא בוצע שינוי בפרטים.";
+            }
+            else
+            {
+                TempData["Msg"] = "הפרטים עודכנו בהצלחה ✔";
+            }
+
             return RedirectToAction("Details");
         }
-
 
     }
     
