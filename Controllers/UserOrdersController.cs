@@ -231,6 +231,39 @@ namespace TripsProject.Controllers
 
                     page.Footer().AlignCenter().Text("© TripsProject").FontSize(10);
                 });
+                
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4);
+                    page.Margin(30);
+                    page.DefaultTextStyle(x => x.FontSize(12));
+
+                    page.Header().Row(row =>
+                    {
+                        row.RelativeItem().Text("TripsProject - Trip Itinerary").FontSize(18).SemiBold();
+                        row.ConstantItem(200).AlignRight().Text($"Order #{data.OrderId}");
+                    });
+
+                    page.Content().Column(col =>
+                    {
+                        col.Spacing(12);
+
+                        col.Item().LineHorizontal(1);
+
+                        col.Item().Text("Travel Route / Track").FontSize(14).SemiBold();
+
+                        col.Item().Text(string.IsNullOrWhiteSpace(data.TrackDesc)
+                            ? "No itinerary/track description was provided for this package."
+                            : data.TrackDesc);
+
+                        col.Item().LineHorizontal(1);
+
+                        col.Item().Text("Notes").FontSize(14).SemiBold();
+                        col.Item().Text("Please arrive on time to each activity. The schedule may change due to weather or local conditions.");
+                    });
+
+                    page.Footer().AlignCenter().Text("© TripsProject").FontSize(10);
+                });
             }).GeneratePdf();
 
             return File(pdf, "application/pdf", $"Invoice_{data.OrderId}.pdf");
@@ -257,7 +290,8 @@ SELECT
     p.EndDate,
     p.PackageType,
     p.NumOfPeople,
-    p.Description
+    p.Description,
+    p.TrackDesc
 FROM Orders o
 JOIN TravelPackages p ON p.PackageId = o.PackageID
 WHERE o.OrderID = @OrderID AND o.UserEmail = @Email;
@@ -287,7 +321,8 @@ WHERE o.OrderID = @OrderID AND o.UserEmail = @Email;
                 EndDate = (DateTime)r["EndDate"],
                 PackageType = r["PackageType"]?.ToString(),
                 NumOfPeople = (int)r["NumOfPeople"],
-                Description = r["Description"]?.ToString()
+                Description = r["Description"]?.ToString(),
+                TrackDesc = r["TrackDesc"] == DBNull.Value ? null : r["TrackDesc"].ToString()
             };
         }
 
@@ -309,6 +344,7 @@ WHERE o.OrderID = @OrderID AND o.UserEmail = @Email;
             public string? PackageType { get; set; }
             public int NumOfPeople { get; set; }
             public string? Description { get; set; }
+            public string? TrackDesc { get; set; }
         }
     }
     
