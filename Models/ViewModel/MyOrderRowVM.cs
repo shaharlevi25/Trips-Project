@@ -11,4 +11,6 @@ public class MyOrderRowVM
     public string Status { get; set; } = "";
     public DateTime OrderDate { get; set; }
     public DateTime? PaidAt { get; set; }
+    public DateTime StartDate { get; set; }   
+    public bool CanCancel { get; set; } 
 }

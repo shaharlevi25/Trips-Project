@@ -250,7 +250,12 @@ SELECT
     o.OrderDate,
     o.PaidAt,
     p.Destination,
-    p.Country
+    p.Country,
+    p.StartDate,
+    CASE 
+         WHEN o.Status = 'Paid' AND p.StartDate > CAST(GETDATE() AS date) THEN 1
+        ELSE 0
+    END AS CanCancel
 FROM Orders o
 JOIN TravelPackages p ON p.PackageId = o.PackageID
 WHERE
@@ -282,7 +287,9 @@ ORDER BY o.OrderDate DESC;
                 TotalPrice = (decimal)r["TotalPrice"],
                 Status = r["Status"].ToString()!,
                 OrderDate = (DateTime)r["OrderDate"],
-                PaidAt = r["PaidAt"] == DBNull.Value ? null : (DateTime?)r["PaidAt"]
+                PaidAt = r["PaidAt"] == DBNull.Value ? null : (DateTime?)r["PaidAt"],
+                StartDate = (DateTime)r["StartDate"],
+                CanCancel = Convert.ToInt32(r["CanCancel"]) == 1
             });
         }
 
