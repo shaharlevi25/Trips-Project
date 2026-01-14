@@ -218,6 +218,9 @@ namespace TripsProject.Controllers
         [HttpGet]
         public IActionResult Details()
         {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Login", "Account");
+            
             string email = User.Identity.Name;
 
             User user = null;
@@ -243,8 +246,15 @@ namespace TripsProject.Controllers
                     };
                 }
             }
+            
+            if (user == null)
+            {
+                // If no user was found in the database for the logged-in email
+                return RedirectToAction("Login", "Account"); // adjust controller name if needed
+            }
 
-            return View(user);
+
+            return View("~/Views/Dashboard/Details.cshtml", user);
         }
         
         // Save Details
@@ -252,31 +262,53 @@ namespace TripsProject.Controllers
         [HttpPost]
         public IActionResult SaveDetails(User model)
         {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Login", "Account");
+            string email = User.Identity.Name;
+
+            int rowsAffected;
+
+
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
 
                 string sql = @"
-            UPDATE Users
-            SET FirstName = @FirstName,
-                LastName = @LastName,
-                PhoneNumber = @Phone,
-                Password = @Password
-            WHERE Email = @Email
-        ";
+                UPDATE Users
+                SET
+                    FirstName = @FirstName,
+                    LastName = @LastName,
+                    PhoneNumber = @Phone,
+                    Password = @Password
+                WHERE Email = @Email
+                  AND (
+                        FirstName <> @FirstName OR
+                        LastName <> @LastName OR
+                        PhoneNumber <> @Phone OR
+                        Password <> @Password
+                      )
+            ";
 
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@FirstName", model.FirstName);
-                cmd.Parameters.AddWithValue("@LastName", model.LastName);
-                cmd.Parameters.AddWithValue("@Phone", model.PhoneNumber);
-                cmd.Parameters.AddWithValue("@Password", model.Password);
-                cmd.Parameters.AddWithValue("@Email", model.Email);
-
-                cmd.ExecuteNonQuery();
+                using SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@FirstName", model.FirstName ?? "");
+                cmd.Parameters.AddWithValue("@LastName", model.LastName ?? "");
+                cmd.Parameters.AddWithValue("@Phone", model.PhoneNumber ?? "");
+                cmd.Parameters.AddWithValue("@Password", model.Password ?? "");
+                cmd.Parameters.AddWithValue("@Email", email);
+                rowsAffected = cmd.ExecuteNonQuery();
+                
+            }
+            if (rowsAffected == 0)
+            {
+                TempData["Error"] = "No changes were made to your details.";
+            }
+            else
+            {
+                TempData["Msg"] = "Details updated successfully ✔";
             }
 
-            TempData["Msg"] = "Profile updated successfully!";
             return RedirectToAction("Details");
+            
         }
 
 
