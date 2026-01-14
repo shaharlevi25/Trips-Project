@@ -1,0 +1,77 @@
+﻿@{
+    ViewData["Title"] = "Cancellation Not Allowed";
+    var title = TempData["CancelTitle"] as string ?? "Cancellation Not Allowed";
+    var msg = TempData["CancelMsg"] as string ?? "You cannot cancel this order.";
+}
+
+<script>
+    // prevent back navigation to previous page
+    history.pushState(null, "", location.href);
+    window.addEventListener("popstate", function () {
+        history.pushState(null, "", location.href);
+        window.location.replace("/UserOrders/MyOrders");
+    });
+</script>
+
+<div class="status-wrapper">
+    <div class="status-card">
+
+        <div class="icon-circle warning">!</div>
+
+        <h2>@title</h2>
+        <p class="sub">@msg</p>
+
+        <div class="info-box">
+            <div class="row">
+                <span class="label">Reason</span>
+                <span class="value">@msg</span>
+            </div>
+        </div>
+
+        <div class="actions">
+            <a class="btn btn-primary" href="/UserOrders/MyOrders">Back to My Orders</a>
+        </div>
+
+        <div class="redirect">
+            Redirecting in <span id="countdown">10</span> seconds…
+        </div>
+
+    </div>
+</div>
+
+<style>
+    body { background: #f5f7fa; }
+    .status-wrapper { min-height: 70vh; display:flex; align-items:center; justify-content:center; padding:20px; }
+    .status-card { background:#fff; width:100%; max-width:520px; border-radius:16px; padding:40px 35px;
+        box-shadow:0 15px 40px rgba(0,0,0,0.08); text-align:center; }
+    .icon-circle { width:62px; height:62px; border-radius:999px; display:grid; place-items:center; margin:0 auto 18px;
+        font-size:28px; font-weight:800; background:#fff7ed; color:#c2410c; border:1px solid #fed7aa; }
+    h2 { margin:0 0 8px; font-size:24px; color:#1f2937; }
+    .sub { margin:0 0 20px; font-size:15px; color:#6b7280; line-height:1.5; }
+
+    .info-box { text-align:left; background:#f8fafc; border:1px solid #e5e7eb; border-radius:12px;
+        padding:14px; margin:18px 0 22px; }
+    .info-box .row { display:flex; justify-content:space-between; gap:12px; padding:10px 6px; }
+    .label { color:#374151; font-weight:600; font-size:14px; }
+    .value { color:#6b7280; font-size:14px; text-align:right; max-width:65%; }
+
+    .actions { display:flex; gap:12px; margin-top:6px; }
+    .btn { flex:1; padding:12px 14px; border-radius:10px; font-size:15px; font-weight:600; text-decoration:none;
+        display:inline-flex; align-items:center; justify-content:center; }
+    .btn-primary { background: linear-gradient(135deg,#2563eb,#1d4ed8); color:#fff; border:none; }
+    .redirect { margin-top:14px; font-size:13px; color:#6b7280; }
+</style>
+
+<script>
+    let seconds = 10;
+    const el = document.getElementById("countdown");
+
+    const timer = setInterval(() => {
+        seconds--;
+        if (el) el.innerText = seconds;
+        if (seconds <= 0) {
+            clearInterval(timer);
+            window.location.href = "/UserOrders/MyOrders";
+        }
+    }, 1000);
+</script>

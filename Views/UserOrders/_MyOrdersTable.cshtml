@@ -47,7 +47,8 @@
             </td>
             
             <td>
-                @if (o.Status == "Paid")
+                
+                @if (o.CanCancel)
                 {
                     <form asp-controller="UserOrders"
                           asp-action="Cancel"
@@ -65,7 +66,7 @@
                 }
                 else
                 {
-                    <span>-</span>
+                    <span style="color:#9ca3af;">-</span>
                 }
             </td>
         </tr>
