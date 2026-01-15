@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using TripsProject.Data;
 using TripsProject.Models;
 using System.Linq; 
+
+
 namespace TripsProject.Controllers.Admin
 {
-    
+    [Authorize(Roles = "Admin")]
     public class PackagesController : Controller
     {
         private readonly PackageRepository _repo;

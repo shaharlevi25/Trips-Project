@@ -69,6 +69,11 @@ namespace TripsProject.Controllers
 
         public IActionResult Checkout(int packageId)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                TempData["AuthMessage"] = "You must login to book a package.";
+                return RedirectToAction("Login", "User");
+            }
             string userEmail = User.Identity!.Name!;
             int activeCount = CountActivePaidOrders(userEmail);
 
@@ -114,6 +119,11 @@ namespace TripsProject.Controllers
 
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest req)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                TempData["AuthMessage"] = "You must login to book a package.";
+                return RedirectToAction("Login", "User");
+            }
             string userEmail = User.Identity!.Name!;
             int activeCount = CountActivePaidOrders(userEmail);
 

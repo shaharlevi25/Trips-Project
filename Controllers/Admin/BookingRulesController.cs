@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TripsProject.Data;
 using TripsProject.Models;
 using TripsProject.Models.ViewModel;
 using TripsProject.Services;
 
 namespace TripsProject.Controllers.Admin;
-
+[Authorize(Roles = "Admin")]
 public class BookingRulesController : Controller
 {
     private readonly BookingRulesRepository _repo;

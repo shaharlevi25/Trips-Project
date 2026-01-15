@@ -10,6 +10,12 @@
     {
         <div class="alert alert-danger text-center">@ViewBag.Error</div>
     }
+    @if (TempData["AuthMessage"] != null)
+    {
+        <div class="alert alert-warning text-center">
+            @TempData["AuthMessage"]
+        </div>
+    }
 
     <form method="post">
         <div class="mb-3">

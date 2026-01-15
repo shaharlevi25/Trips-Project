@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TripsProject.Data;
 using TripsProject.Models.ViewModel;
 
 namespace TripsProject.Controllers.Admin;
-
+[Authorize(Roles = "Admin")]
 public class DiscountsController : Controller
 {
     private readonly DiscountRepository _repo;

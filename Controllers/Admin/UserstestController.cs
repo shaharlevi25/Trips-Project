@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TripsProject.Data;
 using TripsProject.Models;
 
 namespace TripsProject.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UserstestController : Controller
     {
         private readonly UserRepository _repo;

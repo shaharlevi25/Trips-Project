@@ -176,6 +176,11 @@ namespace TripsProject.Controllers
             ViewBag.Email = email;
             return View("ForgotPassword");
         }
+        
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
 
         [HttpPost]
         public async Task<IActionResult> ResetPassword(string email, string newPassword)
