@@ -1,0 +1,45 @@
+﻿@model TripsProject.Models.ViewModel.SiteReviewsPageVM
+@{
+    ViewData["Title"] = "All Reviews";
+}
+
+<link rel="stylesheet" href="~/css/siteReviews.css" />
+
+<div class="reviews-page">
+    <div class="header">
+        <h1>All Reviews</h1>
+        <p class="muted">What people say about the site.</p>
+    </div>
+
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-title">Average</div>
+            <div class="stat-value">@Model.AvgRating.ToString("0.0") / 5</div>
+        </div>
+        <div class="stat">
+            <div class="stat-title">Total reviews</div>
+            <div class="stat-value">@Model.ReviewsCount</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="reviews-list">
+            @foreach (var r in Model.Reviews)
+            {
+                <div class="review">
+                    <div class="review-top">
+                        <div class="name">@r.FullName</div>
+                        <div class="rating">@for (int i = 1; i <= 5; i++) { <span class="s @(i <= r.Rating ? "on" : "")">★</span> }</div>
+                    </div>
+                    <div class="comment">@r.Comment</div>
+                    <div class="date">@r.CreatedAt.ToString("dd/MM/yyyy HH:mm")</div>
+                </div>
+            }
+        </div>
+
+        <div class="more">
+            <a class="btn outline" href="/">Back to Home</a>
+            <a class="btn primary" asp-action="Index">Leave a review</a>
+        </div>
+    </div>
+</div>

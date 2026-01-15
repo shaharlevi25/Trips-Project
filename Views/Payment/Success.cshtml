@@ -40,6 +40,11 @@ ViewData["Title"] = "Order Completed";
             <a asp-controller="UserOrders" asp-action="MyOrders" class="btn outline">
                 My Orders
             </a>
+            
+            <a asp-controller="SiteReviews" asp-action="Index" class="btn rate">
+                Want rate us ?
+            </a>
+            
         </div>
 
         <div class="redirect">
@@ -151,6 +156,16 @@ ViewData["Title"] = "Order Completed";
 
     .btn.outline:hover {
         background: #eff6ff;
+    }
+
+    .btn.rate {
+        background: linear-gradient(135deg, #facc15, #eab308); /* yellow */
+        color: #1f2937; /* dark text */
+        border: none;
+    }
+
+    .btn.rate:hover {
+        filter: brightness(0.95);
     }
 
     .redirect {

@@ -1,0 +1,135 @@
+﻿@model TripsProject.Models.ViewModel.SiteReviewsPageVM
+@{
+    ViewData["Title"] = "Site Reviews";
+}
+
+<link rel="stylesheet" href="~/css/siteReviews.css" />
+
+<div class="reviews-page">
+
+    <div class="header">
+        <h1>Site Reviews</h1>
+        <p class="muted">Rate your experience and help others.</p>
+    </div>
+
+    @if (TempData["error"] != null)
+    {
+        <div class="alert error">@TempData["error"]</div>
+    }
+    @if (TempData["success"] != null)
+    {
+        <div class="alert success">@TempData["success"]</div>
+    }
+
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-title">Average</div>
+            <div class="stat-value">@Model.AvgRating.ToString("0.0") / 5</div>
+        </div>
+        <div class="stat">
+            <div class="stat-title">Total reviews</div>
+            <div class="stat-value">@Model.ReviewsCount</div>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <h2>Leave a review</h2>
+
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <div class="hintbox">
+                    You must be logged in to leave a review.
+                    <a asp-controller="User" asp-action="Login">Login</a>
+                </div>
+            }
+            else
+            {
+                <form asp-action="Add" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <label class="lbl">Rating</label>
+
+                    <!-- כוכבים לחוויה יפה -->
+                    <div class="stars-input" data-initial="@Model.NewReview.Rating">
+                        <input type="hidden" name="NewReview.Rating" id="ratingValue" value="@Model.NewReview.Rating" />
+                        <button type="button" class="star" data-v="1">★</button>
+                        <button type="button" class="star" data-v="2">★</button>
+                        <button type="button" class="star" data-v="3">★</button>
+                        <button type="button" class="star" data-v="4">★</button>
+                        <button type="button" class="star" data-v="5">★</button>
+                        <span class="stars-text" id="starsText">@Model.NewReview.Rating/5</span>
+                    </div>
+
+                    <span class="field-error">
+                        @Html.ValidationMessage("NewReview.Rating")
+                    </span>
+
+                    <label class="lbl">Comment</label>
+                    <textarea name="NewReview.Comment" rows="5" placeholder="Write your experience...">@Model.NewReview.Comment</textarea>
+                    <span class="field-error">
+                        @Html.ValidationMessage("NewReview.Comment")
+                    </span>
+
+                    <button type="submit" class="btn primary">Submit Review</button>
+                </form>
+            }
+        </div>
+
+        <div class="card">
+            <h2>Latest reviews</h2>
+
+            @if (Model.Reviews == null || Model.Reviews.Count == 0)
+            {
+                <div class="empty">No reviews yet. Be the first!</div>
+            }
+            else
+            {
+                <div class="reviews-list">
+                    @foreach (var r in Model.Reviews.Take(8))
+                    {
+                        <div class="review">
+                            <div class="review-top">
+                                <div class="name">@r.FullName</div>
+                                <div class="rating">@for (int i = 1; i <= 5; i++) { <span class="s @(i <= r.Rating ? "on" : "")">★</span> }</div>
+                            </div>
+                            <div class="comment">@r.Comment</div>
+                            <div class="date">@r.CreatedAt.ToString("dd/MM/yyyy HH:mm")</div>
+                        </div>
+                    }
+                </div>
+
+                <div class="more">
+                    <a class="btn outline" asp-action="All">View all reviews</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Stars component
+        const stars = document.querySelectorAll(".stars-input .star");
+        const ratingValue = document.getElementById("ratingValue");
+        const starsText = document.getElementById("starsText");
+
+        function paint(v) {
+            stars.forEach(btn => {
+                const x = parseInt(btn.dataset.v);
+                btn.classList.toggle("on", x <= v);
+            });
+            if (starsText) starsText.innerText = v + "/5";
+            if (ratingValue) ratingValue.value = v;
+        }
+
+        const initial = parseInt(document.querySelector(".stars-input")?.dataset.initial || "5");
+        paint(initial);
+
+        stars.forEach(btn => {
+            btn.addEventListener("click", () => {
+                paint(parseInt(btn.dataset.v));
+            });
+        });
+    </script>
+}
