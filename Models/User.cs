@@ -22,10 +22,11 @@ namespace TripsProject.Models
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
-        [StringLength(100, MinimumLength = 4)]
+        [MinLength(8, ErrorMessage = "Password must be at least 8 characters")]
+        [RegularExpression(@"^(?=.*[A-Z]).*$", ErrorMessage = "Password must contain at least one uppercase letter")]
         public string Password { get; set; }
 
-        public string Role { get; set; } = "User";   // בעתיד נשתמש לזה ל-Admin
+        public string Role { get; set; } = "User";   
         public bool IsActive { get; set; } = true;
     }
 }
