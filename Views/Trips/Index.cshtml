@@ -219,92 +219,95 @@ var byType = (Model ?? new List<TripsProject.Models.TravelPackage>())
             <hr class="flex-grow-1 m-0" />
         </div>
 
-        <div class="country-box mb-4">
-            <div class="scroll-track" dir="ltr">
+            <div class="country-box mb-4">
+                <div class="scroll-track" dir="ltr">
 
-                @{
-                // Sorting inside each group (view-level), default = by date
-                string sort = ViewBag.Sort ?? "";
-                var orderedGroup = sort == "price_asc"
-                ? countryGroup.OrderBy(x => (x.DiscountedPrice ?? x.Price))
-                : sort == "price_desc"
-                ? countryGroup.OrderByDescending(x => (x.DiscountedPrice ?? x.Price))
-                : countryGroup.OrderBy(x => x.StartDate);
-                }
+                    @{
+                    // Sorting inside each group (view-level), default = by date
+                    string sort = ViewBag.Sort ?? "";
+                    var orderedGroup = sort == "price_asc"
+                    ? countryGroup.OrderBy(x => (x.DiscountedPrice ?? x.Price))
+                    : sort == "price_desc"
+                    ? countryGroup.OrderByDescending(x => (x.DiscountedPrice ?? x.Price))
+                    : countryGroup.OrderBy(x => x.StartDate);
+                    }
 
-                @foreach (var p in orderedGroup)
-                {
-                var start = p.StartDate < p.EndDate ? p.StartDate : p.EndDate;
-                var end = p.StartDate < p.EndDate ? p.EndDate : p.StartDate;
+                    @foreach (var p in orderedGroup)
+                    { if (p.EndDate.Date < DateTime.Today)
+                        {
+                            continue; 
+                        }
+                    var start = p.StartDate < p.EndDate ? p.StartDate : p.EndDate;
+                    var end = p.StartDate < p.EndDate ? p.EndDate : p.StartDate;
 
-                <div class="trip-item">
-                    <div class="card trip-card h-100 shadow-sm @(p.IsAvailable ? "" : "trip-card--unavailable")">
+                    <div class="trip-item">
+                        <div class="card trip-card h-100 shadow-sm @(p.IsAvailable ? "" : "trip-card--unavailable")">
 
-                        <div class="type-badge-wrap">
-                            <span class="badge bg-primary">@p.PackageType</span>
-                        </div>
-
-                        <img src="@GetCityImage(p.Destination)"
-                             class="card-img-top trip-img"
-                             alt="@p.Destination"
-                             onerror="this.onerror=null; this.src='@Url.Content("~/images/trips/placeholder.jpg")';" />
-
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="fw-bold mb-1">@p.Destination</h5>
-
-                            <div class="text-muted small mb-2">
-                                @start.ToString("dd/MM/yyyy") - @end.ToString("dd/MM/yyyy")
+                            <div class="type-badge-wrap">
+                                <span class="badge bg-primary">@p.PackageType</span>
                             </div>
 
-                            <div class="d-flex gap-2 mb-2">
-                                @if (!p.IsAvailable)
-                                {
-                                <span class="badge bg-secondary">Unavailable</span>
-                                }
-                                @if (p.AgeLimit != null)
-                                {
-                                <span class="badge bg-warning text-dark">@p.AgeLimit+ Age:</span>
-                                }
-                            </div>
+                            <img src="@GetCityImage(p.Destination)"
+                                 class="card-img-top trip-img"
+                                 alt="@p.Destination"
+                                 onerror="this.onerror=null; this.src='@Url.Content("~/images/trips/placeholder.jpg")';" />
 
-                            <p class="text-muted trip-desc mb-3">@p.Description</p>
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="fw-bold mb-1">@p.Destination</h5>
 
-                            <div class="mt-auto">
-                                @if (p.DiscountedPrice != null)
-                                {
-                                <div class="price-wrap">
-                                    <span class="old-price">₪@p.Price</span>
-                                    <span class="new-price">₪@p.DiscountedPrice</span>
-                                    <span class="discount-badge">-@p.DiscountPercent%</span>
+                                <div class="text-muted small mb-2">
+                                    @start.ToString("dd/MM/yyyy") - @end.ToString("dd/MM/yyyy")
                                 </div>
-                                }
-                                else
-                                {
-                                <div class="fw-bold text-success mb-2">₪@p.Price</div>
-                                }
 
-                                <a asp-controller="TravelPackages"
-                                   asp-action="Details"
-                                   asp-route-id="@p.PackageId"
-                                   class="btn btn-outline-primary w-100">
-                                    Details
-                                </a>
+                                <div class="d-flex gap-2 mb-2">
+                                    @if (!p.IsAvailable)
+                                    {
+                                    <span class="badge bg-secondary">Unavailable</span>
+                                    }
+                                    @if (p.AgeLimit != null)
+                                    {
+                                    <span class="badge bg-warning text-dark">@p.AgeLimit+ Age:</span>
+                                    }
+                                </div>
 
-                                @if (!p.IsAvailable)
-                                {
-                                <div class="text-muted small mt-1">This package is currently unavailable</div>
-                                }
+                                <p class="text-muted trip-desc mb-3">@p.Description</p>
+
+                                <div class="mt-auto">
+                                    @if (p.DiscountedPrice != null)
+                                    {
+                                    <div class="price-wrap">
+                                        <span class="old-price">₪@p.Price</span>
+                                        <span class="new-price">₪@p.DiscountedPrice</span>
+                                        <span class="discount-badge">-@p.DiscountPercent%</span>
+                                    </div>
+                                    }
+                                    else
+                                    {
+                                    <div class="fw-bold text-success mb-2">₪@p.Price</div>
+                                    }
+
+                                    <a asp-controller="TravelPackages"
+                                       asp-action="Details"
+                                       asp-route-id="@p.PackageId"
+                                       class="btn btn-outline-primary w-100">
+                                        Details
+                                    </a>
+
+                                    @if (!p.IsAvailable)
+                                    {
+                                    <div class="text-muted small mt-1">This package is currently unavailable</div>
+                                    }
+                                </div>
                             </div>
+
                         </div>
-
                     </div>
+                    }
+
                 </div>
-                }
-
             </div>
-        </div>
 
-    </div>
+        </div>
     }
     }
 </div>

@@ -160,6 +160,20 @@ public class PackageRepository
             cmd.ExecuteNonQuery();
         }
     }
+    
+    public void ExpireOldPackages()
+    {
+        using var conn = new SqlConnection(_connectionString);
+        conn.Open();
+
+        using var cmd = new SqlCommand(@"
+UPDATE TravelPackages
+SET IsAvailable = 0
+WHERE EndDate < CAST(GETDATE() AS date) AND IsAvailable = 1;
+", conn);
+
+        cmd.ExecuteNonQuery();
+    }
 }
 
 

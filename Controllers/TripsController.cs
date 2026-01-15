@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using TripsProject.Data;
 using TripsProject.Models;
 
 namespace TripsProject.Controllers
@@ -11,10 +12,12 @@ namespace TripsProject.Controllers
     public class TripsController : Controller
     {
         private readonly string _connectionString;
+        private readonly PackageRepository _repo;
 
-        public TripsController(IConfiguration config)
+        public TripsController(IConfiguration config, PackageRepository  packageRepository)
         {
             _connectionString = config.GetConnectionString("TravelDb")!;
+            _repo = packageRepository;
         }
 
         // GET /Trips
@@ -246,8 +249,11 @@ namespace TripsProject.Controllers
                 ViewBag.MaxPrice = maxPrice?.ToString() ?? "";
                 ViewBag.DiscountOnly = discountOnly;
             }
+            _repo.ExpireOldPackages();
 
             return View(packages);
         }
+        
+        
     }
 }
