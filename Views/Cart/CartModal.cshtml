@@ -1,0 +1,28 @@
+@model List<TripsProject.Models.CartItem>
+
+<div class="cart-modal-body">
+    @if (!Model.Any())
+    {
+        <p>Your cart is empty</p>
+    }
+    else
+    {
+        <ul class="list-group mb-3">
+            @foreach (var item in Model)
+            {
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>@item.Title</span>
+                    <strong>₪@item.Price</strong>
+                </li>
+            }
+        </ul>
+
+        <div class="fw-bold text-end mb-3">
+            Total: ₪@Model.Sum(x => x.Price)
+        </div>
+
+        <a href="/Payment/Checkout" class="btn btn-primary w-100">
+            Checkout
+        </a>
+    }
+</div>

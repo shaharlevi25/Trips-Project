@@ -16,7 +16,9 @@ builder.Services.AddScoped<OrderRepository>();
 builder.Services.AddScoped<OrderCleanupService>();
 builder.Services.AddScoped<DiscountService>();
 builder.Services.AddScoped<SiteReviewsRepository>();
-
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<CartService>();
+builder.Services.AddSession();
 
 
 

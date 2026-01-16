@@ -292,6 +292,7 @@ var byType = (Model ?? new List<TripsProject.Models.TravelPackage>())
                                        class="btn btn-outline-primary w-100">
                                         Details
                                     </a>
+                                    
 
                                     @if (!p.IsAvailable)
                                     {
@@ -685,3 +686,9 @@ var byType = (Model ?? new List<TripsProject.Models.TravelPackage>())
 
 
 </style>
+<script>
+function formatDate(dateStr) {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('en-GB'); // dd/MM/yyyy
+}
+</script>

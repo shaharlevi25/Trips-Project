@@ -136,6 +136,15 @@ ViewData["Title"] = "Package Details";
                 Back to all packages
             </a>
 
+            @if (User.Identity?.IsAuthenticated == true && Model.IsAvailable)
+            {
+                <button type="button"
+                        class="btn btn-success"
+                        onclick="addToCartFromDetails()">
+                    Add to Cart
+                </button>
+            }
+
             @if (Model.IsAvailable)
             {
             <a href="javascript:void(0);" class="btn btn-primary"
@@ -152,9 +161,6 @@ ViewData["Title"] = "Package Details";
             </button>
 
             }
-
-
-
         </div>
 
     </div>
@@ -339,3 +345,28 @@ ViewData["Title"] = "Package Details";
     </style>
 
 </div>
+<script>
+function addToCartFromDetails() {
+    fetch('/Cart/Add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body:
+            'packageId=@Model.PackageId' +
+            '&title=@Uri.EscapeDataString(Model.Destination)' +
+            '&price=@(Model.DiscountedPrice ?? Model.Price)' +
+            '&startDate=@Model.StartDate.ToString("yyyy-MM-dd")' +
+            '&endDate=@Model.EndDate.ToString("yyyy-MM-dd")'
+    })
+    .then(r => {
+        if (!r.ok) throw new Error();
+        return r.json();
+    })
+    .then(() => {
+        loadCartCount();
+        loadCart();
+        const modal = new bootstrap.Modal(document.getElementById('cartModal'));
+        modal.show();
+    })
+    .catch(() => alert('Failed to add to cart'));
+}
+</script>
