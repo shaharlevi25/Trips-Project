@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using System;
+using Microsoft.Data.SqlClient;
 using TripsProject.Models.ViewModel;
 
 namespace TripsProject.Data;
@@ -128,5 +129,48 @@ ORDER BY w.RequestDate DESC;
 
         return cmd.ExecuteNonQuery() > 0;
     }
-    
+    public enum JoinResult
+    {
+        Error = 0,
+        Inserted = 1,
+        AlreadyExists = 2
+    }
+
+    public JoinResult TryJoinWaitlist(int packageId, string userEmail)
+    {
+        using var conn = new SqlConnection(_connectionString);
+        conn.Open();
+
+        // If the user is already waiting for this package, don't insert a duplicate row
+        var sql = @"
+IF EXISTS (
+    SELECT 1
+    FROM WaitingList
+    WHERE UserID = @email AND PackageID = @packageId AND Status = 'Waiting'
+)
+BEGIN
+    SELECT 2;
+END
+ELSE
+BEGIN
+    INSERT INTO WaitingList (UserID, PackageID, RequestDate, Status)
+    VALUES (@email, @packageId, GETDATE(), 'Waiting');
+    SELECT 1;
+END
+";
+
+        using var cmd = new SqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@email", userEmail);
+        cmd.Parameters.AddWithValue("@packageId", packageId);
+
+        var scalar = cmd.ExecuteScalar();
+        if (scalar == null) return JoinResult.Error;
+
+        return Convert.ToInt32(scalar) switch
+        {
+            1 => JoinResult.Inserted,
+            2 => JoinResult.AlreadyExists,
+            _ => JoinResult.Error
+        };
+    }
 }
