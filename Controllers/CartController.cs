@@ -19,9 +19,11 @@ namespace TripsProject.Controllers
             string title,
             decimal price,
             DateTime startDate,
-            DateTime endDate)
+            DateTime endDate,
+            int numOfPeople,
+            string? packageType)
         {
-            _cart.Add(packageId, title, price, startDate, endDate);
+            _cart.Add(packageId, title, price, startDate, endDate, numOfPeople, packageType);
             return Json(new { ok = true });
         }
 

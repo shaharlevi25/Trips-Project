@@ -24,7 +24,7 @@ namespace TripsProject.Services
                 : JsonSerializer.Deserialize<List<CartItem>>(json);
         }
 
-        public void Add(int packageId, string title, decimal price, DateTime startDate, DateTime endDate)
+        public void Add(int packageId, string title, decimal price, DateTime startDate, DateTime endDate, int numOfPeople, string? packageType)
         {
             var items = GetItems();
 
@@ -37,7 +37,9 @@ namespace TripsProject.Services
                 Title = title,
                 Price = price,
                 StartDate = startDate,
-                EndDate = endDate
+                EndDate = endDate,
+                NumOfPeople = numOfPeople,
+                PackageType = packageType
             });
 
             _http.HttpContext.Session.SetString(
@@ -71,5 +73,7 @@ namespace TripsProject.Services
         public decimal Price { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public int NumOfPeople { get; set; }
+        public string? PackageType { get; set; }
     }
 }

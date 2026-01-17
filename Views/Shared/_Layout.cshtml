@@ -167,9 +167,6 @@
                     <button class="btn btn-outline-secondary" data-bs-dismiss="modal">
                         Continue Browsing
                     </button>
-                    <button type="button" class="btn btn-primary" id="checkoutBtn">
-                        Checkout
-                    </button>
                 </div>
             </div>
 
@@ -194,22 +191,32 @@ function loadCart() {
 
             items.forEach(i => {
                 ul.innerHTML += `
-    <li class="list-group-item d-flex justify-content-between align-items-center">
-        <div>
-            <strong>${i.title}</strong><br>
-            <small>
-                ${new Date(i.startDate).toLocaleDateString()} -
-                ${new Date(i.endDate).toLocaleDateString()}
-            </small>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-            <span class="fw-bold">₪${i.price}</span>
-            <button class="btn btn-sm btn-outline-danger"
-                    onclick="removeFromCart(${i.packageId})">
-                ✖
-            </button>
-        </div>
-    </li>`;
+<li class="list-group-item d-flex justify-content-between align-items-center">
+    <div>
+        <strong>${i.title}</strong><br>
+        <small>
+            ${new Date(i.startDate).toLocaleDateString()} -
+            ${new Date(i.endDate).toLocaleDateString()}
+        </small><br>
+        <span>People: ${i.numOfPeople}</span><br>
+        <span>Type: ${i.packageType ?? ""}</span>
+    </div>
+
+    <div class="d-flex align-items-center gap-2">
+        <span class="fw-bold">₪${i.price}</span>
+
+        <button class="btn btn-sm btn-outline-danger"
+                onclick="removeFromCart(${i.packageId})">
+            ✖
+        </button>
+
+        <a class="btn btn-sm btn-success"
+           href="/Payment/Checkout?packageId=${i.packageId}">
+            Book Now
+        </a>
+    </div>
+</li>
+`;
             });
             loadCartTotal();
         });

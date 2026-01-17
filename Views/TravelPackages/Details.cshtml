@@ -355,7 +355,9 @@ function addToCartFromDetails() {
             '&title=@Uri.EscapeDataString(Model.Destination)' +
             '&price=@(Model.DiscountedPrice ?? Model.Price)' +
             '&startDate=@Model.StartDate.ToString("yyyy-MM-dd")' +
-            '&endDate=@Model.EndDate.ToString("yyyy-MM-dd")'
+            '&endDate=@Model.EndDate.ToString("yyyy-MM-dd")' +
+            '&numOfPeople=@Model.NumOfPeople' +
+            '&packageType=@Uri.EscapeDataString(Model.PackageType ?? "")'
     })
     .then(r => {
         if (!r.ok) throw new Error();
