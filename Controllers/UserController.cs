@@ -26,7 +26,6 @@ namespace TripsProject.Controllers
         }
         
 
-        /* הרשמה*/
         [HttpGet]
         public IActionResult Register()
         {
@@ -58,8 +57,8 @@ namespace TripsProject.Controllers
                 cmd.ExecuteNonQuery();
                 await _emailService.SendAsync(
                     model.Email,
-                    "ברוך הבא ל-TripsProject",
-                    $"<h2>שלום {model.FirstName}</h2><p>נרשמת בהצלחה למערכת.</p>"
+                    "Welcome to TripsProject",
+                    $"<h2>Hello {model.FirstName}</h2><p>You have successfully registered in the system..</p>"
                 );
             }
 
@@ -159,8 +158,8 @@ namespace TripsProject.Controllers
 
                 await _emailService.SendAsync(
                     userEmail,
-                    "איפוס סיסמה",
-                    $"<h2>שלום {firstName}</h2><p>לחץ כאן לאיפוס הסיסמה:</p><p><a href='{link}'>איפוס סיסמה</a></p>"
+                    "Password reset",
+                    $"<h2>שלום {firstName}</h2><p>Click here to reset your password:</p><p><a href='{link}'>Password reset</a></p>"
                 );
 
                 ViewBag.Sent = true;
@@ -202,8 +201,8 @@ namespace TripsProject.Controllers
 
             await _emailService.SendAsync(
                 email,
-                "הסיסמה עודכנה",
-                "<p>הסיסמה שלך עודכנה בהצלחה. אם לא אתה ביצעת את הפעולה, פנה לתמיכה.</p>"
+                "Password updated",
+                "<p>Your password has been updated successfully. If you did not perform this action, please contact support.</p>"
             );
 
             ViewBag.Mode = "request";
@@ -254,8 +253,7 @@ namespace TripsProject.Controllers
             
             if (user == null)
             {
-                // If no user was found in the database for the logged-in email
-                return RedirectToAction("Login", "Account"); // adjust controller name if needed
+                return RedirectToAction("Login", "Account"); 
             }
 
 

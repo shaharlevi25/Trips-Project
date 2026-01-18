@@ -41,7 +41,6 @@ public class OrderCleanupService
                 return 0;
             }
 
-            // 2) להחזיר מלאי
             foreach (var e in expired)
             {
                 var cmdBack = new SqlCommand(@"

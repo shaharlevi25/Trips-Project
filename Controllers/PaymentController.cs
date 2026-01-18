@@ -240,10 +240,10 @@ namespace TripsProject.Controllers
                 return BadRequest("Payment not completed");
             }
 
-            // ✅ mark as paid (DB)
+            
             MarkOrderPaid(req.OrderId);
 
-            // ✅ Best-effort email (never fail payment flow if email sending fails)
+            
             try
             {
                 var invoice = GetInvoiceDataByPayPalOrderId(req.OrderId);
@@ -289,7 +289,7 @@ namespace TripsProject.Controllers
             return Ok(new { success = true, orderId = req.OrderId });
         }
 
-        // 3) Client cancelled / timer expired -> release reservation
+        
         [HttpPost]
         public IActionResult CancelReservation([FromBody] CaptureRequest req)
         {
@@ -307,7 +307,7 @@ namespace TripsProject.Controllers
 
             try
             {
-                // 1) reserve stock (Amount-- only if Amount>0)
+                
                 var cmdStock = new SqlCommand(@"
 UPDATE TravelPackages
 SET Amount = Amount - 1
@@ -323,7 +323,7 @@ WHERE PackageId = @PackageId AND Amount > 0;
                     return null;
                 }
 
-                // 2) update availability
+                
                 var cmdAvail = new SqlCommand(@"
 UPDATE TravelPackages
 SET IsAvailable = CASE WHEN Amount <= 0 THEN 0 ELSE 1 END
@@ -333,7 +333,6 @@ WHERE PackageId = @PackageId;
                 cmdAvail.Parameters.AddWithValue("@PackageId", packageId);
                 cmdAvail.ExecuteNonQuery();
 
-                // 3) create pending order (needs columns Status, PayPalOrderId, PaidAt in Orders table)
                 var cmdOrder = new SqlCommand(@"
 INSERT INTO Orders (UserEmail, PackageID, TotalPrice, Status)
 OUTPUT INSERTED.OrderID

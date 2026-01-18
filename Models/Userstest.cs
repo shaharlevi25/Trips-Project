@@ -24,6 +24,6 @@ public class Userstest
     [StringLength(100, MinimumLength = 4)]
     public string Password { get; set; }
 
-    public string Role { get; set; } = "User";   // בעתיד נשתמש לזה ל-Admin
+    public string Role { get; set; } = "User";  
     public bool IsActive { get; set; } = true;
 }

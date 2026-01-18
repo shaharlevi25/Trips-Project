@@ -5,7 +5,7 @@ namespace TripsProject.Controllers
 {
     public class DashboardController : Controller
     {
-        [Authorize] // רק משתמש מחובר
+        [Authorize] 
         [HttpGet]
         public IActionResult User()
         {

@@ -20,7 +20,7 @@ namespace TripsProject.Controllers
             _repo = packageRepository;
         }
 
-        // GET /Trips
+        
         [HttpGet("")]
         public IActionResult Index(
             string? q,
@@ -41,7 +41,6 @@ namespace TripsProject.Controllers
             using var conn = new SqlConnection(_connectionString);
             conn.Open();
 
-            // ===== Stats: total packages + sum amount =====
             using (var statsCmd = new SqlCommand(@"
                 SELECT COUNT(*) AS TotalTrips,
                        ISNULL(SUM(Amount), 0) AS TotalAmount
@@ -55,7 +54,6 @@ namespace TripsProject.Controllers
                 }
             }
 
-            // בסיס השאילתה
             string sql = @"
                 SELECT PackageId, Destination, Country, StartDate, EndDate,
                        Price, NumOfPeople, PackageType, AgeLimit,
@@ -69,7 +67,6 @@ namespace TripsProject.Controllers
 
             if (searched)
             {
-                // יעד/עיר (Destination) - LIKE
                 if (!string.IsNullOrWhiteSpace(destination))
                 {
                     sql += @"
@@ -80,7 +77,6 @@ namespace TripsProject.Controllers
 
                     cmd.Parameters.AddWithValue("@destination", destination.Trim());
                 }
-                // Free text search (q): "Paris honeymoon package"
                 if (!string.IsNullOrWhiteSpace(q))
                 {
                     ViewBag.Q = q;
@@ -108,7 +104,6 @@ namespace TripsProject.Controllers
                     ViewBag.Q = "";
                 }
 
-                // טווח תאריכים - חפיפה בין הטווח המבוקש לחבילה
                 if (start.HasValue)
                 {
                     sql += " AND EndDate >= @start";
@@ -138,7 +133,6 @@ namespace TripsProject.Controllers
             sql += " ORDER BY CreatedAt DESC";
             cmd.CommandText = sql;
 
-            // ✅ לסגור Reader לפני שאילתה נוספת
             {
                 using var reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -163,7 +157,6 @@ namespace TripsProject.Controllers
                 }
             }
 
-            // ===== שליפת הנחות אחרי שמילאת packages =====
             if (packages.Count > 0)
             {
                 var today = DateTime.Today;
@@ -209,7 +202,6 @@ namespace TripsProject.Controllers
                 }
             }
 
-            // ===== Extra filters/sorting (only when searching) =====
             if (searched)
             {
                 IEnumerable<TravelPackage> result = packages;

@@ -15,7 +15,7 @@ namespace TripsProject.Controllers
             _repo = repo;
         }
 
-        // מציג את כל המשתמשים
+        
         public IActionResult Index()
         {
             var users = _repo.GetAllUsers();

@@ -14,14 +14,14 @@ public class DiscountsController : Controller
         _repo = repo;
     }
 
-    // דף ראשי: מציג הכל
+    
     public IActionResult Index()
     {
         var data = _repo.GetAll("");
         return View(data);
     }
 
-    // AJAX: מחזיר רק את הטבלה
+    
     [HttpGet]
     public IActionResult Filter(string search)
     {
@@ -35,7 +35,7 @@ public class DiscountsController : Controller
             return View();
         }
 
-        // AJAX: load packages table
+        
         [HttpGet]
         public IActionResult PackagesPicker(string search)
         {
@@ -122,12 +122,11 @@ public class DiscountsController : Controller
         [HttpPost]
         public IActionResult Edit(DiscountVM vm)
         {
-            // טוענים שוב מידע חבילה+הנחה מה DB כדי לא לסמוך על ערכים שהגיעו מהמשתמש
             var current = _repo.GetDiscountForEdit(vm.DiscountID);
             if (current == null) return NotFound();
 
-            // נשמור את פרטי החבילה לתצוגה ולבדיקות
-            vm.PackageID = current.PackageID;     // לא מאפשרים לשנות חבילה בעריכה
+            
+            vm.PackageID = current.PackageID;     
             vm.Destination = current.Destination;
             vm.Country = current.Country;
             vm.OriginalPrice = current.OriginalPrice;
@@ -170,13 +169,12 @@ public class DiscountsController : Controller
         // GET: /Discounts/Delete/5  -> confirmation page
         public IActionResult Delete(int id)
         {
-            var vm = _repo.GetDiscountForEdit(id); // כבר מחזיר הכל (יעד, מחיר, תאריכים...)
+            var vm = _repo.GetDiscountForEdit(id); 
             if (vm == null) return NotFound();
 
             return View(vm);
         }
-
-// POST: /Discounts/DeleteConfirmed
+        
         [HttpPost]
         public IActionResult DeleteConfirmed(int discountId)
         {

@@ -118,7 +118,6 @@
     <script src="https://www.paypal.com/sdk/js?client-id=AUIimViTH8m2sDNv8d9Osd9xex0s3b6bmxiXfb8Zx9IGHTtPsa_1P5a7qg5OvA1mVY_PhP05dMyZIWDO&currency=ILS"></script>
 
     <script>
-        // Global variable to store the created PayPal OrderId (so we can release reservation on timeout/cancel)
         window.currentPayPalOrderId = null;
 
         document.addEventListener("DOMContentLoaded", function () {
@@ -146,7 +145,6 @@
 
                     const data = await res.json();
 
-                    // Save the PayPal orderId so we can cancel reservation if needed
                     window.currentPayPalOrderId = data.orderId;
 
                     return data.orderId;
@@ -159,11 +157,9 @@
                         body: JSON.stringify({ orderId: data.orderID })
                     });
 
-                    // Read body once
                     const bodyText = await res.text();
 
                     if (res.ok) {
-                        // Server should return: { success: true, orderId: "..." }
                         const data2 = JSON.parse(bodyText);
 
                         window.location.href =
@@ -190,7 +186,6 @@
     </script>
 
     <script>
-        // Expiration time comes from server (UTC)
         const expireAt = new Date('@ViewBag.ExpireAt.ToString("yyyy-MM-ddTHH:mm:ssZ")');
 
         function startTimer() {
@@ -204,7 +199,6 @@
                     clearInterval(interval);
                     timerEl.innerText = "00:00";
 
-                    // Release reservation only if a PayPal order was created
                     if (window.currentPayPalOrderId) {
                         try {
                             await fetch('/Payment/CancelReservation', {

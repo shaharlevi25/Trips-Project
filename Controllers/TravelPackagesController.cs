@@ -15,8 +15,7 @@ namespace TripsProject.Controllers
             _connectionString = configuration.GetConnectionString("TravelDb");
         }
 
-        // GET: /TravelPackages/Details/1
-        // GET /Trips/Details/{id}
+       
 [HttpGet("Details/{id}")]
 public IActionResult Details(int id)
 {
@@ -61,7 +60,6 @@ public IActionResult Details(int id)
         };
     }
 
-    // 2) שליפת הנחה פעילה להיום (כמו ב-Index רק לחבילה אחת)
     var today = DateTime.Today;
 
     using (var discountCmd = new SqlCommand(@"

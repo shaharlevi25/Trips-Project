@@ -45,7 +45,6 @@ namespace TripsProject.Controllers
 
             }
 
-            // שליחת מייל ל-waitlist רק אם לפני הביטול היה Amount==0
             if (result.WasAmountZeroBeforeCancel)
             {
                 try
@@ -103,7 +102,6 @@ namespace TripsProject.Controllers
 </div>
 ";
 
-                        // best-effort: לא מפילים את הביטול אם מייל נכשל
                         foreach (var to in waitlistEmails)
                         {
                             try
@@ -113,20 +111,18 @@ namespace TripsProject.Controllers
                             catch { /* ignore per-recipient */ }
                         }
 
-                        // אופציונלי: לשנות סטטוס ב-WaitingList כדי לא להודיע שוב
                         _repo.MarkWaitlistNotified(result.PackageId);
                     }
                 }
                 catch
                 {
-                    // best effort: מתעלמים
+                    // best effort:
                 }
             }
 
             return RedirectToAction("MyOrders");
         }
 
-        // GET: /UserOrders/MyOrders
         [HttpGet]
         public IActionResult MyOrders()
         {
@@ -139,7 +135,6 @@ namespace TripsProject.Controllers
             return View(orders);
         }
 
-        // GET: /UserOrders/MyOrdersSearch?query=...
         [HttpGet]
         public IActionResult MyOrdersSearch(string? query)
         {

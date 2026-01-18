@@ -23,7 +23,7 @@ namespace TripsProject.Controllers.Admin
             return View(packages);
         }
 
-        // פעולה שמחזירה רק את טבלת החבילות – למטרות AJAX
+        
         public IActionResult Filter(string destination, DateTime? startDate, DateTime? endDate, bool? isAvailable)
         {
             var packages = _repo.GetAllPackages().AsEnumerable();

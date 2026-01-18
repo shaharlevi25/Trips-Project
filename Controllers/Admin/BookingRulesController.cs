@@ -21,7 +21,7 @@ public class BookingRulesController : Controller
     // GET: /BookingRules
     public IActionResult Index()
     {
-        var vm = _repo.Get() ?? new BookingRulesVM(); // אם אין שורה עדיין
+        var vm = _repo.Get() ?? new BookingRulesVM();
         ViewBag.PolicyText = _policy.BuildPolicyText(vm);
         return View(vm);
     }
@@ -38,7 +38,6 @@ public class BookingRulesController : Controller
 
         _repo.Upsert(vm);
 
-        // להציג שוב עם טקסט מעודכן
         ViewBag.PolicyText = _policy.BuildPolicyText(vm);
         ViewBag.Success = "Rules updated successfully.";
         return View(vm);

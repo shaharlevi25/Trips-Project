@@ -13,7 +13,6 @@ namespace TripsProject.Controllers
             _repo = repo;
         }
 
-        // דף שמציג גם סטטיסטיקות + טופס + ביקורות
         [HttpGet]
         public IActionResult Index()
         {
@@ -31,7 +30,6 @@ namespace TripsProject.Controllers
             return View(vm);
         }
 
-        // POST: שליחת ביקורת
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Add(SiteReviewsPageVM vm)
@@ -44,7 +42,6 @@ namespace TripsProject.Controllers
 
             string email = User.Identity!.Name!;
 
-            // אופציונלי: למנוע ספאם — רק ביקורת אחת למשתמש
             if (_repo.HasUserReviewed(email))
             {
                 TempData["error"] = "You already submitted a review. Thank you!";
@@ -53,7 +50,6 @@ namespace TripsProject.Controllers
 
             if (!ModelState.IsValid)
             {
-                // טוענים שוב את הדף עם הביקורות כדי שהטופס יציג errors
                 var (avg, cnt) = _repo.GetStats();
                 vm.AvgRating = avg;
                 vm.ReviewsCount = cnt;
@@ -66,7 +62,6 @@ namespace TripsProject.Controllers
             return RedirectToAction("Thanks");
         }
 
-        // דף תודה + טיימר 10 שניות לעמוד הראשי
         [HttpGet]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Thanks()
@@ -74,7 +69,6 @@ namespace TripsProject.Controllers
             return View();
         }
 
-        // דף שמציג רק ביקורות (אם אתה רוצה נפרד)
         [HttpGet]
         public IActionResult All()
         {

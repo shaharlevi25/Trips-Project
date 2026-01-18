@@ -568,8 +568,8 @@ var byType = (Model ?? new List<TripsProject.Models.TravelPackage>())
         display: flex;
         align-items: baseline;
         gap: 10px;
-        margin-bottom: 8px;     /* כמו שהיה לך mb-2 */
-        flex-wrap: wrap;        /* שלא יישבר על מסכים קטנים */
+        margin-bottom: 8px;     
+        flex-wrap: wrap;        
     }
 
     .old-price{
@@ -585,7 +585,7 @@ var byType = (Model ?? new List<TripsProject.Models.TravelPackage>())
     .new-price{
         font-weight: 900;
         font-size: 18px;
-        color: #198754;         /* Bootstrap success */
+        color: #198754;         
         white-space: nowrap;
     }
 
@@ -597,9 +597,9 @@ var byType = (Model ?? new List<TripsProject.Models.TravelPackage>())
         border-radius: 999px;
         white-space: nowrap;
 
-        /* מראה "מבצע" עדין */
-        background: rgba(220, 53, 69, .12);  /* אדום שקוף */
-        color: #dc3545;                      /* Bootstrap danger */
+        
+        background: rgba(220, 53, 69, .12);  
+        color: #dc3545;                      
         border: 1px solid rgba(220, 53, 69, .25);
     }
 
@@ -626,20 +626,20 @@ var byType = (Model ?? new List<TripsProject.Models.TravelPackage>())
         border-radius: 999px;
         white-space: nowrap;
     }
-    /* ===== FILTERS ROW (same line) ===== */
+    
     .ta-filters{
-        grid-column: 1 / -1;                 /* שורה שנייה בכל הרוחב של ה-grid */
+        grid-column: 1 / -1;                 
         display: flex;
         align-items: center;
         gap: 16px;
-        flex-wrap: nowrap;                    /* חשוב: לא לשבור שורות */
+        flex-wrap: nowrap;                    
 
         padding: 10px 12px;
         border-top: 1px solid rgba(0,0,0,.12);
         background: #fff;
     }
 
-    /* כל פילטר = שורה אחת */
+    
     .ta-filter{
         display: flex;
         align-items: center;
@@ -655,7 +655,7 @@ var byType = (Model ?? new List<TripsProject.Models.TravelPackage>())
         margin: 0;
     }
 
-    /* הגובה/רוחב של select + input כדי שייראה אחיד */
+    
     .ta-filter__control{
         height: 34px;
         border: 1px solid rgba(0,0,0,.16);
@@ -666,7 +666,7 @@ var byType = (Model ?? new List<TripsProject.Models.TravelPackage>())
         min-width: 180px;
     }
 
-    /* checkbox באותה שורה */
+    
     .ta-filter--check{
         display: flex;
         align-items: center;
@@ -680,15 +680,11 @@ var byType = (Model ?? new List<TripsProject.Models.TravelPackage>())
         margin: 0;
     }
 
-    /* אם המסך צר מדי – רק אז נשבור שורה בצורה יפה */
-
-
-
-
+    
 </style>
 <script>
 function formatDate(dateStr) {
     const d = new Date(dateStr);
-    return d.toLocaleDateString('en-GB'); // dd/MM/yyyy
+    return d.toLocaleDateString('en-GB'); 
 }
 </script>

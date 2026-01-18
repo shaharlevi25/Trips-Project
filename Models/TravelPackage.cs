@@ -26,7 +26,6 @@ namespace TripsProject.Models
 
         public bool IsAvailable { get; set; }
 
-        // אופציונלי אם יש לך תמונות:
         public string? ImageUrl { get; set; }
         
         public int Amount  { get; set; } 

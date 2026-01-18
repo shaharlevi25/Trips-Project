@@ -47,7 +47,6 @@ public class OrderRepository
         {
             int cancelDays = 0;
 
-            // 1) rules
             using (var cmdRules = new SqlCommand(@"
                    SELECT TOP 1 CancellationDaysBeforeStart
                    FROM BookingRules

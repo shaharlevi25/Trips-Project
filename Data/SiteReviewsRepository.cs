@@ -40,7 +40,6 @@ FROM SiteReviews;
             using var conn = new SqlConnection(_cs);
             conn.Open();
 
-            // JOIN Users כדי להביא FirstName+LastName במקום אימייל
             using var cmd = new SqlCommand(@"
 SELECT 
     sr.ReviewId,

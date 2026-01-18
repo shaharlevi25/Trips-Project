@@ -107,7 +107,6 @@ namespace TripsProject.Services
         }
         private static string StripHtml(string html)
         {
-            // מינימלי כדי שיהיה PlainText סביר
             return html
                 .Replace("<br>", "\n").Replace("<br/>", "\n").Replace("<br />", "\n")
                 .Replace("</p>", "\n").Replace("<p>", "")

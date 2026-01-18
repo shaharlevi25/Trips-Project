@@ -15,7 +15,7 @@ namespace TripsProject.Data
             _connectionString = configuration.GetConnectionString("TravelDb"); 
         }
 
-        // מחזיר את כל המשתמשים
+        
         public List<User> GetAllUsers()
         {
             var list = new List<User>();
@@ -41,7 +41,7 @@ namespace TripsProject.Data
             return list;
         }
 
-        // מחזיר משתמש לפי מייל
+        
         public User GetUserByEmail(string email)
         {
             using (var conn = new SqlConnection(_connectionString))
@@ -68,7 +68,7 @@ namespace TripsProject.Data
             return null;
         }
 
-        // מוסיף משתמש חדש
+        
         public void AddUser(User user)
         {
             using (var conn = new SqlConnection(_connectionString))
@@ -92,7 +92,7 @@ namespace TripsProject.Data
             }
         }
 
-        // מעדכן משתמש קיים
+        
         public void UpdateUser(User user)
         {
             using (var conn = new SqlConnection(_connectionString))
@@ -121,7 +121,7 @@ namespace TripsProject.Data
             }
         }
 
-        // מחיקת משתמש לפי מייל
+        
         public void DeleteUser(string email)
         {
             using (var conn = new SqlConnection(_connectionString))

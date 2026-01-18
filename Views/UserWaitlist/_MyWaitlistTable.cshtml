@@ -16,7 +16,6 @@
     <tbody>
     @foreach (var w in Model)
     {
-        // כמו אצלך: map ל-3 צבעים
         var cls = w.Status == "Notified" ? "paid"
             : w.Status == "Pending" ? "pending"
             : "cancelled";

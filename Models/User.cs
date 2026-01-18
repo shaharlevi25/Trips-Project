@@ -26,7 +26,7 @@ namespace TripsProject.Models
         [RegularExpression(@"^(?=.*[A-Z]).*$", ErrorMessage = "Password must contain at least one uppercase letter")]
         public string Password { get; set; }
 
-        public string Role { get; set; } = "User";   // בעתיד נשתמש לזה ל-Admin
+        public string Role { get; set; } = "User";   
         public bool IsActive { get; set; } = true;
     }
 }
