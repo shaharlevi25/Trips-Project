@@ -2,59 +2,178 @@
     ViewData["Title"] = "Privacy Policy";
 }
 
-<h1>Privacy Policy</h1>
+<div class="legal-page">
+    <div class="legal-card">
+        <h1 class="legal-title">Privacy Policy</h1>
 
-<p>
-    Your privacy is important to us. This Privacy Policy explains how we collect, use, and protect your personal information when you use our website.
-</p>
+        <p class="legal-lead">
+            Your privacy is important to us. This Privacy Policy explains how we collect, use, and protect your personal information when you use our website.
+        </p>
 
-<h2>Information We Collect</h2>
-<p>
-    When you use our website, we may collect the following information:
-</p>
-<ul>
-    <li>Personal details such as name and email address when you register or make a booking</li>
-    <li>Booking and reservation details related to travel packages</li>
-    <li>Communication data when you contact us or join a waiting list</li>
-</ul>
+        <hr class="legal-divider"/>
 
-<h2>How We Use Your Information</h2>
-<p>
-    We use the information we collect for the following purposes:
-</p>
-<ul>
-    <li>To manage bookings, reservations, and waiting lists</li>
-    <li>To communicate with you regarding your account, bookings, or availability updates</li>
-    <li>To improve our services and user experience</li>
-    <li>To ensure the security and proper functioning of the website</li>
-</ul>
+        <h2>Information We Collect</h2>
+        <p>When you use our website, we may collect the following information:</p>
+        <ul>
+            <li>Personal details such as name and email address when you register or make a booking</li>
+            <li>Booking and reservation details related to travel packages</li>
+            <li>Communication data when you contact us or join a waiting list</li>
+        </ul>
 
-<h2>Data Protection</h2>
-<p>
-    We take reasonable technical and organizational measures to protect your personal information against unauthorized access, loss, or misuse.
-</p>
+        <h2>How We Use Your Information</h2>
+        <p>We use the information we collect for the following purposes:</p>
+        <ul>
+            <li>To manage bookings, reservations, and waiting lists</li>
+            <li>To communicate with you regarding your account, bookings, or availability updates</li>
+            <li>To improve our services and user experience</li>
+            <li>To ensure the security and proper functioning of the website</li>
+        </ul>
 
-<h2>Sharing of Information</h2>
-<p>
-    We do not sell or rent your personal information to third parties. Your data may only be shared when required by law or when necessary to provide our services.
-</p>
+        <h2>Data Protection</h2>
+        <p>We take reasonable technical and organizational measures to protect your personal information against unauthorized access, loss, or misuse.</p>
 
-<h2>Cookies</h2>
-<p>
-    Our website uses cookies to manage user sessions and improve functionality. By using our website, you agree to the use of cookies.
-</p>
+        <h2>Sharing of Information</h2>
+        <p>We do not sell or rent your personal information to third parties. Your data may only be shared when required by law or when necessary to provide our services.</p>
 
-<h2>Your Rights</h2>
-<p>
-    You have the right to access, update, or request deletion of your personal information. If you have any questions or requests regarding your data, please contact us.
-</p>
+        <h2>Cookies</h2>
+        <p>Our website uses cookies to manage user sessions and improve functionality. By using our website, you agree to the use of cookies.</p>
 
-<h2>Changes to This Policy</h2>
-<p>
-    We may update this Privacy Policy from time to time. Any changes will be published on this page.
-</p>
+        <h2>Your Rights</h2>
+        <p>You have the right to access, update, or request deletion of your personal information. If you have any questions or requests regarding your data, please contact us.</p>
 
-<h2>Contact Us</h2>
-<p>
-    If you have any questions about this Privacy Policy, please contact us through the website.
-</p>
+        <h2>Changes to This Policy</h2>
+        <p>We may update this Privacy Policy from time to time. Any changes will be published on this page.</p>
+
+        <h2>Contact Us</h2>
+        <p>If you have any questions about this Privacy Policy, please contact us through the website.</p>
+    </div>
+</div>
+
+<style>
+    /* Page background */
+    .legal-page {
+        min-height: calc(100vh - 120px);
+        padding: 40px 16px 70px;
+        background: radial-gradient(1200px 600px at 20% 0%, rgba(37, 99, 235, 0.10), transparent 55%),
+        radial-gradient(900px 500px at 100% 10%, rgba(245, 158, 11, 0.10), transparent 55%),
+        linear-gradient(180deg, #f1f5f9 0%, #f8fafc 100%);
+        display: flex;
+        justify-content: center;
+    }
+
+    /* Card */
+    .legal-card {
+        width: 100%;
+        max-width: 920px;
+        background: #fff;
+        border: 1px solid rgba(2, 6, 23, 0.08);
+        border-radius: 18px;
+        padding: 28px 26px;
+        box-shadow: 0 18px 40px rgba(2, 6, 23, 0.10), 0 4px 10px rgba(2, 6, 23, 0.06);
+    }
+
+    /* Typography */
+    .legal-title {
+        font-size: 30px;
+        font-weight: 900;
+        color: #0f172a;
+        letter-spacing: -0.02em;
+        margin: 0 0 10px;
+    }
+
+    .legal-lead {
+        font-size: 15px;
+        line-height: 1.8;
+        color: #475569;
+        margin: 0 0 18px;
+    }
+
+    .legal-card h2 {
+        margin: 22px 0 10px;
+        font-size: 18px;
+        font-weight: 800;
+        color: #0f172a;
+        letter-spacing: -0.01em;
+        position: relative;
+        padding-left: 12px;
+    }
+
+    .legal-card h2::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 4px;
+        width: 4px;
+        height: 18px;
+        border-radius: 999px;
+        background: linear-gradient(180deg, #2563eb, #1d4ed8);
+        opacity: 0.95;
+    }
+
+    .legal-card p {
+        margin: 0 0 12px;
+        font-size: 14.5px;
+        line-height: 1.85;
+        color: #334155;
+    }
+
+    /* Divider */
+    .legal-divider {
+        margin: 18px 0 6px;
+        border: 0;
+        height: 1px;
+        background: linear-gradient(to right, transparent, #cbd5e1, transparent);
+    }
+
+    /* Lists */
+    .legal-card ul {
+        margin: 10px 0 16px;
+        padding: 0;
+        list-style: none;
+    }
+
+    .legal-card li {
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 10px 12px;
+        margin-bottom: 10px;
+        color: #1f2937;
+        font-size: 14px;
+        line-height: 1.6;
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .legal-card li::before {
+        content: "✓";
+        font-weight: 900;
+        color: #2563eb;
+        margin-top: 1px;
+    }
+
+    /* Links (if you add later) */
+    .legal-card a {
+        color: #2563eb;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .legal-card a:hover {
+        text-decoration: underline;
+    }
+
+    .legal-title {
+        font-size: 24px;
+    }
+
+    .legal-card h2 {
+        font-size: 16px;
+    }
+
+    .legal-card p, .legal-card li {
+        font-size: 14px;
+    }
+       
+</style>
